@@ -216,31 +216,15 @@ public class SwerveModule {
 
     /**
      * This method gets the current position in radians and 
-     * is used for actual running of the swerve drive. There 
-     * is code that supports drive motor invertion within, this 
-     * "reverses" the module's zero to the robot's rear while 
-     * isInverted is true. Normally the zero is at the front of 
-     * the robot.
-     * 
-     * note: Inverted module safe
+     * normally the zero is at the front of the robot.
      * 
      * @return the position of the module in radians, should limit from -PI to PI
      */
     public double getPosInRad() {
         //get the current position and convert it to radians.
-        double absPosInRad = Math.toRadians(getAbsPosInDeg());
-        //the following is an if statement set used with invertible drive
-        if(isInverted){
-            if(absPosInRad <= 0.0){
-                return absPosInRad + Math.PI;
-            }else{
-                return absPosInRad - Math.PI;
-            }
-        }else{
-            return absPosInRad;
-        }
-   }
-
+        return Math.toRadians(getAbsPosInDeg());
+    }
+   
     /**
      * This is a method meant for testing by getting the count from the 
      * rotational encoder which is internal to the NEO550. This encoder 
@@ -253,8 +237,32 @@ public class SwerveModule {
         return rotationMotor.getSelectedSensorPosition();
     }
     
+    /**
+     * 
+     * @param targetState
+     */
     public void setModuleState(SwerveModuleState targetState){
+        
+        //find the difference between the target and current position
+        double posDiff = targetState.angle.getRadians() - getPosInRad();
+        double absDiff = Math.abs(posDiff);
 
+        // if the distance is more than a half circle,we going the wrong way, fix
+        if (absDiff > Math.PI) {
+            // the distance the other way around the circle
+            posDiff = posDiff- (Constants.TWO_PI * Math.signum(posDiff));
+        }
+
+        // Convert the shortest distance of rotation to relative encoder value(use convertion factor)
+        double targetAngle = posDiff * Constants.RAD_TO_ENC_CONV_FACTOR;
+        // add the encoder distance to the current encoder count
+        double outputEncValue = targetAngle + getRelEncCount();
+
+        // Set the setpoint using setReference on the TalonFX
+        rotationMotor.set(TalonFXControlMode.Position, outputEncValue);
+
+        //TODO:Make work with PercentOutput or Velocity.
+        driveMotor.set(TalonFXControlMode.PercentOutput, targetState.speedMetersPerSecond);
     }
   
     /**
