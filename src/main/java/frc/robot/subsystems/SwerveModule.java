@@ -7,16 +7,8 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-// import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -24,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 
@@ -46,7 +39,6 @@ public class SwerveModule {
     // discontinuity from -180 to 180, it can't be used for motion. We use the 
     // rotateRelEncoder for that.
     private CANCoder rotateAbsSensor;
-    private boolean isInverted = false;
 
     /**
      * Creates a new SwerveModule object
@@ -58,6 +50,8 @@ public class SwerveModule {
      * @param canCoderID      The CAN ID of the rotation sensor
      */
     public SwerveModule(int driveMotorID, int rotationMotorID, int canCoderID) {
+        
+        //contruct and setup drive falcon
         driveMotor = new TalonFX(driveMotorID);
         driveMotor.configFactoryDefault();
         // use the integrated sensor with the primary closed loop and timeout is 0.
@@ -70,14 +64,13 @@ public class SwerveModule {
         driveMotor.enableVoltageCompensation(true);
         driveMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setDriveMotorPIDF(Constants.SWERVE_DRIVE_P_VALUE, Constants.SWERVE_DRIVE_I_VALUE,
-                          Constants.SWERVE_DRIVE_D_VALUE, Constants.SWERVE_DRIVE_F_VALUE);
+                          Constants.SWERVE_DRIVE_D_VALUE, Constants.SWERVE_DRIVE_FF_VALUE);
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
         driveMotor.setSelectedSensorPosition(0.0);
 
-
+        //contruct and setup rotation falcon
         rotationMotor = new TalonFX(rotationMotorID);
-        
         rotationMotor.configFactoryDefault();
         // use the integrated sensor with the primary closed loop and timeout is 0.
         rotationMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
@@ -88,11 +81,12 @@ public class SwerveModule {
         rotationMotor.enableVoltageCompensation(true);
         driveMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setDriveMotorPIDF(Constants.SWERVE_ROT_P_VALUE, Constants.SWERVE_ROT_I_VALUE,
-                          Constants.SWERVE_ROT_D_VALUE, Constants.SWERVE_ROT_F_VALUE);
+                          Constants.SWERVE_ROT_D_VALUE, Constants.SWERVE_ROT_FF_VALUE);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
+        //TODO: use configAllowableClosedLoopError with SWERVE_MODULE_TOLLERANCE from constants
         rotationMotor.setSelectedSensorPosition(0.0);
-
+        
 
         //the following sensor is angle of the module, as an absolute value
         rotateAbsSensor = new CANCoder(canCoderID);
@@ -103,24 +97,22 @@ public class SwerveModule {
 
     /**
      * Set the speed of the drive motor in percent duty cycle
-     * note: Inverted module safe
      * 
      * @param dutyCycle a number between -1.0 and 1.0, where 0.0 is not moving, as
      *                  percent duty cycle
      */
     public void setDriveMotor(double dutyCycle) {
-        driveMotor.set(TalonFXControlMode.PercentOutput, dutyCycle * (isInverted ? -1 : 1));
+        driveMotor.set(TalonFXControlMode.PercentOutput, dutyCycle );
     }
 
     /**
      * Set the speed of the drive motor in meter per second, this relies on the
      * PIDController built into the TalonFX.
-     * note: Inverted module safe
      * 
      * @param speed a speed in meters per second
      */
     public void setDriveSpeed(double speed) {
-        driveMotor.set(TalonFXControlMode.Velocity, speed * (isInverted ? -1 : 1));
+        driveMotor.set(TalonFXControlMode.Velocity, speed );
     }
 
    /**
@@ -150,7 +142,7 @@ public class SwerveModule {
 
     /**
      * A method to set the position of the drive encoder to zero,
-     * essentially resetting it.
+     * essentially resetting it. 
      */
     public void resetDriveMotorEncoder() {
         driveMotor.setSelectedSensorPosition(0.0);// this code sets the Drive position to 0.0
@@ -206,12 +198,17 @@ public class SwerveModule {
         return rotateAbsSensor.getAbsolutePosition();
     }
 
+    /**
+     * Returns the current angle of the swerve module, 
+     * as read by the absolute rotational sensor, as a 
+     * Rotation2d object. This is measured from the 
+     * front of the robot, where counter-clockwise is 
+     * positive.
+     * 
+     * @return A Rotation2d object, current position of the module
+     */
     public Rotation2d getCurRot2d(){
         return Rotation2d.fromDegrees(getAbsPosInDeg());
-    }
-
-    public SwerveModuleState getModuleState(){
-        return new SwerveModuleState(getDriveVelocity(), getCurRot2d());
     }
 
     /**
@@ -226,6 +223,18 @@ public class SwerveModule {
     }
    
     /**
+     * Returns the current state of the swerve module 
+     * as a SwerveModuleState. The speed of the module 
+     * should be in m/s and the rotational position is 
+     * in the form of a Rotation2d object.
+     * 
+     * @return a SwerveModuleState
+     */
+    public SwerveModuleState getModuleState(){
+        return new SwerveModuleState(getDriveVelocity(), getCurRot2d());
+    }
+
+    /**
      * This is a method meant for testing by getting the count from the 
      * rotational encoder which is internal to the NEO550. This encoder 
      * is relative, and does not easily translate to a specific rotational 
@@ -238,13 +247,23 @@ public class SwerveModule {
     }
     
     /**
+     * The method to set the module to a position and speed. 
+     * This method does the opitimization internally. The 
+     * speed should be from -1.0 to 1.0 if isVeloMode is false, 
+     * and should be between -MAX_VELOCITY and MAX_VELOCITY if 
+     * isVeloMode is true.
      * 
-     * @param targetState
+     * @param targetState SwerveModuleState
+     * @param isVeloMode true if velocity mode, false if percent output mode
      */
-    public void setModuleState(SwerveModuleState targetState){
+    public void setModuleState(SwerveModuleState targetState, boolean isVeloMode){
+
+        //TODO: Create Rotation2d object and fill with call from getCurRot2d()
+
+        //TODO: Use optimize from SwerveModuleState with targetState and Rotation2d object pulled from above
         
         //find the difference between the target and current position
-        double posDiff = targetState.angle.getRadians() - getPosInRad();
+        double posDiff = targetState.angle.getRadians() - getPosInRad(); //TODO: change getPosInRad to Rotation2d from first line in method, pull angle out
         double absDiff = Math.abs(posDiff);
 
         // if the distance is more than a half circle,we going the wrong way, fix
@@ -261,83 +280,9 @@ public class SwerveModule {
         // Set the setpoint using setReference on the TalonFX
         rotationMotor.set(TalonFXControlMode.Position, outputEncValue);
 
-        //TODO:Make work with PercentOutput or Velocity.
+        //TODO:Make work with PercentOutput or Velocity. use isVeloMode
         driveMotor.set(TalonFXControlMode.PercentOutput, targetState.speedMetersPerSecond);
-    }
-  
-    /**
-     * This method should be the regularly called function
-     * to rotate the swerve module. It handles the invertion 
-     * of drive motor to optimize rotation. It handles the 
-     * discontinuity of the CANcoder, and passes target 
-     * direction to the PID loop on the SparkMAX and it's 
-     * encoder(the relative).
-     * 
-     * Position should represent the direction the wheel will 
-     * be moving the robot
-     * 
-     * @param targetPos a value between -PI and PI, PI is counter-clockwise, 0.0 is
-     *                  forward
-     */
-    // public void setPosInRad(double targetPos) {
-
-    //     //find the difference between the target and current position
-    //     double posDiff = targetPos - getPosInRad();
-
-    //     double absDiff = Math.abs(posDiff);
-
-    //     //The following is for non-inverting, commented out as we are inverting
-    //     // if the distance is more than a half circle,we going the wrong way, fix
-    //     // if (absDiff > Math.PI) {
-    //     //     // the distance the other way around the circle
-    //     //     posDiff = posDiff - (Constants.TWO_PI * Math.signum(posDiff));
-    //     // }
-    //     // else if (absDiff < Constants.SWERVE_MODULE_TOLERANCE){
-    //     //     //if the distance to the goal is small enough, stop rotation and return
-    //     //     rotatePID.setReference(0.0, ControlType.kDutyCycle);
-    //     //     return;
-    //     // }
-
-    //     //the following is for inverting the drive when values are 90 to 270 (to be faster)
-    //     //if the distance is larger than 270, this is the wrong way round the circle
-    //     if(absDiff >= Constants.THREE_PI_OVER_TWO){
-    //         //the distance the other way around the circle
-    //         posDiff = posDiff - (Constants.TWO_PI*Math.signum(posDiff));
-    //     //if between 90 and 270 invert the motor
-    //     }else if(absDiff < Constants.THREE_PI_OVER_TWO && absDiff >
-    //         Constants.PI_OVER_TWO){
-    //         //switch the motor inversion
-    //         isInverted = !isInverted;
-    //         //Since inverted, pull position again and recompute everything
-    //         posDiff = targetPos - getPosInRad();
-    //         absDiff = Math.abs(posDiff);
-    //         if(absDiff > Constants.THREE_PI_OVER_TWO){
-    //             //the distance the other way around the circle
-    //             posDiff = posDiff - (Constants.TWO_PI*Math.signum(posDiff));
-    //         }
-    //     }
-
-    //     //Since SparkMAX's don't have PID tolerance
-    //     if (absDiff < Constants.SWERVE_MODULE_TOLERANCE){
-    //         //if the distance to the goal is small enough, stop rotation and return
-    //         rotationMotor.stopMotor();
-    //         SmartDashboard.putBoolean("Rotation Stop "+rotationMotor.getDeviceId()+":", true);
-    //         return;//return to SwerveDrive
-    //     }
-
-
-    //     // Convert the shortest distance of rotation to relative encoder value(use convertion factor)
-    //     double targetEncDistance = posDiff * Constants.RAD_TO_ENC_CONV_FACTOR;
-
-    //     // add the encoder distance to the current encoder count
-    //     double outputEncValue = targetEncDistance + rotateRelEncoder.getPosition();
-    //     SmartDashboard.putBoolean("Rotation Running "+rotationMotor.getDeviceId()+":", true);
-
-    //     // Set the setpoint using setReference on the PIDController
-    //     rotatePID.setReference(outputEncValue, ControlType.kPosition, 0,
-    //         Constants.SWERVE_ROT_ARB_FF_VOLTAGE*Math.signum(posDiff),
-    //         CANPIDController.ArbFFUnits.kVoltage);
-    // }
+    }  
 
     /**
      * This is a testing method, used to drive the module's rotation.

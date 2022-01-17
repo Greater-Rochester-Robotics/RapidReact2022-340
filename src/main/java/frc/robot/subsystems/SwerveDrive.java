@@ -4,12 +4,19 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
-import com.analog.adis16470.frc.ADIS16470_IMU.ADIS16470CalibrationTime;
-import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.ADIS16470_IMU.CalibrationTime;
+
 import frc.robot.Constants;
 
 public class SwerveDrive extends SubsystemBase {
@@ -18,7 +25,8 @@ public class SwerveDrive extends SubsystemBase {
   private static SwerveModule frontLeft, rearLeft, rearRight, frontRight;
   public ADIS16470_IMU imu;
   private SwerveDriveKinematics driveKinematics;
-
+  //TODO: instantiate the SwerveDriveOdometry object
+  public PIDController robotSpinController;
 
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
@@ -37,28 +45,101 @@ public class SwerveDrive extends SubsystemBase {
       frontRight
     };
     
-    // Constructs IMU object
-    imu = new ADIS16470_IMU(IMUAxis.kY, SPI.Port.kOnboardCS0, ADIS16470CalibrationTime._4s);
+    //Create kinematics object, which converts between ChassisSpeeds and ModuleStates
     driveKinematics = new SwerveDriveKinematics(
       Constants.FRONT_LEFT_POSITION, Constants.REAR_LEFT_POSITION, 
       Constants.REAR_RIGHT_POSITION, Constants.FRONT_RIGHT_POSITION);
+
+    // Constructs IMU object
+    imu = new ADIS16470_IMU(IMUAxis.kY, SPI.Port.kOnboardCS0, CalibrationTime._4s);
     
+    //TODO: construct the odometry class.
+
+    //construct the wpilib PIDcontroller for rotation.
+    robotSpinController = new PIDController(Constants.ROBOT_SPIN_P, Constants.ROBOT_SPIN_I, Constants.ROBOT_SPIN_D);
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    //TODO: instatiate and construct a 4 large SwerveModuleState array
+    //TODO: get the current SwerveModuleStates from all modules in array, use for loop
+    //TODO:run odometry update on the odometry object
   }
 
+  /**
+   * Drives the robot based on speeds from the robot's orientation.
+   * all speed should be in range of -1.0 to 1.0 with 0.0 being not 
+   * moving for percentVoltage mode and between the Max Velocity 
+   * and -Max Velocity with 0 not moving in Velocity mode
+   * @param chassisSpeeds an object  
+   * @param isVeloMode true if velocity mode, false if percent output mode
+   */
+  public void driveRobotCentric(ChassisSpeeds chassisSpeeds , boolean isVeloMode){
+    //TODO: instatiate an array of SwerveModuleStates, set equal to the output of toSwerveModuleStates() (method of SwerveDriveKinematics)
+    //TODO: use SwerveDriveKinematic.desaturateWheelSpeeds(), max speed should be 1 if percentOutput, MaxVelovcity if velocity mode 
+    //TODO: pass along SwerveModuleStates to SwerveModules using for loop, pass along boolean isVeloMode
+  }
 
-    /**
+  /**
+   * Drives the robot based on speeds from the robot's orientation.
+   * all speed should be in range of -1.0 to 1.0 with 0.0 being not 
+   * moving for percentVoltage mode and between the Max Velocity 
+   * and -Max Velocity with 0 not moving in Velocity mode
+   * @param forwardSpeed the movement forward and backward
+   * @param strafeSpeed the movement side to side
+   * @param rotSpeed the speed of rotation
+   * @param isVeloMode true if velocity mode, false if percent output mode
+   */
+  public void driveRobotCentric(double forwardSpeed, double strafeSpeed, double rotSpeed, boolean isVeloMode){
+    //TODO: convert forwardSpeed, strafeSpeed and rotSpeed to a chassisSpeeds object
+    //TODO: pass newly created chassisSpeeds object and mode to driveRobotCentric(ChassisSpeeds chassisSpeeds , boolean isVeloMode)
+  }
+
+  /**
+   * Drive the robot so that all directions are independent of the robots orientation (rotation)
+   * all speed should be in range of -1.0 to 1.0 with 0.0 being not moving in that direction
+   * 
+   * @param awaySpeed from field relative, aka a fix direction,
+   *                  away from or toward the driver, a speed
+   *                  valued between -1.0 and 1.0, where 1.0
+   *                  is to away from the driver 
+   * @param lateralSpeed from field relative, aka a fix direction
+   *                     regardless of robot rotation, a speed
+   *                     valued between -1.0 and 1.0, where 1.0
+   *                     is to the left 
+   * @param rotSpeed rotational speed of the robot
+   *                 -1.0 to 1.0 where 0.0 is not rotating
+   * @param isVeloMode true if velocity mode, false if percent output mode
+   */
+  public void driveFieldRelative(double awaySpeed, double lateralSpeed, double rotSpeed, boolean isVeloMode){
+    //TODO: convert awaySpeed, lateralSpeed and rotSpeed to a ChassisSpeeds object, use method fromFieldRelativeSpeeds
+    //TODO: pass newly created ChassisSpeeds object and mode to driveRobotCentric(ChassisSpeeds chassisSpeeds , boolean isVeloMode)
+  }
+
+  /**
    * Stops all module motion, then lets all the modules spin freely.
    */
   public void stopAllModules(){
+    //run a for loop to call each mmodule
     for (int i=0; i<4; i++){
+      //use the stopAll method, which stops both the drive and rotation motor.
       swerveModules[i].stopAll();
     }
   }
+
+  /**
+   * Pull the current Position from the odometry 
+   * class, this should be in meters.
+   * 
+   * @return a Pose2d representing the current position
+   */
+  public Pose2d getCurPose2d(){
+    //TODO: return pose2d object from the odometry class
+  }
+
+  //TODO: create a method to set the odometry with Pose2d
 
   /**
    * A function that allows the user to reset the gyro, this 
@@ -79,7 +160,7 @@ public class SwerveDrive extends SubsystemBase {
    */
   public Rotation2d getGyroRotation2d(){
     //return a newly constructed Rotation2d object, it takes the angle in radians as a constructor argument
-    return new Rotation2d(getGyroInRad());
+    return Rotation2d.fromDegrees(getGyroInDeg());
     //note that counterclockwise rotation is positive
   }
 
@@ -105,6 +186,13 @@ public class SwerveDrive extends SubsystemBase {
     //note counterclockwise rotation is positive
   }
 
+  /**
+   * Returns all values from the module's absolute 
+   * encoders, and returns them in an array of 
+   * doubles, as degrees, in module order.
+   * 
+   * @return array of doubles, in degrees
+   */
   public double[] getAllAbsModuleAngles(){
     double[] moduleAngles = new double[4];
     for(int i=0; i<4; i++){
@@ -113,6 +201,13 @@ public class SwerveDrive extends SubsystemBase {
     return moduleAngles;
   }
 
+  /**
+   * Returns all values from the rotational motor's 
+   * reletive encoders in an array of doubles. This 
+   * array is in order of module number.
+   * 
+   * @return array of doubles, representing tick count.
+   */
   public double[] getAllModuleRelEnc(){
     double[] moduleRelEnc = new double[4];
     for(int i=0; i<4; i++){
@@ -122,6 +217,8 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   /**
+   * Returns the collective distance as seen by the 
+   * drive motor's encoder, for each module.
    * 
    * @return
    */
@@ -172,4 +269,25 @@ public class SwerveDrive extends SubsystemBase {
       swerveModules[i].zeroAbsPositionSensor();
     }
   }
+
+  /**
+   * 
+   * @param target an angle in radians
+   * @return a value to give the rotational input, -1.0 to 1.0
+   */
+  public double getRobotRotationPIDOut(double target){
+    double currentGyroPos = getGyroInRad();
+    //Why is this back? well if we end up switching to a NavX, we'll need it
+    // double posDiff =  currentGyroPos - target;
+    // if ( posDiff > Math.PI) {
+    //   // the distance the other way around the circle
+    //   target = currentGyroPos + (Constants.TWO_PI - (posDiff));
+    // }
+    // else if (posDiff < -Math.PI){
+    //   //if the distance to the goal is small enough, stop rotation and return
+    //   target = currentGyroPos - (Constants.TWO_PI + (posDiff));
+    // }
+    return robotSpinController.calculate(currentGyroPos, target);
+  }
+
 }

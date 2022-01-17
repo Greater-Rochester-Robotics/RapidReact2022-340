@@ -21,12 +21,13 @@ public final class Constants {
     public static final double THREE_PI_OVER_TWO = 3*PI_OVER_TWO;
     public static final double TWO_PI = 2*Math.PI;
 
+    /* Swerve Module Positions */
     public static final Translation2d FRONT_LEFT_POSITION = new Translation2d(.2,.2);
     public static final Translation2d FRONT_RIGHT_POSITION = new Translation2d(-.2,.2);
     public static final Translation2d REAR_LEFT_POSITION = new Translation2d(-.2,-.2);
     public static final Translation2d REAR_RIGHT_POSITION = new Translation2d(.2,-.2); 
 
-    /* Swerve Drive Constants */
+    /* Swerve Module Drive Constants */
     public static final double MINIMUM_DRIVE_SPEED = 0.01;// the slowest the wheels can turn, in m/s
     public static final double MINIMUM_DRIVE_DUTY_CYCLE = 0.05;// the slowest the wheels can turn, in duty cycle
     public static final double MAXIMUM_VELOCITY = 4.5;
@@ -36,20 +37,23 @@ public final class Constants {
     public static final double SWERVE_DRIVE_P_VALUE = 1000; // 0.035;
     public static final double SWERVE_DRIVE_I_VALUE = 0.0;
     public static final double SWERVE_DRIVE_D_VALUE = 25;
-    public static final double SWERVE_DRIVE_F_VALUE = 1023 / (MAXIMUM_VELOCITY / DRIVE_ENC_TO_METERS_FACTOR);
+    public static final double SWERVE_DRIVE_FF_VALUE = 1023 / (MAXIMUM_VELOCITY / DRIVE_ENC_TO_METERS_FACTOR);
 
     /* Swerve Module Rotation constants */
-    public static final double SWERVE_ROT_P_VALUE = 0.4;// 2if sluggish, increase P value
+    public static final double SWERVE_ROT_P_VALUE = 0.4;// TODO:find this value for real, .4 was from 2021
     public static final double SWERVE_ROT_I_VALUE = 0.0;
-    public static final double SWERVE_ROT_D_VALUE = 0.0; // 4
+    public static final double SWERVE_ROT_D_VALUE = 0.0; 
     public static final double SWERVE_ROT_I_ZONE_VALUE = 0;
-    public static final double SWERVE_ROT_NONARB_FF_VALUE = 0.0;//.0001;//Not arbitrary, this is multiplied by setpoint, must be 0 in position PID
-    public static final double SWERVE_ROT_ARB_FF_VOLTAGE = 0.0;//1.1;
-    public static final double SWERVE_ROT_PID_VOLTAGE_MINIMUM = -12.0;
-    public static final double SWERVE_ROT_PID_VOLTAGE_MAXIMUM = 12.0;
+    public static final double SWERVE_ROT_FF_VALUE = 0.0;
+    public static final double SWERVE_ROT_ARB_FF_VOLTAGE = 0.0;//This is left over from NEO550
+    public static final double SWERVE_ROT_PID_VOLTAGE_MINIMUM = -12.0;//This is left over from NEO550
+    public static final double SWERVE_ROT_PID_VOLTAGE_MAXIMUM = 12.0;//This is left over from NEO550
     public static final double SWERVE_MODULE_TOLERANCE = .051;
 
-
+    /* Robot Motion PID controller constants */
+    public static final double ROBOT_SPIN_P = 1;//TODO:this can't be the number, adjust when have robot
+    public static final double ROBOT_SPIN_I = 0;
+    public static final double ROBOT_SPIN_D = 0;
 
     // CTRE motor and sensors
     public static final int FRONT_LEFT_MOVE_MOTOR = 40;// module 0
