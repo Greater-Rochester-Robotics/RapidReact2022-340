@@ -280,7 +280,7 @@ public class SwerveModule {
         // Set the setpoint using setReference on the TalonFX
         rotationMotor.set(TalonFXControlMode.Position, outputEncValue);
 
-        //TODO:Make work with PercentOutput or Velocity. use isVeloMode
+        //TODO:Make work with PercentOutput or Velocity. use isVeloMode (ternary operator)
         driveMotor.set(TalonFXControlMode.PercentOutput, targetState.speedMetersPerSecond);
     }  
 

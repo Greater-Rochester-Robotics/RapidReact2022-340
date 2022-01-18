@@ -5,12 +5,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.SPI;
@@ -28,6 +30,24 @@ public class SwerveDrive extends SubsystemBase {
   //TODO: instantiate the SwerveDriveOdometry object
   public PIDController robotSpinController;
 
+  /**
+   * This enumeration clarifies the numbering of the swerve module for new users.
+   * frontLeft  | 0
+   * rearLeft   | 1
+   * rearRight  | 2
+   * frontRight | 3
+   */
+  public enum SwerveModNum{
+    frontLeft(0) , rearLeft(1) , rearRight(2) , frontRight(3);
+    public int num;
+    private SwerveModNum(int number){
+      num = number;
+    }
+    public int getNumber() {
+			return num;
+		}
+  }
+  
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
     //adds CANCoder address as third param, already named as rotation sensor in constants
@@ -118,6 +138,29 @@ public class SwerveDrive extends SubsystemBase {
     //TODO: pass newly created ChassisSpeeds object and mode to driveRobotCentric(ChassisSpeeds chassisSpeeds , boolean isVeloMode)
   }
 
+/**
+   * This function is meant to drive one module at a time for testing purposes.
+   * @param moduleNumber which of the four modules(0-3) we are using
+   * @param moveSpeed move speed -1.0 to 1.0, where 0.0 is stopped
+   * @param rotatePos a position between -PI and PI where we want the module to be
+   * @param isVeloMode changes between velocity mode and dutyCycle mode
+   */
+  public void driveOneModule(int moduleNumber,double moveSpeed, double rotatePos, boolean isVeloMode){
+    //test that moduleNumber is between 0-3, return if not(return;)
+    if (moduleNumber > 3 && moduleNumber < 0){
+      System.out.println("Module " + moduleNumber + " is out of bounds.");
+      return;
+    }else if(rotatePos<-Math.PI || rotatePos > Math.PI){
+      System.out.println("Input angle out of range.");
+      return;
+    }
+
+    SwerveModuleState oneSwerveState = new SwerveModuleState(moveSpeed, new Rotation2d(rotatePos));
+    //code to drive one module in a testing form
+    swerveModules[moduleNumber].setModuleState( oneSwerveState , isVeloMode );
+
+  }
+
   /**
    * Stops all module motion, then lets all the modules spin freely.
    */
@@ -139,7 +182,7 @@ public class SwerveDrive extends SubsystemBase {
     //TODO: return pose2d object from the odometry class
   }
 
-  //TODO: create a method to set the odometry with Pose2d
+  //TODO: create a method to set the odometry with Pose2d as a param
 
   /**
    * A function that allows the user to reset the gyro, this 
@@ -220,7 +263,7 @@ public class SwerveDrive extends SubsystemBase {
    * Returns the collective distance as seen by the 
    * drive motor's encoder, for each module.
    * 
-   * @return
+   * @return an array of doubles in meters
    */
   public double[] getAllModuleDistance(){
     double[] moduleDistances = new double[4];
@@ -277,7 +320,7 @@ public class SwerveDrive extends SubsystemBase {
    */
   public double getRobotRotationPIDOut(double target){
     double currentGyroPos = getGyroInRad();
-    //Why is this back? well if we end up switching to a NavX, we'll need it
+    //Why is this here? well if we end up switching to a NavX, we'll need it
     // double posDiff =  currentGyroPos - target;
     // if ( posDiff > Math.PI) {
     //   // the distance the other way around the circle

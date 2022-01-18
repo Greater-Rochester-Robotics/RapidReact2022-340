@@ -1,0 +1,101 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.commands.drive;
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
+import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
+import frc.robot.RobotContainer.Axis;
+
+/**
+ * This command is designed so that a driver can drive 
+ * the swerve drive based around a fixed orientation.
+ * Forward on the stick should cause the robot to away 
+ * from the driver. If this is true, then left and right 
+ * on the stick will cause the robot to move to the 
+ * driver's left and right, respectively. This command 
+ * does not end of its own accord so it must be interrupted 
+ * to end.
+ * 
+ * UNLIKE DriveFieldCentric this command uses a PIDController 
+ * to maintain the robot's rotational orientation when the 
+ * robot is not instructed to rotate by the rotational 
+ * input. 
+ */
+
+public class DriveFieldRelativeAdvanced extends CommandBase {
+  private double currentAngle = 0;
+
+  /** Creates a new DriveFieldCentricAdvanced. */
+  public DriveFieldRelativeAdvanced() {
+    addRequirements(RobotContainer.swerveDrive);
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    RobotContainer.swerveDrive.setOdometryActive(false);
+    currentAngle = Robot.robotContainer.swerveDrive.getGyroInRad();
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    //pull primary stick values, and put to awaySpeed and lateralSpeed doubles
+    double  awaySpeed = Robot.robotContainer.getDriverAxis(Axis.LEFT_Y);
+    double lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.LEFT_X);
+    //check if secondary sticks are being used
+    if(Math.abs(Robot.robotContainer.getDriverAxis(Axis.RIGHT_Y))>.1 ||
+      Math.abs(Robot.robotContainer.getDriverAxis(Axis.RIGHT_X))>.1){
+      //if secondary sticks used, replace with secondary sticks witha slow factor
+      awaySpeed = Robot.robotContainer.getDriverAxis(Axis.RIGHT_Y)*.5;
+      lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.RIGHT_X)*.5;
+    }
+    //create rotation speed from gamepad triggers
+    double rotSpeed = Robot.robotContainer.getDriverAxis(Axis.RIGHT_TRIGGER) - Robot.robotContainer.getDriverAxis(Axis.LEFT_TRIGGER);
+
+    //use DPad to turn to specific angles.
+    // if(Robot.robotContainer.getDriverDPad() == 0){
+    //   currentAngle = Math.round(RobotContainer.swerveDrive.getGyroInRad()/Constants.TWO_PI) * Constants.TWO_PI;
+    // }else if(Robot.robotContainer.getDriverDPad() == 90){
+    //   currentAngle = Math.round(RobotContainer.swerveDrive.getGyroInRad()/Constants.TWO_PI) * Constants.TWO_PI - 1.178;
+    // }
+
+    //test if the absolute rotational input is greater than .1
+    if (Math.abs(rotSpeed) > .1){
+      //if the test is true, just copy the DriveFieldCentric execute method
+      RobotContainer.swerveDrive.driveFieldCentric(
+        awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
+        lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
+        rotSpeed*-Constants.DRIVER_SPEED_SCALE_ROTATIONAL ,
+        false
+      );
+      //for when rotation speed is zero, update the current angle
+      currentAngle = RobotContainer.swerveDrive.getGyroInRad();
+    }
+    else {
+      //if the test is false, still use driveFieldCentric(), but for last parameter use PIDController accessor function
+      RobotContainer.swerveDrive.driveFieldCentric(
+        awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
+        lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
+        RobotContainer.swerveDrive.getRobotRotationPIDOut(currentAngle),
+        false
+      );
+    }
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
+}

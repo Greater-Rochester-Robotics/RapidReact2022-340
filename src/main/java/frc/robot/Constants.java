@@ -27,10 +27,11 @@ public final class Constants {
     public static final Translation2d REAR_LEFT_POSITION = new Translation2d(-.2,-.2);
     public static final Translation2d REAR_RIGHT_POSITION = new Translation2d(.2,-.2); 
 
-    /* Swerve Module Drive Constants */
+    /* Swerve Module Drive Motor Constants */
     public static final double MINIMUM_DRIVE_SPEED = 0.01;// the slowest the wheels can turn, in m/s
     public static final double MINIMUM_DRIVE_DUTY_CYCLE = 0.05;// the slowest the wheels can turn, in duty cycle
     public static final double MAXIMUM_VELOCITY = 4.5;
+    public static final double MAX_ROBOT_ROT_VELOCITY = 2;
     public static final double MAXIMUM_ACCELERATION = 1.0;
     // public static final double MAX_ROBOT_ROT_VELOCITY = MAXIMUM_VELOCITY / DISTANCE_TO_MODULE_0;
     public static final double MAXIMUM_VOLTAGE = 12.0;
@@ -54,6 +55,10 @@ public final class Constants {
     public static final double ROBOT_SPIN_P = 1;//TODO:this can't be the number, adjust when have robot
     public static final double ROBOT_SPIN_I = 0;
     public static final double ROBOT_SPIN_D = 0;
+
+    /* Driver Scaling Constants */
+    public static final double DRIVER_SPEED_SCALE_LINEAR = -.6;
+    public static final double DRIVER_SPEED_SCALE_ROTATIONAL = .6;
 
     // CTRE motor and sensors
     public static final int FRONT_LEFT_MOVE_MOTOR = 40;// module 0

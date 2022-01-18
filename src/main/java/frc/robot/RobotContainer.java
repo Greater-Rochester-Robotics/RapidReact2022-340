@@ -15,9 +15,24 @@ import edu.wpi.first.wpilibj2.command.Command;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  // The robot's gamepads are defined here...
+  //TODO: pull over joysitcks, update to XboxController, pull over all button construction
+
+  //The robot's subsystems are instantiated here
+  //TODO: instantiate the subsystems as static objects
+
+  //The sendable chooser for autonomous is constructed here
+  //TODO: construct the sendable chooser 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    //create(construct) subsystems
+    //TODO:construct subsystems
+
+    //Add all autos to the auto selector
+    configureAutoModes();
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -31,8 +46,12 @@ public class RobotContainer {
   private void configureButtonBindings() {}
 
   /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
+   * Define all autonomous modes here to have them 
+   * appear in the autonomous select drop down menu.
    */
+  private void configureAutoModes() {
+    //TODO:add auto modes to the sendable chooser
+  }
+
+  //TODO:create accessor functions to get the value of driver and coDriver axises
 }
