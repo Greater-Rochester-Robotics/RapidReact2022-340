@@ -76,9 +76,9 @@ public class RobotContainer {
 
 
   //The robot's subsystems are instantiated here
+  public static Compressor compressor;
   public static SwerveDrive swerveDrive;
   public static Climber climber;
-  public static Compressor compressor;
   public static Intake intake;
   public static LimeLight limeLight;
   public static Shooter shooter;
@@ -90,9 +90,9 @@ public class RobotContainer {
   public RobotContainer() {
 
     //create(construct) subsystems
+    compressor = new Compressor();//Let's keep compressor first
     swerveDrive = new SwerveDrive();
     climber = new Climber();
-    compressor = new Compressor();
     intake = new Intake();
     limeLight = new LimeLight();
     shooter = new Shooter();

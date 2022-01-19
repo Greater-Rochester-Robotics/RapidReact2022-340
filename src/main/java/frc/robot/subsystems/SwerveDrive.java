@@ -103,9 +103,9 @@ public class SwerveDrive extends SubsystemBase {
    * @param isVeloMode true if velocity mode, false if percent output mode
    */
   public void driveRobotCentric(ChassisSpeeds chassisSpeeds , boolean isVeloMode){
-    //TODO: instatiate an array of SwerveModuleStates, set equal to the output of toSwerveModuleStates() (method of SwerveDriveKinematics)
+    //instantiate an array of SwerveModuleStates, set equal to the output of toSwerveModuleStates() 
     SwerveModuleState[] targetStates = driveKinematics.toSwerveModuleStates(chassisSpeeds);
-    //TODO: use SwerveDriveKinematic.desaturateWheelSpeeds(), max speed should be 1 if percentOutput, MaxVelovcity if velocity mode
+    //use SwerveDriveKinematic.desaturateWheelSpeeds(), max speed is 1 if percentOutput, MaxVelovcity if velocity mode
     SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, isVeloMode? Constants.MAXIMUM_VELOCITY : 1.0);
     //pass along SwerveModuleStates to SwerveModules and pass along boolean isVeloMode
     for (int i = 0; i < targetStates.length; i++) {
@@ -124,10 +124,8 @@ public class SwerveDrive extends SubsystemBase {
    * @param isVeloMode true if velocity mode, false if percent output mode
    */
   public void driveRobotCentric(double forwardSpeed, double strafeSpeed, double rotSpeed, boolean isVeloMode){
-    //TODO: convert forwardSpeed, strafeSpeed and rotSpeed to a chassisSpeeds object
-    // CassisSpeeds chassisSpeeds  = 
+    //convert forwardSpeed, strafeSpeed and rotSpeed to a chassisSpeeds object, pass to driveRobotCentric
     driveRobotCentric(new ChassisSpeeds(forwardSpeed, strafeSpeed, rotSpeed), isVeloMode);
-    //TODO: pass newly created chassisSpeeds object and mode to driveRobotCentric(ChassisSpeeds chassisSpeeds , boolean isVeloMode)
   }
 
   /**
@@ -147,9 +145,8 @@ public class SwerveDrive extends SubsystemBase {
    * @param isVeloMode true if velocity mode, false if percent output mode
    */
   public void driveFieldRelative(double awaySpeed, double lateralSpeed, double rotSpeed, boolean isVeloMode){
-    //TODO: convert awaySpeed, lateralSpeed and rotSpeed to a ChassisSpeeds object, use method fromFieldRelativeSpeeds
+    //convert awaySpeed, lateralSpeed and rotSpeed to ChassisSpeeds with fromFieldRelativeSpeeds pass to driveRobotCentric
     driveRobotCentric(ChassisSpeeds.fromFieldRelativeSpeeds(awaySpeed, lateralSpeed, rotSpeed, getGyroRotation2d()), isVeloMode);
-    //TODO: pass newly created ChassisSpeeds object and mode to driveRobotCentric(ChassisSpeeds chassisSpeeds , boolean isVeloMode)
   }
 
 /**

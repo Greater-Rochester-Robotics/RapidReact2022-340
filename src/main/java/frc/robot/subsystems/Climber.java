@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
+  //TODO:Instantiate doubleSolenoid for tilt
+  //TODO:instatiate two falcon motors fo 2 climbers
   /** Creates a new Climber. */
   public Climber() {}
 

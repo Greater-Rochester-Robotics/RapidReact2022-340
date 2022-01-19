@@ -7,11 +7,16 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
+  //TODO:Instantiate DoubleSolenoid for harvester in/out
+  //TODO:Instantiate harvester motor(unknown motor type)
   /** Creates a new Intake. */
-  public Intake() {}
+  public Intake() {
+    //TODO:construct
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+  //TODO:make modifier methods outHarvester inHarvester
 }

@@ -74,10 +74,9 @@ public class SwerveModule {
         rotationMotor.configFactoryDefault();
         // use the integrated sensor with the primary closed loop and timeout is 0.
         rotationMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-        // above uses configSelectedFeedbackCoefficient(), to scale the
-        // driveMotor to real distance, DRIVE_ENC_TO_METERS_FACTOR
+        
         rotationMotor.setNeutralMode(NeutralMode.Brake);
-        rotationMotor.setInverted(false);// Set motor inverted(set to false) TODO:Is this right in swerveX
+        rotationMotor.setInverted(false);// Set motor inverted(set to false) TODO:Is this right in swerveX?
         rotationMotor.enableVoltageCompensation(true);
         driveMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setDriveMotorPIDF(Constants.SWERVE_ROT_P_VALUE, Constants.SWERVE_ROT_I_VALUE,

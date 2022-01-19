@@ -7,11 +7,16 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
+  //TODO: instantiate two shooter motors(main/follower) Falcon500
   /** Creates a new Shooter. */
-  public Shooter() {}
+  public Shooter() {
+    //TODO:construct shooter motors
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  //TODO: methods getSpeed(), setSpeed, isAtSpeed, stopMotors
 }

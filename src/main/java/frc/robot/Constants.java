@@ -15,8 +15,8 @@ import edu.wpi.first.math.geometry.Translation2d;
  */
 public final class Constants {
 
-    public static final double RAD_TO_ENC_CONV_FACTOR = 10.1859;//TODO: fix for swerveX //the radian to enc factor
-    public static final double DRIVE_ENC_TO_METERS_FACTOR = 0.00002226;//TODO:Get correct value from SwerveX//the ratio from mechanical specs
+    public static final double RAD_TO_ENC_CONV_FACTOR = 10.1859;//TODO: fix for swerveX 8T to 24T / 14T to 72T//the radian to enc factor
+    public static final double DRIVE_ENC_TO_METERS_FACTOR = 0.00002226;//TODO:Get correct value from SwerveX 7.13:1//the ratio from mechanical specs
     public static final double PI_OVER_TWO = Math.PI/2;
     public static final double THREE_PI_OVER_TWO = 3*PI_OVER_TWO;
     public static final double TWO_PI = 2*Math.PI;
