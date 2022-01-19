@@ -5,11 +5,11 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.RobotContainer.Axis;
 
 /**
  * This command is designed so that a driver can drive 
@@ -38,25 +38,24 @@ public class DriveFieldRelativeAdvanced extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.swerveDrive.setOdometryActive(false);
-    currentAngle = Robot.robotContainer.swerveDrive.getGyroInRad();
+    currentAngle = RobotContainer.swerveDrive.getGyroInRad();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     //pull primary stick values, and put to awaySpeed and lateralSpeed doubles
-    double  awaySpeed = Robot.robotContainer.getDriverAxis(Axis.LEFT_Y);
-    double lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.LEFT_X);
+    double awaySpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftY);
+    double lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftX);
     //check if secondary sticks are being used
-    if(Math.abs(Robot.robotContainer.getDriverAxis(Axis.RIGHT_Y))>.1 ||
-      Math.abs(Robot.robotContainer.getDriverAxis(Axis.RIGHT_X))>.1){
+    if(Math.abs(Robot.robotContainer.getDriverAxis(Axis.kRightY))>.1 ||
+      Math.abs(Robot.robotContainer.getDriverAxis(Axis.kRightX))>.1){
       //if secondary sticks used, replace with secondary sticks witha slow factor
-      awaySpeed = Robot.robotContainer.getDriverAxis(Axis.RIGHT_Y)*.5;
-      lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.RIGHT_X)*.5;
+      awaySpeed = Robot.robotContainer.getDriverAxis(Axis.kRightY)*.5;
+      lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightX)*.5;
     }
     //create rotation speed from gamepad triggers
-    double rotSpeed = Robot.robotContainer.getDriverAxis(Axis.RIGHT_TRIGGER) - Robot.robotContainer.getDriverAxis(Axis.LEFT_TRIGGER);
+    double rotSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightTrigger) - Robot.robotContainer.getDriverAxis(Axis.kLeftTrigger);
 
     //use DPad to turn to specific angles.
     // if(Robot.robotContainer.getDriverDPad() == 0){
@@ -68,7 +67,7 @@ public class DriveFieldRelativeAdvanced extends CommandBase {
     //test if the absolute rotational input is greater than .1
     if (Math.abs(rotSpeed) > .1){
       //if the test is true, just copy the DriveFieldCentric execute method
-      RobotContainer.swerveDrive.driveFieldCentric(
+      RobotContainer.swerveDrive.driveFieldRelative(
         awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
         lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
         rotSpeed*-Constants.DRIVER_SPEED_SCALE_ROTATIONAL ,
@@ -79,7 +78,7 @@ public class DriveFieldRelativeAdvanced extends CommandBase {
     }
     else {
       //if the test is false, still use driveFieldCentric(), but for last parameter use PIDController accessor function
-      RobotContainer.swerveDrive.driveFieldCentric(
+      RobotContainer.swerveDrive.driveFieldRelative(
         awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
         lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
         RobotContainer.swerveDrive.getRobotRotationPIDOut(currentAngle),

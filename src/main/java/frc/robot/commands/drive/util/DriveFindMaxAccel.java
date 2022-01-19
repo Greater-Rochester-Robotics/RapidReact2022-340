@@ -24,7 +24,7 @@ public class DriveFindMaxAccel extends CommandBase {
   @Override
   public void initialize() {
     
-    RobotContainer.swerveDrive.resetCurrentPos();
+    // RobotContainer.swerveDrive.resetCurrentPos();
     RobotContainer.swerveDrive.stopAllModules();
     timer.reset();
     timer.start();
@@ -33,24 +33,24 @@ public class DriveFindMaxAccel extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.swerveDrive.driveFieldCentric(1.0, 0.0, 0.0, false);
+    RobotContainer.swerveDrive.driveFieldRelative(1.0, 0.0, 0.0, false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     
-    double accel = RobotContainer.swerveDrive.getCurrentVelocity().getX() *
-      RobotContainer.swerveDrive.getCurrentVelocity().getX() /
-      2 / RobotContainer.swerveDrive.getCurrentPose().getX();
+    // double accel = RobotContainer.swerveDrive.getCurrentVelocity().getX() *
+    //   RobotContainer.swerveDrive.getCurrentVelocity().getX() /
+    //   2 / RobotContainer.swerveDrive.getCurrentPose().getX();
     timer.stop();
-    System.out.println("Acceleration = " + accel);
+    // System.out.println("Acceleration = " + accel);
     RobotContainer.swerveDrive.stopAllModules();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.swerveDrive.getCurrentVelocity().getX() > 4.0;
+    return true;//RobotContainer.swerveDrive.getCurrentVelocity().getX() > 4.0;
   }
 }

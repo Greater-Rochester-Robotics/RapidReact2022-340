@@ -8,11 +8,11 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.RobotContainer.Axis;
 
 /**
  * This command is designed so that a driver can drive 
@@ -24,12 +24,12 @@ import frc.robot.RobotContainer.Axis;
  * does not end of its own accord so it must be interupted 
  * to end.
  */
-public class DriveFieldCentricVelocity extends CommandBase {
+public class DriveFieldRelativeVelocity extends CommandBase {
   /**
    * Creates a new DriveFieldCentric.
    */
   @Deprecated
-  public DriveFieldCentricVelocity() {
+  public DriveFieldRelativeVelocity() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.swerveDrive);
   }
@@ -42,12 +42,12 @@ public class DriveFieldCentricVelocity extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double  awaySpeed = Robot.robotContainer.getDriverAxis(Axis.LEFT_Y);
-    double lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.LEFT_X);
-    double rotSpeed = Robot.robotContainer.getDriverAxis(Axis.RIGHT_TRIGGER) - Robot.robotContainer.getDriverAxis(Axis.LEFT_TRIGGER);
+    double  awaySpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftY);
+    double lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftX);
+    double rotSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightTrigger) - Robot.robotContainer.getDriverAxis(Axis.kLeftTrigger);
 
 
-    RobotContainer.swerveDrive.driveFieldCentric(
+    RobotContainer.swerveDrive.driveFieldRelative(
       awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR*Constants.MAXIMUM_VELOCITY,
       lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR*Constants.MAXIMUM_VELOCITY,
       rotSpeed*-Constants.DRIVER_SPEED_SCALE_ROTATIONAL*Constants.MAX_ROBOT_ROT_VELOCITY, 

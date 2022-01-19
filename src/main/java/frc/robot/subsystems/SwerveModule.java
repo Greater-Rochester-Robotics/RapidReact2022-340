@@ -257,13 +257,15 @@ public class SwerveModule {
      * @param isVeloMode true if velocity mode, false if percent output mode
      */
     public void setModuleState(SwerveModuleState targetState, boolean isVeloMode){
-
-        //TODO: Create Rotation2d object and fill with call from getCurRot2d()
-
-        //TODO: Use optimize from SwerveModuleState with targetState and Rotation2d object pulled from above
+        
+        //Instatiate Rotation2d object and fill with call from getCurRot2d()
+        Rotation2d curPosition = getCurRot2d();
+        
+        //optimize targetState with Rotation2d object pulled from above
+        SwerveModuleState.optimize(targetState, curPosition);
         
         //find the difference between the target and current position
-        double posDiff = targetState.angle.getRadians() - getPosInRad(); //TODO: change getPosInRad to Rotation2d from first line in method, pull angle out
+        double posDiff = targetState.angle.getRadians() - curPosition.getRadians(); 
         double absDiff = Math.abs(posDiff);
 
         // if the distance is more than a half circle,we going the wrong way, fix
@@ -280,8 +282,12 @@ public class SwerveModule {
         // Set the setpoint using setReference on the TalonFX
         rotationMotor.set(TalonFXControlMode.Position, outputEncValue);
 
-        //TODO:Make work with PercentOutput or Velocity. use isVeloMode (ternary operator)
-        driveMotor.set(TalonFXControlMode.PercentOutput, targetState.speedMetersPerSecond);
+        //output to drive motor based on velomode or not
+        if (isVeloMode) {
+            setDriveSpeed(targetState.speedMetersPerSecond);
+        } else {
+            setDriveMotor(targetState.speedMetersPerSecond);
+        }
     }  
 
     /**

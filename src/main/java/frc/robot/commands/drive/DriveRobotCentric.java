@@ -8,11 +8,11 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.RobotContainer.Axis;
 
 /**
  * This command is designed so that a driver can drive 
@@ -41,17 +41,17 @@ public class DriveRobotCentric extends CommandBase {
   @Override
   public void execute() {
     //pull primary stick values, and put to awaySpeed and lateralSpeed doubles
-    double  forwardSpeed = Robot.robotContainer.getDriverAxis(Axis.LEFT_Y);
-    double strafeSpeed = Robot.robotContainer.getDriverAxis(Axis.LEFT_X);
+    double  forwardSpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftY);
+    double strafeSpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftX);
     //check if secondary sticks are being used
-    if(Math.abs(Robot.robotContainer.getDriverAxis(Axis.RIGHT_Y))>.1 ||
-      Math.abs(Robot.robotContainer.getDriverAxis(Axis.RIGHT_X))>.1){
+    if(Math.abs(Robot.robotContainer.getDriverAxis(Axis.kRightY))>.1 ||
+      Math.abs(Robot.robotContainer.getDriverAxis(Axis.kRightX))>.1){
       //if secondary sticks used, replace with secondary sticks witha slow factor
-      forwardSpeed = Robot.robotContainer.getDriverAxis(Axis.RIGHT_Y)*.5;
-      strafeSpeed = Robot.robotContainer.getDriverAxis(Axis.RIGHT_X)*.5;
+      forwardSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightY)*.5;
+      strafeSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightX)*.5;
     }
     //create rotation speed from gamepad triggers
-    double rotSpeed = Robot.robotContainer.getDriverAxis(Axis.RIGHT_TRIGGER) - Robot.robotContainer.getDriverAxis(Axis.LEFT_TRIGGER);
+    double rotSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightTrigger) - Robot.robotContainer.getDriverAxis(Axis.kLeftTrigger);
 
     RobotContainer.swerveDrive.driveRobotCentric(
       forwardSpeed *-Constants.DRIVER_SPEED_SCALE_LINEAR ,

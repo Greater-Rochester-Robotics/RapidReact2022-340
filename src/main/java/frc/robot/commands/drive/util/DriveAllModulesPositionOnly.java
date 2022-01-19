@@ -4,11 +4,12 @@
 
 package frc.robot.commands.drive.util;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.RobotContainer.Axis;
 import frc.robot.subsystems.SwerveDrive.SwerveModNum;
 
 /**
@@ -39,11 +40,11 @@ public class DriveAllModulesPositionOnly extends CommandBase {
   @Override
   public void execute() {
     //check to see that the joystick is far enough from centered
-    if ((Math.abs(Robot.robotContainer.getDriverAxis(Axis.LEFT_Y)) > .1)
-        || (Math.abs(Robot.robotContainer.getDriverAxis(Axis.LEFT_X)) > .1)){
+    if ((Math.abs(Robot.robotContainer.getDriverAxis(Axis.kLeftY)) > .1)
+        || (Math.abs(Robot.robotContainer.getDriverAxis(Axis.kLeftX)) > .1)){
       //take the angle the joystick is moved to and make that the rotation target position
-      rotatePos = Math.atan2(Robot.robotContainer.getDriverAxis(Axis.LEFT_Y),
-        Robot.robotContainer.getDriverAxis(Axis.LEFT_X));
+      rotatePos = Math.atan2(Robot.robotContainer.getDriverAxis(Axis.kLeftY),
+        Robot.robotContainer.getDriverAxis(Axis.kLeftX));
     }
 
     for (int i=0 ; i<4 ; i++){

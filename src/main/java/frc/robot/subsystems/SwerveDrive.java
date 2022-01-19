@@ -27,7 +27,7 @@ public class SwerveDrive extends SubsystemBase {
   private static SwerveModule frontLeft, rearLeft, rearRight, frontRight;
   public ADIS16470_IMU imu;
   private SwerveDriveKinematics driveKinematics;
-  //TODO: instantiate the SwerveDriveOdometry object
+  public SwerveDriveOdometry driveOdometry;
   public PIDController robotSpinController;
 
   /**
@@ -73,7 +73,8 @@ public class SwerveDrive extends SubsystemBase {
     // Constructs IMU object
     imu = new ADIS16470_IMU(IMUAxis.kY, SPI.Port.kOnboardCS0, CalibrationTime._4s);
     
-    //TODO: construct the odometry class.
+    //construct the odometry class.
+    driveOdometry = new SwerveDriveOdometry(driveKinematics, getGyroRotation2d());
 
     //construct the wpilib PIDcontroller for rotation.
     robotSpinController = new PIDController(Constants.ROBOT_SPIN_P, Constants.ROBOT_SPIN_I, Constants.ROBOT_SPIN_D);
@@ -83,9 +84,14 @@ public class SwerveDrive extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //TODO: instatiate and construct a 4 large SwerveModuleState array
-    //TODO: get the current SwerveModuleStates from all modules in array, use for loop
-    //TODO:run odometry update on the odometry object
+    //instatiate and construct a 4 large SwerveModuleState array
+    SwerveModuleState[] moduleStates =  new SwerveModuleState[4];
+    //get the current SwerveModuleStates from all modules in array
+    for (int i = 0; i < moduleStates.length; i++) {
+      moduleStates[i] = swerveModules[i].getModuleState();
+    }
+    //run odometry update on the odometry object
+    driveOdometry.update(getGyroRotation2d(), moduleStates);
   }
 
   /**
@@ -98,8 +104,13 @@ public class SwerveDrive extends SubsystemBase {
    */
   public void driveRobotCentric(ChassisSpeeds chassisSpeeds , boolean isVeloMode){
     //TODO: instatiate an array of SwerveModuleStates, set equal to the output of toSwerveModuleStates() (method of SwerveDriveKinematics)
-    //TODO: use SwerveDriveKinematic.desaturateWheelSpeeds(), max speed should be 1 if percentOutput, MaxVelovcity if velocity mode 
-    //TODO: pass along SwerveModuleStates to SwerveModules using for loop, pass along boolean isVeloMode
+    SwerveModuleState[] targetStates = driveKinematics.toSwerveModuleStates(chassisSpeeds);
+    //TODO: use SwerveDriveKinematic.desaturateWheelSpeeds(), max speed should be 1 if percentOutput, MaxVelovcity if velocity mode
+    SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, isVeloMode? Constants.MAXIMUM_VELOCITY : 1.0);
+    //pass along SwerveModuleStates to SwerveModules and pass along boolean isVeloMode
+    for (int i = 0; i < targetStates.length; i++) {
+       swerveModules[i].setModuleState(targetStates[i], isVeloMode);
+    }
   }
 
   /**
@@ -114,6 +125,8 @@ public class SwerveDrive extends SubsystemBase {
    */
   public void driveRobotCentric(double forwardSpeed, double strafeSpeed, double rotSpeed, boolean isVeloMode){
     //TODO: convert forwardSpeed, strafeSpeed and rotSpeed to a chassisSpeeds object
+    // CassisSpeeds chassisSpeeds  = 
+    driveRobotCentric(new ChassisSpeeds(forwardSpeed, strafeSpeed, rotSpeed), isVeloMode);
     //TODO: pass newly created chassisSpeeds object and mode to driveRobotCentric(ChassisSpeeds chassisSpeeds , boolean isVeloMode)
   }
 
@@ -135,6 +148,7 @@ public class SwerveDrive extends SubsystemBase {
    */
   public void driveFieldRelative(double awaySpeed, double lateralSpeed, double rotSpeed, boolean isVeloMode){
     //TODO: convert awaySpeed, lateralSpeed and rotSpeed to a ChassisSpeeds object, use method fromFieldRelativeSpeeds
+    driveRobotCentric(ChassisSpeeds.fromFieldRelativeSpeeds(awaySpeed, lateralSpeed, rotSpeed, getGyroRotation2d()), isVeloMode);
     //TODO: pass newly created ChassisSpeeds object and mode to driveRobotCentric(ChassisSpeeds chassisSpeeds , boolean isVeloMode)
   }
 
@@ -179,10 +193,18 @@ public class SwerveDrive extends SubsystemBase {
    * @return a Pose2d representing the current position
    */
   public Pose2d getCurPose2d(){
-    //TODO: return pose2d object from the odometry class
+    return driveOdometry.getPoseMeters();
   }
 
-  //TODO: create a method to set the odometry with Pose2d as a param
+  
+  /**
+   * Sets current position in the odometry class
+   * 
+   * @param pose new current position
+   */
+  public void setCurPose2d(Pose2d pose) {
+    driveOdometry.resetPosition(pose, getGyroRotation2d());
+  }
 
   /**
    * A function that allows the user to reset the gyro, this 
@@ -285,6 +307,17 @@ public class SwerveDrive extends SubsystemBase {
     }
     return moduleVelocities;
   }
+
+  /**  
+   * method to configure all modules DriveMotor PIDF
+   * these are the PIDF on the TalonFX
+   */
+  public void setDrivePIDF(double P, double I, double D, double F){
+    for (int i=0; i<4; i++){
+      swerveModules[i].setDriveMotorPIDF(P, I, D, F);
+    }
+  }
+
 
   /**
    * a method to print all module positions for testing purposes

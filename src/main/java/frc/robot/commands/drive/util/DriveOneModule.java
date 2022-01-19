@@ -9,10 +9,10 @@ package frc.robot.commands.drive.util;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.RobotContainer.Axis;
 
 import frc.robot.subsystems.SwerveDrive.SwerveModNum;
 
@@ -65,7 +65,7 @@ public class DriveOneModule extends CommandBase {
 
     //Set the one module we are working with to an angle and a speed
     RobotContainer.swerveDrive.driveOneModule(
-      moduleNum, Robot.robotContainer.getDriverAxis(Axis.LEFT_Y), rotatePos, false);
+      moduleNum, Robot.robotContainer.getDriverAxis(Axis.kLeftY), rotatePos, false);
   }
 
   // Called once the command ends or is interrupted.
