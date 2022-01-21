@@ -15,8 +15,8 @@ import edu.wpi.first.math.geometry.Translation2d;
  */
 public final class Constants {
 
-    public static final double RAD_TO_ENC_CONV_FACTOR = 10.1859;//TODO: fix for swerveX 8T to 24T / 14T to 72T//the radian to enc factor
-    public static final double DRIVE_ENC_TO_METERS_FACTOR = 0.00002226;//TODO:Get correct value from SwerveX 7.13:1//the ratio from mechanical specs
+    public static final double RAD_TO_ENC_CONV_FACTOR = 5029.08073;//swerveX 8T to 24T / 14T to 72T //the radian to enc factor
+    public static final double DRIVE_ENC_TO_METERS_FACTOR = 0.00002153;//7.13:1//the ratio from mechanical specs
     public static final double PI_OVER_TWO = Math.PI/2;
     public static final double THREE_PI_OVER_TWO = 3*PI_OVER_TWO;
     public static final double TWO_PI = 2*Math.PI;
@@ -77,4 +77,10 @@ public final class Constants {
     public static final int FRONT_RIGHT_ROTATE_MOTOR = 50;// module 3
     public static final int FRONT_RIGHT_ROTATE_SENSOR = 51;// module 3
 
+    public static final double MIN_PRESSURE = 95.0;
+    public static final double MAX_PRESSURE = 120.0;
+
+    // Solenoid Channels
+    public static final int HARVESTER_TILT_IN = 0;
+    public static final int HARVESTER_TILT_OUT = 1;
 }

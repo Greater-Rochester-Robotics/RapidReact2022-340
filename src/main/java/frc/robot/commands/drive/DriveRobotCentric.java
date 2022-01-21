@@ -41,7 +41,7 @@ public class DriveRobotCentric extends CommandBase {
   @Override
   public void execute() {
     //pull primary stick values, and put to awaySpeed and lateralSpeed doubles
-    double  forwardSpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftY);
+    double forwardSpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftY);
     double strafeSpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftX);
     //check if secondary sticks are being used
     if(Math.abs(Robot.robotContainer.getDriverAxis(Axis.kRightY))>.1 ||

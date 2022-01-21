@@ -4,22 +4,40 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Compressor extends SubsystemBase {
-  //TODO: instantiate the PnumaticHub
+  PneumaticHub pneumaticHub;
   /** Creates a new Compressor. */
   public Compressor() {
-    //TODO: construct PneumaticHub
-    //TODO:run enableCompressorAnalog, max ressure and min pressure from Constants(that haven't yet been made)
+    pneumaticHub = new PneumaticHub();
+    pneumaticHub.enableCompressorAnalog(Constants.MIN_PRESSURE, Constants.MAX_PRESSURE);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    //TODO:push value of getPressure()(the one below) to SmartDashboard, round the output before pushing to SD. decimal is not needed
+    // push value of getPressure() to SmartDashboard, round the output before pushing to SD. decimal is not needed
+    SmartDashboard.putNumber("Pressure", Math.round(getPressure()));
   }
 
-  //TODO:accessor method for getPressure
-  //TODO:modifier methods enableCompressor, disableCompressor
+  /**
+   * Gets and returns pressure of pneumatic hub.
+   * @return Pressure in PSI
+   */
+  public double getPressure(){
+    return pneumaticHub.getPressure(0);
+  }
+  
+  /** Enables compressor. */
+  public void enableCompressor(){
+    pneumaticHub.enableCompressorAnalog(Constants.MIN_PRESSURE, Constants.MAX_PRESSURE);
+  }
+
+  /** Disables compressor. */
+  public void disableCompressor(){
+    pneumaticHub.disableCompressor();
+  }
 }

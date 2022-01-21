@@ -19,4 +19,16 @@ public class Shooter extends SubsystemBase {
   }
 
   //TODO: methods getSpeed(), setSpeed, isAtSpeed, stopMotors
+  public double getSpeed(){
+    return  0.0;
+  }
+  public void setSpeed(double speed){
+    
+  }
+  public boolean isAtSpeed(){
+    return false;
+  }
+  public void stopMotors(){
+    
+  }
 }

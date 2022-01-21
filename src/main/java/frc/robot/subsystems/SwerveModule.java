@@ -74,7 +74,7 @@ public class SwerveModule {
         rotationMotor.configFactoryDefault();
         // use the integrated sensor with the primary closed loop and timeout is 0.
         rotationMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-        
+        rotationMotor.configSelectedFeedbackCoefficient(1);
         rotationMotor.setNeutralMode(NeutralMode.Brake);
         rotationMotor.setInverted(false);// Set motor inverted(set to false) TODO:Is this right in swerveX?
         rotationMotor.enableVoltageCompensation(true);
@@ -127,7 +127,7 @@ public class SwerveModule {
      * @return the distance the drive wheel has traveled
      */
     public double getDriveDistance() {
-        return driveMotor.getSensorCollection().getIntegratedSensorPosition()*Constants.DRIVE_ENC_TO_METERS_FACTOR;
+        return driveMotor.getSensorCollection().getIntegratedSensorPosition();//*Constants.DRIVE_ENC_TO_METERS_FACTOR;
     }
 
     /**
@@ -136,7 +136,7 @@ public class SwerveModule {
      * @return speed of the drive wheel
      */
     public double getDriveVelocity() {
-        return driveMotor.getSensorCollection().getIntegratedSensorVelocity()*10*Constants.DRIVE_ENC_TO_METERS_FACTOR;
+        return driveMotor.getSensorCollection().getIntegratedSensorVelocity()*10;//*Constants.DRIVE_ENC_TO_METERS_FACTOR;
     }
 
     /**
