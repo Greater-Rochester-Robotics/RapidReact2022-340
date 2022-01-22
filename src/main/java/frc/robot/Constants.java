@@ -83,6 +83,8 @@ public final class Constants {
     // Solenoid Channels
     public static final int HARVESTER_TILT_IN = 0;
     public static final int HARVESTER_TILT_OUT = 1;
+    public static final int CLIMBER_TILT_IN = 2;
+    public static final int CLIMBER_TILT_OUT = 3;
 
     // Harvester Motors
     public static final int HARVESTER_MOTOR = 0;
@@ -92,5 +94,13 @@ public final class Constants {
     // Shooter Motors
     public static final int MAIN_SHOOTER_MOTOR = 0;
     public static final int FOLLOW_SHOOTER_MOTOR = 1;
+
+    // Climber Motors
+    public static final int CLIMBER_FIXED_ARM = 2;
+    public static final int CLIMBER_EXTENDO_ARM = 3;
+    public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.6;
+    public static final double CLIMBER_EXTENDO_SPEED_IN = -0.6;
+    public static final double CLIMBER_FIXED_SPEED_OUT = 0.6;
+    public static final double CLIMBER_FIXED_SPEED_IN = -0.6;
 
 }

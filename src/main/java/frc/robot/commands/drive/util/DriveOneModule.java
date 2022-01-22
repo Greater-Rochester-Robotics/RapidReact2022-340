@@ -17,7 +17,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveDrive.SwerveModNum;
 
 /**
- * A command to test one module at a time, it takes that module 
+ * A command to test one swerve module at a time, it takes that module 
  * as a constructor arguement. This command is designed to test 
  * a single module, while all other module are stopped. 
  */
