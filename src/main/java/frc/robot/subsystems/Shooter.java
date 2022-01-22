@@ -4,13 +4,28 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Shooter extends SubsystemBase {
-  //TODO: instantiate two shooter motors(main/follower) Falcon500
+/**
+ * This is the class that controls the shooter.
+ * Currently, it controls a single main motor.
+ * TODO: Revisit when mechanical figures out what the shooter is
+ * 
+ */
+public class Shooter extends SubsystemBase { 
+  private static final double speedError = 0.01;
+  private double goalSpeed;
+  TalonFX mainMotor;
+  TalonFX followMotor;
   /** Creates a new Shooter. */
-  public Shooter() {
-    //TODO:construct shooter motors
+  public Shooter(int mainMotorID, int followMotorID) {
+    mainMotor = new TalonFX(mainMotorID);
+    followMotor = new TalonFX(followMotorID);
+    //TODO: write more to configure the motors.
   }
 
   @Override
@@ -18,17 +33,24 @@ public class Shooter extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  //TODO: methods getSpeed(), setSpeed, isAtSpeed, stopMotors
   public double getSpeed(){
-    return  0.0;
+    return mainMotor.getSelectedSensorVelocity();
   }
+
   public void setSpeed(double speed){
-    
+    mainMotor.set(TalonFXControlMode.Velocity, speed);
   }
+  
+  /**
+   * @return if it is at speed within tolerance
+   */
   public boolean isAtSpeed(){
-    return false;
+    //TalonFX has an isAtSpeed() with tolerance already
+    return ((goalSpeed * (1.00 - speedError) <= getSpeed()) && 
+            (goalSpeed * (1.00 + speedError) >= getSpeed()));
   }
+
   public void stopMotors(){
-    
+    mainMotor.set(TalonFXControlMode.PercentOutput, 0.0);
   }
 }
