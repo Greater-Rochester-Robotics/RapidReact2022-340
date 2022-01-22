@@ -20,6 +20,11 @@ import frc.robot.commands.drive.util.DriveAdjustModuleZeroPoint;
 import frc.robot.commands.drive.util.DriveAllModulesPositionOnly;
 import frc.robot.commands.drive.util.DriveOneModule;
 import frc.robot.commands.drive.util.DriveResetAllModulePositionsToZero;
+import frc.robot.commands.intake.IntakeIn;
+import frc.robot.commands.intake.IntakeIntake;
+import frc.robot.commands.intake.IntakeOut;
+import frc.robot.commands.intake.IntakeOuttake;
+import frc.robot.commands.intake.IntakeStop;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.Intake;
@@ -99,11 +104,11 @@ public class RobotContainer {
 
     //create(construct) subsystems
     compressor = new Compressor();//Let's keep compressor first
-    swerveDrive = new SwerveDrive();
-    climber = new Climber();
+    // swerveDrive = new SwerveDrive();
+    // climber = new Climber();
     intake = new Intake();
-    limeLight = new LimeLight();
-    shooter = new Shooter();
+    // limeLight = new LimeLight();
+    // shooter = new Shooter();
 
     //Add all autos to the auto selector
     configureAutoModes();
@@ -112,14 +117,19 @@ public class RobotContainer {
     configureButtonBindings();
 
     //add some commands to dashboard for testing/configuring
-    SmartDashboard.putData(new DriveResetAllModulePositionsToZero());
-    SmartDashboard.putData(new DriveAdjustModuleZeroPoint());
-    SmartDashboard.putData("Drive Module 0", new DriveOneModule(0));
-    SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));
-    SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));
-    SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));
-    SmartDashboard.putData(new DriveStopAllModules());
-    SmartDashboard.putData(new DriveAllModulesPositionOnly());
+    // SmartDashboard.putData(new DriveResetAllModulePositionsToZero());
+    // SmartDashboard.putData(new DriveAdjustModuleZeroPoint());
+    // SmartDashboard.putData("Drive Module 0", new DriveOneModule(0));
+    // SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));
+    // SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));
+    // SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));
+    // SmartDashboard.putData(new DriveStopAllModules());
+    // SmartDashboard.putData(new DriveAllModulesPositionOnly());
+    SmartDashboard.putData(new IntakeIn());
+    SmartDashboard.putData(new IntakeOut());
+    SmartDashboard.putData(new IntakeStop());
+    SmartDashboard.putData(new IntakeIntake());
+    SmartDashboard.putData(new IntakeOuttake());
   }
 
   /**
