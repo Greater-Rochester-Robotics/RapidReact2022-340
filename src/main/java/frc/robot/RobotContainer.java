@@ -8,11 +8,18 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
+import frc.robot.commands.drive.DriveStopAllModules;
+import frc.robot.commands.drive.util.DriveAdjustModuleZeroPoint;
+import frc.robot.commands.drive.util.DriveAllModulesPositionOnly;
+import frc.robot.commands.drive.util.DriveOneModule;
+import frc.robot.commands.drive.util.DriveResetAllModulePositionsToZero;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.Intake;
@@ -84,7 +91,8 @@ public class RobotContainer {
   public static Shooter shooter;
 
   //The sendable chooser for autonomous is constructed here
-  //TODO: construct the sendable chooser 
+  public static SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -102,6 +110,16 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
+
+    //add some commands to dashboard for testing/configuring
+    SmartDashboard.putData(new DriveResetAllModulePositionsToZero());
+    SmartDashboard.putData(new DriveAdjustModuleZeroPoint());
+    SmartDashboard.putData("Drive Module 0", new DriveOneModule(0));
+    SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));
+    SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));
+    SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));
+    SmartDashboard.putData(new DriveStopAllModules());
+    SmartDashboard.putData(new DriveAllModulesPositionOnly());
   }
 
   /**
@@ -117,7 +135,12 @@ public class RobotContainer {
    * appear in the autonomous select drop down menu.
    */
   private void configureAutoModes() {
-    //TODO:add auto modes to the sendable chooser
+    //TODO:add auto modes to the sendable chooser when autos written
+    autoChooser.setDefaultOption("Wait 1 sec(do nothing)", new WaitCommand(1));
+
+    // autoChooser.addOption("Barrel Racing 64", new AutoBarrelPath());
+
+    SmartDashboard.putData(RobotContainer.autoChooser);
   }
 
   
