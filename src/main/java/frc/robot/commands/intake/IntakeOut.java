@@ -19,6 +19,6 @@ public class IntakeOut extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.intake.intakeOut();
+    // RobotContainer.intake.intakeOut();
   }
 }

@@ -21,10 +21,7 @@ import frc.robot.commands.drive.util.DriveAllModulesPositionOnly;
 import frc.robot.commands.drive.util.DriveOneModule;
 import frc.robot.commands.drive.util.DriveResetAllModulePositionsToZero;
 import frc.robot.commands.intake.IntakeIn;
-import frc.robot.commands.intake.IntakeIntake;
 import frc.robot.commands.intake.IntakeOut;
-import frc.robot.commands.intake.IntakeOuttake;
-import frc.robot.commands.intake.IntakeStop;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.Intake;
@@ -127,9 +124,6 @@ public class RobotContainer {
     // SmartDashboard.putData(new DriveAllModulesPositionOnly());
     SmartDashboard.putData(new IntakeIn());
     SmartDashboard.putData(new IntakeOut());
-    SmartDashboard.putData(new IntakeStop());
-    SmartDashboard.putData(new IntakeIntake());
-    SmartDashboard.putData(new IntakeOuttake());
   }
 
   /**

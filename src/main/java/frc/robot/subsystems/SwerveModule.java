@@ -78,7 +78,7 @@ public class SwerveModule {
         rotationMotor.setNeutralMode(NeutralMode.Brake);
         rotationMotor.setInverted(false);// Set motor inverted(set to false) TODO:Is this right in swerveX?
         rotationMotor.enableVoltageCompensation(true);
-        driveMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
+        rotationMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setDriveMotorPIDF(Constants.SWERVE_ROT_P_VALUE, Constants.SWERVE_ROT_I_VALUE,
                           Constants.SWERVE_ROT_D_VALUE, Constants.SWERVE_ROT_FF_VALUE);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
