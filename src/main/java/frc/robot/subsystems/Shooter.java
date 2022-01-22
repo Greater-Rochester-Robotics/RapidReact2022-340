@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 /**
  * This is the class that controls the shooter.
@@ -22,9 +23,9 @@ public class Shooter extends SubsystemBase {
   TalonFX mainMotor;
   TalonFX followMotor;
   /** Creates a new Shooter. */
-  public Shooter(int mainMotorID, int followMotorID) {
-    mainMotor = new TalonFX(mainMotorID);
-    followMotor = new TalonFX(followMotorID);
+  public Shooter() {
+    mainMotor = new TalonFX(Constants.MAIN_SHOOTER_MOTOR);
+    followMotor = new TalonFX(Constants.FOLLOW_SHOOTER_MOTOR);
     //TODO: write more to configure the motors.
   }
 

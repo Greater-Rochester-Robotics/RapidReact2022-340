@@ -83,4 +83,14 @@ public final class Constants {
     // Solenoid Channels
     public static final int HARVESTER_TILT_IN = 0;
     public static final int HARVESTER_TILT_OUT = 1;
+
+    // Harvester Motors
+    public static final int HARVESTER_MOTOR = 0;
+    public static final double HARVESTER_INTAKE_SPEED = 0.6;
+    public static final double HARVESTER_EXTAKE_SPEED = -0.6;
+
+    // Shooter Motors
+    public static final int MAIN_SHOOTER_MOTOR = 0;
+    public static final int FOLLOW_SHOOTER_MOTOR = 1;
+
 }
