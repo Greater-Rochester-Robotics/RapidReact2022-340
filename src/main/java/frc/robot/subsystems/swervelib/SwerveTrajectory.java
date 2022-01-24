@@ -1,32 +1,41 @@
-package lib.swerve;
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.util.Units;
+package frc.robot.subsystems.swervelib;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.wpi.first.wpilibj.Filesystem;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
+
 
 /**
  * Custom version of the wpilib trajectory class that is
  * made to work better with PathPlanner and swerve drive
+ * 
+ * originally written by Michael Jansen
  */
-public class SwervePath {
-    public static final double TIME_STEP = 0.01;
+public class SwerveTrajectory {
+    public static double TIME_STEP = 0.01;
     private ArrayList<State> states;
 
     /**
-     * Construct a new Swerve Path
+     * Esentially an ArrayList of States along the trajectory of the robot. Methods exist within for Linear interpolation of points and importing from a CSV.
      */
-    public SwervePath() {
+    public SwerveTrajectory() {
         this.states = new ArrayList<>();
     }
 
@@ -35,7 +44,7 @@ public class SwervePath {
      *
      * @return An arraylist of all path states
      */
-    public ArrayList<State> getStates() {
+    public ArrayList<State> getAllStates() {
         return this.states;
     }
 
@@ -68,13 +77,14 @@ public class SwervePath {
 
     /**
      * Create a SwervePath object from a CSV file
-     * Expected format is xPos, yPos, velocity, acceleration, heading (direction robot is moving), rotation
+     * Expected format is xPos, yPos, velocity, 
+     * acceleration, heading (direction robot is moving), rotation
      *
      * @param filename The path file to load
      * @return The SwervePath object
      */
-    public static SwervePath fromCSV(String filename) {
-        SwervePath traj = new SwervePath();
+    public static SwerveTrajectory fromCSV(String filename) {
+        SwerveTrajectory traj = new SwerveTrajectory();
 
         try (BufferedReader br = new BufferedReader(new FileReader(new File(Filesystem.getDeployDirectory(), "paths/" + filename + ".csv")))) {
             String line = "";
@@ -95,14 +105,37 @@ public class SwervePath {
         return traj;
     }
 
+    /**
+     * linear interpolation function, used to 
+     * find the distance between two numbers.
+     * @param startVal
+     * @param endVal
+     * @param t
+     * @return
+     */
     private static double lerp(double startVal, double endVal, double t) {
         return startVal + (endVal - startVal) * t;
     }
 
+    /**
+     * Linear interpolation function for finding a point
+     * between two Translation2d objects.
+     * @param startVal
+     * @param endVal
+     * @param t
+     * @return
+     */
     private static Translation2d lerp(Translation2d startVal, Translation2d endVal, double t) {
         return startVal.plus((endVal.minus(startVal)).times(t));
     }
 
+    /**
+     * linear interpolation function for finding an angle between two rotation2d ojects.
+     * @param startVal
+     * @param endVal
+     * @param t
+     * @return
+     */
     private static Rotation2d lerp(Rotation2d startVal, Rotation2d endVal, double t) {
         return startVal.plus((endVal.minus(startVal)).times(t));
     }
@@ -144,6 +177,9 @@ public class SwervePath {
         return prevSample.interpolate(sample, (time - prevSample.time) / (sample.time - prevSample.time));
     }
 
+    /**
+     * A state of the robot, i.e. a position, rotation, velocity at a specific time
+     */
     public static class State {
         private final double pos;
         private final Rotation2d heading;

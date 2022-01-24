@@ -1,13 +1,13 @@
-package lib.swerve;
+package frc.robot.subsystems.swervelib;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.util.Units;
-import frc.robot.RobotContainer;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
+
 
 public class SwervePathController {
     private final PIDController posErrorController;
@@ -80,7 +80,7 @@ public class SwervePathController {
      * @param goalState       Goal state of the robot
      * @return The calculated speeds and rotation
      */
-    public ChassisSpeeds calculate(Pose2d currentPose, SwervePath.State goalState, double deltaTime, boolean doHeading) {
+    public ChassisSpeeds calculate(Pose2d currentPose, SwerveTrajectory.State goalState, double deltaTime, boolean doHeading) {
         Translation2d currentPos = currentPose.getTranslation();
         Rotation2d currentRotation = currentPose.getRotation();
 

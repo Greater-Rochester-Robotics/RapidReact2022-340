@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.CalibrationTime;
 
 import frc.robot.Constants;
+import frc.robot.subsystems.swervelib.SwerveModule;
 
 public class SwerveDrive extends SubsystemBase {
 

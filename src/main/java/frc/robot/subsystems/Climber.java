@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
@@ -64,6 +65,7 @@ public class Climber extends SubsystemBase {
     tiltRobot.set(Value.kReverse);
   }
 
+  //TODO: Make a method to move the extendoArm to a specific distance(use built-in MotionProfile?), def use postitioncontrol
   public void extendoArmOut(){
     extendoMotor.set(TalonFXControlMode.PercentOutput, 
     Constants.CLIMBER_EXTENDO_SPEED_OUT);;
@@ -74,6 +76,7 @@ public class Climber extends SubsystemBase {
     Constants.CLIMBER_EXTENDO_SPEED_IN);
   }
 
+  //TODO: Make a method to move the fixedArm to a speciffic distance(Use built-in MotionProfile?), def use postitioncontrol
   public void fixedArmOut(){
     fixedMotor.set(TalonFXControlMode.PercentOutput, 
     Constants.CLIMBER_FIXED_SPEED_OUT);
