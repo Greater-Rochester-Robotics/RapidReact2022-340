@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.autonomous.TestPath;
 import frc.robot.commands.drive.DriveStopAllModules;
 import frc.robot.commands.drive.util.DriveAdjustModuleZeroPoint;
 import frc.robot.commands.drive.util.DriveAllModulesPositionOnly;
@@ -143,6 +144,7 @@ public class RobotContainer {
     autoChooser.setDefaultOption("Wait 1 sec(do nothing)", new WaitCommand(1));
 
     // autoChooser.addOption("Barrel Racing 64", new AutoBarrelPath());
+    autoChooser.addOption("TestPath", new TestPath());
 
     SmartDashboard.putData(RobotContainer.autoChooser);
   }
