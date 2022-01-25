@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motion.BufferedTrajectoryPointStream;
+import com.ctre.phoenix.motion.MotionProfileStatus;
+import com.ctre.phoenix.motion.TrajectoryPoint;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
@@ -67,19 +71,41 @@ public class Climber extends SubsystemBase {
 
   //TODO: Make a method to move the extendoArm to a specific distance(use built-in MotionProfile?), def use postitioncontrol
   public void extendoArmOut(){
-    extendoMotor.set(TalonFXControlMode.PercentOutput, 
-    Constants.CLIMBER_EXTENDO_SPEED_OUT);;
-  }
+    BufferedTrajectoryPointStream stream = new BufferedTrajectoryPointStream(); // Creates a set of points telling the motor how to move
+    TrajectoryPoint middleTrajectoryPoint = new TrajectoryPoint(); // Creates single point telling the motor how to move
+    TrajectoryPoint lastTrajectoryPoint = new TrajectoryPoint();
+
+    //TODO: Might need to make a start position
+
+    // The following sets our middle position and speed
+    middleTrajectoryPoint.position = 10;
+    middleTrajectoryPoint.velocity = Constants.CLIMBER_EXTENDO_SPEED_OUT;
+    stream.Write(middleTrajectoryPoint); // Add trajectory point to stream
+    // The following sets our last position and speed
+    lastTrajectoryPoint.position = 20;
+    lastTrajectoryPoint.velocity = 0; // Must be set to 0 or motor will spin indefinitely
+    stream.Write(lastTrajectoryPoint);
+
+    // Creates a motion profile using set of points in stream and the control mode
+    extendoMotor.startMotionProfile(stream, extendoMotor.getMotionProfileTopLevelBufferCount(), ControlMode.Position);
+    }
 
   public void extendoArmIn(){
     extendoMotor.set(TalonFXControlMode.PercentOutput, 
     Constants.CLIMBER_EXTENDO_SPEED_IN);
   }
 
-  //TODO: Make a method to move the fixedArm to a speciffic distance(Use built-in MotionProfile?), def use postitioncontrol
+  //TODO: Make match extendoArmOut()
   public void fixedArmOut(){
-    fixedMotor.set(TalonFXControlMode.PercentOutput, 
-    Constants.CLIMBER_FIXED_SPEED_OUT);
+    BufferedTrajectoryPointStream stream = new BufferedTrajectoryPointStream();
+    TrajectoryPoint trajectoryPoint = new TrajectoryPoint();
+
+    trajectoryPoint.position = 10;
+    trajectoryPoint.velocity = Constants.CLIMBER_FIXED_SPEED_OUT;
+    stream.Write(trajectoryPoint);
+    
+    int minBufferedPts = fixedMotor.getMotionProfileTopLevelBufferCount();
+    fixedMotor.startMotionProfile(stream, minBufferedPts, ControlMode.Position);
   }
 
   public void fixedArmIn(){
