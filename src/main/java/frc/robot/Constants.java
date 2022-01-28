@@ -33,6 +33,8 @@ public final class Constants {
     public static final double MAXIMUM_VELOCITY = 4.5;
     public static final double MAX_ROBOT_ROT_VELOCITY = 2;
     public static final double MAXIMUM_ACCELERATION = 1.0;
+    public static final double DRIVE_MAX_ANGULAR_VELOCITY = 600; //stolen from 3015
+    public static final double DRIVE_MAX_ANGULAR_ACCEL = 6000; //stolen from 3015
     // public static final double MAX_ROBOT_ROT_VELOCITY = MAXIMUM_VELOCITY / DISTANCE_TO_MODULE_0;
     public static final double MAXIMUM_VOLTAGE = 12.0;
     public static final double SWERVE_DRIVE_P_VALUE = 1000; // 0.035;
@@ -127,5 +129,21 @@ public final class Constants {
     public static final int HARVESTER_TILT_OUT = 1;//Intake
     public static final int CLIMBER_TILT_IN = 2;//Climber
     public static final int CLIMBER_TILT_OUT = 3;//Climber
+
+    /* We stole 3015's constants for DriveFollowTrajectory */
+    public static final double DRIVE_POS_ERROR_CONTROLLER_P = 12; // 10
+    public static final double DRIVE_POS_ERROR_CONTROLLER_I = 0;
+    public static final double DRIVE_POS_ERROR_CONTROLLER_D = 0.05;
+    public static final double DRIVE_HEADING_ERROR_CONTROLLER_P = 0; // 1.05
+    public static final double DRIVE_HEADING_ERROR_CONTROLLER_I = 0;
+    public static final double DRIVE_HEADING_ERROR_CONTROLLER_D = 0; // 0.02
+    public static final double DRIVE_ROTATION_CONTROLLER_P = 10;// 9
+    public static final double DRIVE_ROTATION_CONTROLLER_I = 0;
+    public static final double DRIVE_ROTATION_CONTROLLER_D = 0;
+    public static final double DRIVE_TARGETING_CONTROLLER_P = 13;// 9
+    public static final double DRIVE_TARGETING_CONTROLLER_I = 0;
+    public static final double DRIVE_TARGETING_CONTROLLER_D = 0.5;
+    public static final double DRIVE_ROTATION_MIN_VELOCITY = 25;
+    public static final double DRIVE_TARGETING_I_ZONE = 2;
 
 }
