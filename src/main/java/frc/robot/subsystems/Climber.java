@@ -8,6 +8,8 @@ import com.ctre.phoenix.motion.BufferedTrajectoryPointStream;
 import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
@@ -56,6 +58,22 @@ public class Climber extends SubsystemBase {
     extendoMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
     extendoMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
     extendoMotor.setSelectedSensorPosition(0.0);
+
+    extendoMotor.config_kP(0, Constants.EXTENDO_MOTOR_P);
+    extendoMotor.config_kI(0, Constants.EXTENDO_MOTOR_I);
+    extendoMotor.config_kD(0, Constants.EXTENDO_MOTOR_D);
+    extendoMotor.config_kF(0, Constants.EXTENDO_MOTOR_F);
+    extendoMotor.configMotionCruiseVelocity(Constants.EXTENDO_CRUISE_VELOCITY);
+    extendoMotor.configMotionAcceleration(Constants.EXTENDO_ACCELERATION);
+    extendoMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+
+    fixedMotor.config_kP(0, Constants.EXTENDO_MOTOR_P);
+    fixedMotor.config_kI(0, Constants.EXTENDO_MOTOR_I);
+    fixedMotor.config_kD(0, Constants.EXTENDO_MOTOR_D);
+    fixedMotor.config_kF(0, Constants.EXTENDO_MOTOR_F);
+    fixedMotor.configMotionCruiseVelocity(Constants.FIXED_CRUISE_VELOCITY);
+    fixedMotor.configMotionAcceleration(Constants.FIXED_ACCELERATION);
+    fixedMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
   }
 
   @Override
@@ -88,11 +106,38 @@ public class Climber extends SubsystemBase {
 
     // Creates a motion profile using set of points in stream and the control mode
     extendoMotor.startMotionProfile(stream, extendoMotor.getMotionProfileTopLevelBufferCount(), ControlMode.Position);
-    }
+  }
+
+  public void extendoArmSetPos(double pos) {
+    extendoMotor.set(TalonFXControlMode.MotionMagic, pos);
+  }
 
   public void extendoArmIn(){
     extendoMotor.set(TalonFXControlMode.PercentOutput, 
     Constants.CLIMBER_EXTENDO_SPEED_IN);
+  }
+
+  public void stopExtendoArm() {
+    extendoMotor.set(TalonFXControlMode.PercentOutput, 0);
+  }
+
+  public double getExtendoCurrent() {
+    return extendoMotor.getSupplyCurrent();
+  }
+
+  public boolean getExtendoSwitch() {
+    return extendoMotor.isRevLimitSwitchClosed() == 1;
+  }
+
+  public double getExtendoEncPos() {
+    return extendoMotor.getSelectedSensorPosition();
+  }
+  public double getExtendoEncVel() {
+    return extendoMotor.getSelectedSensorVelocity();
+  }
+
+  public void setExtendoEnc(double sensorPos) {
+    extendoMotor.setSelectedSensorPosition(sensorPos);
   }
 
   //TODO: Make match extendoArmOut()
@@ -108,10 +153,35 @@ public class Climber extends SubsystemBase {
     fixedMotor.startMotionProfile(stream, minBufferedPts, ControlMode.Position);
   }
 
+  public void fixedArmSetPos(double pos) {
+    fixedMotor.set(TalonFXControlMode.MotionMagic, pos);
+  }
+
   public void fixedArmIn(){
     fixedMotor.set(TalonFXControlMode.PercentOutput, 
     Constants.CLIMBER_FIXED_SPEED_IN);
   }
 
+  public void stopFixedArm() {
+    fixedMotor.set(TalonFXControlMode.PercentOutput, 0);
+  }
 
+  public double getFixedCurrent() {
+    return fixedMotor.getSupplyCurrent();
+  }
+
+  public boolean getFixedSwitch() {
+    return fixedMotor.isRevLimitSwitchClosed() == 1;
+  }
+
+  public double getFixedEncPos() {
+    return fixedMotor.getSelectedSensorPosition();
+  }
+  public double getFixedEncVel() {
+    return fixedMotor.getSelectedSensorVelocity();
+  }
+
+  public void setFixedEnc(double sensorPos) {
+    fixedMotor.setSelectedSensorPosition(sensorPos);
+  }
 }
