@@ -16,16 +16,16 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.autonomous.TestPath;
+import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
+import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.drive.DriveStopAllModules;
 import frc.robot.commands.drive.util.DriveAdjustModuleZeroPoint;
 import frc.robot.commands.drive.util.DriveAllModulesPositionOnly;
 import frc.robot.commands.drive.util.DriveOneModule;
 import frc.robot.commands.drive.util.DriveResetAllModulePositionsToZero;
-import frc.robot.commands.intake.IntakeIn;
-import frc.robot.commands.intake.IntakeOut;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Compressor;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
@@ -89,7 +89,7 @@ public class RobotContainer {
   public static Compressor compressor;
   public static SwerveDrive swerveDrive;
   public static Climber climber;
-  public static Intake intake;
+  public static BallHandler ballHandler;
   public static LimeLight limeLight;
   public static Shooter shooter;
 
@@ -104,7 +104,7 @@ public class RobotContainer {
     compressor = new Compressor();//Let's keep compressor first
     // swerveDrive = new SwerveDrive();
     // climber = new Climber();
-    intake = new Intake();
+    ballHandler = new BallHandler();
     // limeLight = new LimeLight();
     // shooter = new Shooter();
 
@@ -123,8 +123,8 @@ public class RobotContainer {
     // SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));
     // SmartDashboard.putData(new DriveStopAllModules());
     // SmartDashboard.putData(new DriveAllModulesPositionOnly());
-    SmartDashboard.putData(new IntakeIn());
-    SmartDashboard.putData(new IntakeOut());
+    SmartDashboard.putData(new BallHandlerIntakeIn());
+    SmartDashboard.putData(new BallHandlerIntakeOut());
   }
 
   /**

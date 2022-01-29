@@ -72,6 +72,22 @@ public final class Constants {
     public static final double HARVESTER_INTAKE_SPEED = 0.6;
     public static final double HARVESTER_EXTAKE_SPEED = -0.6;
 
+    public static final double SELECTOR_INTAKE_SPEED = 0.6;
+    public static final double SELECTOR_EXTAKE_SPEED = -0.6;
+
+    public static final double BALL_HANDLER_0_INTAKE_SPEED = 0.6;
+    public static final double BALL_HANDLER_0_EXTAKE_SPEED = -0.6;
+    public static final double BALL_HANDLER_1_INTAKE_SPEED = 0.6;
+    public static final double BALL_HANDLER_1_EXTAKE_SPEED = -0.6;
+    public static final double BALL_HANDLER_1_SHOOT_SPEED = 0.6;
+    public static final double BALL_HANDLER_0_SHOOT_SPEED = 0.5;
+
+    /* Intake Levels */
+    public static final int BLUE_LEVEL = 100;
+    public static final int RED_LEVEL = 100;
+    
+    public static final int INTAKE_PROXIMITY = 100;
+
     /* Climber Constants */
     public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.6;
     public static final double CLIMBER_EXTENDO_SPEED_IN = -0.6;
@@ -95,6 +111,8 @@ public final class Constants {
     public static final int MAIN_SHOOTER_MOTOR = 4;//Shooter
     public static final int FOLLOW_SHOOTER_MOTOR = 5;//Shooter
 
+    public static final int HARVESTER_MOTOR = 6;//Handler
+
     public static final int FRONT_LEFT_MOVE_MOTOR = 40;//drive module 0
     public static final int FRONT_LEFT_ROTATE_MOTOR = 41;//drive module 0
     public static final int FRONT_LEFT_ROTATE_SENSOR = 42;//drive module 0
@@ -112,7 +130,9 @@ public final class Constants {
     public static final int FRONT_RIGHT_ROTATE_SENSOR = 51;//drive module 3
 
     /* Rev Robotics SparkMAXs */
-    public static final int HARVESTER_MOTOR = 0;
+    public static final int SELECTOR_MOTOR = 1;//Handler
+    public static final int BALL_HANDLER_MOTOR_0 = 2;//Handler
+    public static final int BALL_HANDLER_MOTOR_1 = 3;//Handler
 
     /* Solenoid Channels */
     public static final int HARVESTER_TILT_IN = 0;//Intake
@@ -135,5 +155,10 @@ public final class Constants {
     public static final double DRIVE_TARGETING_CONTROLLER_D = 0.5;
     public static final double DRIVE_ROTATION_MIN_VELOCITY = 25;
     public static final double DRIVE_TARGETING_I_ZONE = 2;
+    
+    /* Digital Input */
+    public static final int BALL_SENSOR_0 = 0;
+    public static final int BALL_SENSOR_1 = 1;
+    public static final int COLOR_SENSOR_0 = 2;
 
 }
