@@ -24,18 +24,21 @@ public class ClimberExtendoToPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.climber.setExtendoEnc(position);
+    RobotContainer.climber.extendoRightSetPos(position);
+    RobotContainer.climber.extendoLeftSetPos(position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.climber.stopExtendoArm();
+    RobotContainer.climber.stopExtendoRightArm();
+    RobotContainer.climber.stopExtendoLeftArm();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(RobotContainer.climber.getExtendoEncPos() - position) < Constants.EXTENDO_ALLOWABLE_ERROR;
+    return (Math.abs(RobotContainer.climber.getExtendoRightEncPos() - position) < Constants.EXTENDO_ALLOWABLE_ERROR) &&
+       (Math.abs(RobotContainer.climber.getExtendoLeftEncPos() - position) < Constants.EXTENDO_ALLOWABLE_ERROR);
   }
 }

@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Climber;
 
 public class ClimberExtendoHome extends CommandBase {
   Timer timer = new Timer();
@@ -28,21 +27,47 @@ public class ClimberExtendoHome extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.climber.extendoArmIn();
+    if(isRightAtBottom()){
+      RobotContainer.climber.stopExtendoRightArm();
+    }
+    else{
+      RobotContainer.climber.extendoArmRightIn();
+    }
+
+    if(isLeftAtBottom()){
+      RobotContainer.climber.stopExtendoLeftArm();
+    }else{
+        RobotContainer.climber.extendoArmLeftIn();
+    }
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.climber.stopExtendoArm();
-    RobotContainer.climber.setExtendoEnc(0.0);
+    RobotContainer.climber.stopExtendoRightArm();
+    RobotContainer.climber.stopExtendoLeftArm();
+
+    if(!interrupted){
+      RobotContainer.climber.setExtendoRightEnc(0.0);
+      RobotContainer.climber.setExtendoLeftEnc(0.0);
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.climber.getExtendoSwitch() ||
-    (timer.hasElapsed(0.5) && RobotContainer.climber.getExtendoCurrent() > Constants.EXTENDO_HOMING_CURRENT) ||
-    (timer.hasElapsed(0.5) && Math.abs(RobotContainer.climber.getExtendoEncVel()) < 0.1);
+    return isRightAtBottom() && isLeftAtBottom();
+  }
+
+  boolean isRightAtBottom(){
+    return RobotContainer.climber.getExtendoRightSwitch() ||
+    (timer.hasElapsed(0.5) && RobotContainer.climber.getExtendoRightCurrent() > Constants.EXTENDO_HOMING_CURRENT) ||
+    (timer.hasElapsed(0.5) && Math.abs(RobotContainer.climber.getExtendoRightEncVel()) < 0.1);
+  }
+  boolean isLeftAtBottom(){
+    return RobotContainer.climber.getExtendoLeftSwitch() ||
+    (timer.hasElapsed(0.5) && RobotContainer.climber.getExtendoLeftCurrent() > Constants.EXTENDO_HOMING_CURRENT) ||
+    (timer.hasElapsed(0.5) && Math.abs(RobotContainer.climber.getExtendoLeftEncVel()) < 0.1);
   }
 }

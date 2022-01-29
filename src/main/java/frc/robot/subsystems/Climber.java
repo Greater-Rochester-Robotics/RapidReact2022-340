@@ -4,8 +4,9 @@
 
 package frc.robot.subsystems;
 
+import java.io.File;
+
 import com.ctre.phoenix.motion.BufferedTrajectoryPointStream;
-import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
@@ -24,56 +25,56 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
-  DoubleSolenoid tiltRobot;
-  TalonFX fixedMotor;
-  TalonFX extendoMotor;
+  DoubleSolenoid tiltRobot; // attatched to the fixed arm
+  TalonFX extendoMotorLeft; // attatched to the left extending arm
+  TalonFX extendoMotorRight; // attatched to the right extending arm, not mechanically linked to left
 
   /** Creates a new Climber. */
   public Climber() {
     tiltRobot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
       Constants.CLIMBER_TILT_IN, Constants.CLIMBER_TILT_OUT);
 
-    fixedMotor = new TalonFX(Constants.CLIMBER_FIXED_ARM);
-    fixedMotor.configFactoryDefault();
+    extendoMotorLeft = new TalonFX(Constants.CLIMBER_FIXED_ARM);
+    extendoMotorLeft.configFactoryDefault();
     // use the integrated sensor with the primary closed loop and timeout is 0.
-    fixedMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-    fixedMotor.configSelectedFeedbackCoefficient(1);//TODO: based on gearing, find out
-    fixedMotor.setNeutralMode(NeutralMode.Brake);
-    fixedMotor.setInverted(false);// Set motor inverted(set to false) TODO:Is this right?
-    fixedMotor.enableVoltageCompensation(true);
-    fixedMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
-    fixedMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
-    fixedMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
-    fixedMotor.setSelectedSensorPosition(0.0);
+    extendoMotorLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
+    extendoMotorLeft.configSelectedFeedbackCoefficient(1);//TODO: based on gearing, find out
+    extendoMotorLeft.setNeutralMode(NeutralMode.Brake);
+    extendoMotorLeft.setInverted(false);// Set motor inverted(set to false) TODO:Is this right?
+    extendoMotorLeft.enableVoltageCompensation(true);
+    extendoMotorLeft.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
+    extendoMotorLeft.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
+    extendoMotorLeft.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
+    extendoMotorLeft.setSelectedSensorPosition(0.0);
+    extendoMotorLeft.config_kP(0, Constants.EXTENDO_MOTOR_P);
+    extendoMotorLeft.config_kI(0, Constants.EXTENDO_MOTOR_I);
+    extendoMotorLeft.config_kD(0, Constants.EXTENDO_MOTOR_D);
+    extendoMotorLeft.config_kF(0, Constants.EXTENDO_MOTOR_F);
+    extendoMotorLeft.configMotionCruiseVelocity(Constants.EXTENDO_CRUISE_VELOCITY);
+    extendoMotorLeft.configMotionAcceleration(Constants.EXTENDO_ACCELERATION);
+    extendoMotorLeft.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
 
-    extendoMotor = new TalonFX(Constants.CLIMBER_EXTENDO_ARM);
-    extendoMotor.configFactoryDefault();
+    extendoMotorRight = new TalonFX(Constants.CLIMBER_EXTENDO_ARM);
+    extendoMotorRight.configFactoryDefault();
     // use the integrated sensor with the primary closed loop and timeout is 0.
-    extendoMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-    extendoMotor.configSelectedFeedbackCoefficient(1);//TODO: based on gearing,find out
-    extendoMotor.setNeutralMode(NeutralMode.Brake);
-    extendoMotor.setInverted(false);// Set motor inverted(set to false) TODO:Is this right?
-    extendoMotor.enableVoltageCompensation(true);
-    extendoMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
-    extendoMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
-    extendoMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
-    extendoMotor.setSelectedSensorPosition(0.0);
+    extendoMotorRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
+    extendoMotorRight.configSelectedFeedbackCoefficient(1);//TODO: based on gearing,find out
+    extendoMotorRight.setNeutralMode(NeutralMode.Brake);
+    extendoMotorRight.setInverted(false);// Set motor inverted(set to false) TODO:Is this right?
+    extendoMotorRight.enableVoltageCompensation(true);
+    extendoMotorRight.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
+    extendoMotorRight.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
+    extendoMotorRight.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
+    extendoMotorRight.setSelectedSensorPosition(0.0);
 
-    extendoMotor.config_kP(0, Constants.EXTENDO_MOTOR_P);
-    extendoMotor.config_kI(0, Constants.EXTENDO_MOTOR_I);
-    extendoMotor.config_kD(0, Constants.EXTENDO_MOTOR_D);
-    extendoMotor.config_kF(0, Constants.EXTENDO_MOTOR_F);
-    extendoMotor.configMotionCruiseVelocity(Constants.EXTENDO_CRUISE_VELOCITY);
-    extendoMotor.configMotionAcceleration(Constants.EXTENDO_ACCELERATION);
-    extendoMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+    extendoMotorRight.config_kP(0, Constants.EXTENDO_MOTOR_P);
+    extendoMotorRight.config_kI(0, Constants.EXTENDO_MOTOR_I);
+    extendoMotorRight.config_kD(0, Constants.EXTENDO_MOTOR_D);
+    extendoMotorRight.config_kF(0, Constants.EXTENDO_MOTOR_F);
+    extendoMotorRight.configMotionCruiseVelocity(Constants.EXTENDO_CRUISE_VELOCITY);
+    extendoMotorRight.configMotionAcceleration(Constants.EXTENDO_ACCELERATION);
+    extendoMotorRight.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
 
-    fixedMotor.config_kP(0, Constants.EXTENDO_MOTOR_P);
-    fixedMotor.config_kI(0, Constants.EXTENDO_MOTOR_I);
-    fixedMotor.config_kD(0, Constants.EXTENDO_MOTOR_D);
-    fixedMotor.config_kF(0, Constants.EXTENDO_MOTOR_F);
-    fixedMotor.configMotionCruiseVelocity(Constants.FIXED_CRUISE_VELOCITY);
-    fixedMotor.configMotionAcceleration(Constants.FIXED_ACCELERATION);
-    fixedMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
   }
 
   @Override
@@ -88,100 +89,103 @@ public class Climber extends SubsystemBase {
   }
 
   //TODO: Make a method to move the extendoArm to a specific distance(use built-in MotionProfile?), def use postitioncontrol
-  public void extendoArmOut(){
-    BufferedTrajectoryPointStream stream = new BufferedTrajectoryPointStream(); // Creates a set of points telling the motor how to move
-    TrajectoryPoint middleTrajectoryPoint = new TrajectoryPoint(); // Creates single point telling the motor how to move
-    TrajectoryPoint lastTrajectoryPoint = new TrajectoryPoint();
+  // public void extendoArmOut(){
+  //   BufferedTrajectoryPointStream stream = new BufferedTrajectoryPointStream(); // Creates a set of points telling the motor how to move
+  //   TrajectoryPoint middleTrajectoryPoint = new TrajectoryPoint(); // Creates single point telling the motor how to move
+  //   TrajectoryPoint lastTrajectoryPoint = new TrajectoryPoint();
 
-    //TODO: Might need to make a start position
+  //   //TODO: Might need to make a start position
 
-    // The following sets our middle position and speed
-    middleTrajectoryPoint.position = 10;
-    middleTrajectoryPoint.velocity = Constants.CLIMBER_EXTENDO_SPEED_OUT;
-    stream.Write(middleTrajectoryPoint); // Add trajectory point to stream
-    // The following sets our last position and speed
-    lastTrajectoryPoint.position = 20;
-    lastTrajectoryPoint.velocity = 0; // Must be set to 0 or motor will spin indefinitely
-    stream.Write(lastTrajectoryPoint);
+  //   // The following sets our middle position and speed
+  //   middleTrajectoryPoint.position = 10;
+  //   middleTrajectoryPoint.velocity = Constants.CLIMBER_EXTENDO_SPEED_OUT;
+  //   stream.Write(middleTrajectoryPoint); // Add trajectory point to stream
+  //   // The following sets our last position and speed
+  //   lastTrajectoryPoint.position = 20;
+  //   lastTrajectoryPoint.velocity = 0; // Must be set to 0 or motor will spin indefinitely
+  //   stream.Write(lastTrajectoryPoint);
 
-    // Creates a motion profile using set of points in stream and the control mode
-    extendoMotor.startMotionProfile(stream, extendoMotor.getMotionProfileTopLevelBufferCount(), ControlMode.Position);
+  //   // Creates a motion profile using set of points in stream and the control mode
+  //   extendoMotorRight.startMotionProfile(stream, extendoMotorRight.getMotionProfileTopLevelBufferCount(), ControlMode.Position);
+  // }
+
+  public void extendoRightSetPos(double pos) {
+    extendoMotorRight.set(TalonFXControlMode.MotionMagic, pos);
   }
 
-  public void extendoArmSetPos(double pos) {
-    extendoMotor.set(TalonFXControlMode.MotionMagic, pos);
-  }
-
-  public void extendoArmIn(){
-    extendoMotor.set(TalonFXControlMode.PercentOutput, 
+  public void extendoArmRightIn(){
+    extendoMotorRight.set(TalonFXControlMode.PercentOutput, 
     Constants.CLIMBER_EXTENDO_SPEED_IN);
   }
 
-  public void stopExtendoArm() {
-    extendoMotor.set(TalonFXControlMode.PercentOutput, 0);
+  public void stopExtendoRightArm() {
+    extendoMotorRight.set(TalonFXControlMode.PercentOutput, 0);
   }
 
-  public double getExtendoCurrent() {
-    return extendoMotor.getSupplyCurrent();
+  public double getExtendoRightCurrent() {
+    return extendoMotorRight.getSupplyCurrent();
   }
 
-  public boolean getExtendoSwitch() {
-    return extendoMotor.isRevLimitSwitchClosed() == 1;
+  public boolean getExtendoRightSwitch() {
+    return extendoMotorRight.isRevLimitSwitchClosed() == 1;
   }
 
-  public double getExtendoEncPos() {
-    return extendoMotor.getSelectedSensorPosition();
-  }
-  public double getExtendoEncVel() {
-    return extendoMotor.getSelectedSensorVelocity();
+  public double getExtendoRightEncPos() {
+    return extendoMotorRight.getSelectedSensorPosition();
   }
 
-  public void setExtendoEnc(double sensorPos) {
-    extendoMotor.setSelectedSensorPosition(sensorPos);
+  public double getExtendoRightEncVel() {
+    return extendoMotorRight.getSelectedSensorVelocity();
+  }
+
+  public void setExtendoRightEnc(double sensorPos) {
+    extendoMotorRight.setSelectedSensorPosition(sensorPos);
   }
 
   //TODO: Make match extendoArmOut()
-  public void fixedArmOut(){
-    BufferedTrajectoryPointStream stream = new BufferedTrajectoryPointStream();
-    TrajectoryPoint trajectoryPoint = new TrajectoryPoint();
+  // public void fixedArmOut(){
+  //   BufferedTrajectoryPointStream stream = new BufferedTrajectoryPointStream();
+  //   TrajectoryPoint trajectoryPoint = new TrajectoryPoint();
 
-    trajectoryPoint.position = 10;
-    trajectoryPoint.velocity = Constants.CLIMBER_FIXED_SPEED_OUT;
-    stream.Write(trajectoryPoint);
+  //   trajectoryPoint.position = 10;
+  //   trajectoryPoint.velocity = Constants.CLIMBER_EXTENDO_SPEED_OUT;
+  //   stream.Write(trajectoryPoint);
     
-    int minBufferedPts = fixedMotor.getMotionProfileTopLevelBufferCount();
-    fixedMotor.startMotionProfile(stream, minBufferedPts, ControlMode.Position);
+  //   int minBufferedPts = extendoMotorLeft.getMotionProfileTopLevelBufferCount();
+  //   extendoMotorLeft.startMotionProfile(stream, minBufferedPts, ControlMode.Position);
+  // }
+
+  public void extendoLeftSetPos(double pos) {
+    extendoMotorLeft.set(TalonFXControlMode.MotionMagic, pos);
   }
 
-  public void fixedArmSetPos(double pos) {
-    fixedMotor.set(TalonFXControlMode.MotionMagic, pos);
+  public void extendoArmLeftIn(){
+    extendoMotorLeft.set(TalonFXControlMode.PercentOutput, 
+    Constants.CLIMBER_EXTENDO_SPEED_IN);
   }
 
-  public void fixedArmIn(){
-    fixedMotor.set(TalonFXControlMode.PercentOutput, 
-    Constants.CLIMBER_FIXED_SPEED_IN);
+  public void stopExtendoLeftArm() {
+    extendoMotorLeft.set(TalonFXControlMode.PercentOutput, 0);
   }
 
-  public void stopFixedArm() {
-    fixedMotor.set(TalonFXControlMode.PercentOutput, 0);
+  public double getExtendoLeftCurrent() {
+    return extendoMotorLeft.getSupplyCurrent();
   }
 
-  public double getFixedCurrent() {
-    return fixedMotor.getSupplyCurrent();
+  public boolean getExtendoLeftSwitch() {
+    return extendoMotorLeft.isRevLimitSwitchClosed() == 1;
   }
 
-  public boolean getFixedSwitch() {
-    return fixedMotor.isRevLimitSwitchClosed() == 1;
+  public double getExtendoLeftEncPos() {
+    return extendoMotorLeft.getSelectedSensorPosition();
   }
 
-  public double getFixedEncPos() {
-    return fixedMotor.getSelectedSensorPosition();
-  }
-  public double getFixedEncVel() {
-    return fixedMotor.getSelectedSensorVelocity();
+  public double getExtendoLeftEncVel() {
+    return extendoMotorLeft.getSelectedSensorVelocity();
   }
 
-  public void setFixedEnc(double sensorPos) {
-    fixedMotor.setSelectedSensorPosition(sensorPos);
+  public void setExtendoLeftEnc(double sensorPos) {
+    extendoMotorLeft.setSelectedSensorPosition(sensorPos);
   }
+
 }

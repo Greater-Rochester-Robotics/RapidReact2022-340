@@ -75,8 +75,6 @@ public final class Constants {
     /* Climber Constants */
     public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.6;
     public static final double CLIMBER_EXTENDO_SPEED_IN = -0.6;
-    public static final double CLIMBER_FIXED_SPEED_OUT = 0.6;
-    public static final double CLIMBER_FIXED_SPEED_IN = -0.6;
 
     public static final double EXTENDO_MOTOR_P = 0.0;
     public static final double EXTENDO_MOTOR_I = 0.0;
@@ -87,14 +85,6 @@ public final class Constants {
     public static final double EXTENDO_HOMING_CURRENT = 20.0;
     public static final double EXTENDO_ALLOWABLE_ERROR = 0.1;
 
-    public static final double FIXED_MOTOR_P = 0.0;
-    public static final double FIXED_MOTOR_I = 0.0;
-    public static final double FIXED_MOTOR_D = 0.0;
-    public static final double FIXED_MOTOR_F = 0.0;
-    public static final double FIXED_CRUISE_VELOCITY = 15000.0;
-    public static final double FIXED_ACCELERATION = 6000.0;
-    public static final double FIXED_HOMING_CURRENT = 20.0;
-    public static final double FIXED_ALLOWABLE_ERROR = 0.1;
 
     /* IDENTIFICATION NUMBERS FOR DEVICES */
 
