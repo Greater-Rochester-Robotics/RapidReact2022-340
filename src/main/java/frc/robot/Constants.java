@@ -59,6 +59,23 @@ public final class Constants {
     public static final double ROBOT_SPIN_I = 0;
     public static final double ROBOT_SPIN_D = 0;
 
+    
+    /* We stole 3015's constants for DriveFollowTrajectory */
+    public static final double DRIVE_POS_ERROR_CONTROLLER_P = 12; // 10
+    public static final double DRIVE_POS_ERROR_CONTROLLER_I = 0;
+    public static final double DRIVE_POS_ERROR_CONTROLLER_D = 0.05;
+    public static final double DRIVE_HEADING_ERROR_CONTROLLER_P = 0; // 1.05
+    public static final double DRIVE_HEADING_ERROR_CONTROLLER_I = 0;
+    public static final double DRIVE_HEADING_ERROR_CONTROLLER_D = 0; // 0.02
+    public static final double DRIVE_ROTATION_CONTROLLER_P = 10;// 9
+    public static final double DRIVE_ROTATION_CONTROLLER_I = 0;
+    public static final double DRIVE_ROTATION_CONTROLLER_D = 0;
+    public static final double DRIVE_TARGETING_CONTROLLER_P = 13;// 9
+    public static final double DRIVE_TARGETING_CONTROLLER_I = 0;
+    public static final double DRIVE_TARGETING_CONTROLLER_D = 0.5;
+    public static final double DRIVE_ROTATION_MIN_VELOCITY = 25;
+    public static final double DRIVE_TARGETING_I_ZONE = 2;
+
     /* Driver Scaling Constants */
     public static final double DRIVER_SPEED_SCALE_LINEAR = -.6;
     public static final double DRIVER_SPEED_SCALE_ROTATIONAL = .6;
@@ -100,13 +117,15 @@ public final class Constants {
     public static final double EXTENDO_ACCELERATION = 6000.0;
     public static final double EXTENDO_HOMING_CURRENT = 20.0;
     public static final double EXTENDO_ALLOWABLE_ERROR = 0.1;
-
+    public static final double CLIMBER_TOP_POSITION = 1000;
+    public static final double CLIMBER_BOTTOM_POSITION = 0;
+    public static final double CLIMBER_MIDDLE_POSITION = 900;
 
     /* IDENTIFICATION NUMBERS FOR DEVICES */
 
     /* CTRE motor and sensors */
-    public static final int CLIMBER_FIXED_ARM = 2;//Climber
-    public static final int CLIMBER_EXTENDO_ARM = 3;//Climber
+    public static final int CLIMBER_LEFT_ARM = 2;//Climber
+    public static final int CLIMBER_RIGHT_ARM = 3;//Climber
 
     public static final int MAIN_SHOOTER_MOTOR = 4;//Shooter
     public static final int FOLLOW_SHOOTER_MOTOR = 5;//Shooter
@@ -140,25 +159,11 @@ public final class Constants {
     public static final int CLIMBER_TILT_IN = 2;//Climber
     public static final int CLIMBER_TILT_OUT = 3;//Climber
 
-    /* We stole 3015's constants for DriveFollowTrajectory */
-    public static final double DRIVE_POS_ERROR_CONTROLLER_P = 12; // 10
-    public static final double DRIVE_POS_ERROR_CONTROLLER_I = 0;
-    public static final double DRIVE_POS_ERROR_CONTROLLER_D = 0.05;
-    public static final double DRIVE_HEADING_ERROR_CONTROLLER_P = 0; // 1.05
-    public static final double DRIVE_HEADING_ERROR_CONTROLLER_I = 0;
-    public static final double DRIVE_HEADING_ERROR_CONTROLLER_D = 0; // 0.02
-    public static final double DRIVE_ROTATION_CONTROLLER_P = 10;// 9
-    public static final double DRIVE_ROTATION_CONTROLLER_I = 0;
-    public static final double DRIVE_ROTATION_CONTROLLER_D = 0;
-    public static final double DRIVE_TARGETING_CONTROLLER_P = 13;// 9
-    public static final double DRIVE_TARGETING_CONTROLLER_I = 0;
-    public static final double DRIVE_TARGETING_CONTROLLER_D = 0.5;
-    public static final double DRIVE_ROTATION_MIN_VELOCITY = 25;
-    public static final double DRIVE_TARGETING_I_ZONE = 2;
-    
     /* Digital Input */
     public static final int BALL_SENSOR_0 = 0;
     public static final int BALL_SENSOR_1 = 1;
-    public static final int COLOR_SENSOR_0 = 2;
+    public static final int CLIMBER_LEFT_BOTTOM_SWITCH = 2;
+    public static final int CLIMBER_RIGHT_BOTTOM_SWITCH = 3;
+
 
 }
