@@ -19,11 +19,16 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.autonomous.TestPath;
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
+import frc.robot.commands.drive.DriveFieldRelativeAdvanced;
+import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveStopAllModules;
 import frc.robot.commands.drive.util.DriveAdjustModuleZeroPoint;
 import frc.robot.commands.drive.util.DriveAllModulesPositionOnly;
+import frc.robot.commands.drive.util.DriveFindMaxAccel;
 import frc.robot.commands.drive.util.DriveOneModule;
 import frc.robot.commands.drive.util.DriveResetAllModulePositionsToZero;
+import frc.robot.commands.drive.util.DriveResetGyroToZero;
+import frc.robot.commands.drive.util.DriveTuneDriveMotorFeedForward;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.BallHandler;
@@ -116,14 +121,16 @@ public class RobotContainer {
     configureButtonBindings();
 
     //add some commands to dashboard for testing/configuring
-    // SmartDashboard.putData(new DriveResetAllModulePositionsToZero());
-    // SmartDashboard.putData(new DriveAdjustModuleZeroPoint());
-    // SmartDashboard.putData("Drive Module 0", new DriveOneModule(0));
-    // SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));
-    // SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));
-    // SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));
-    // SmartDashboard.putData(new DriveStopAllModules());
-    // SmartDashboard.putData(new DriveAllModulesPositionOnly());
+    SmartDashboard.putData(new DriveResetAllModulePositionsToZero());
+    SmartDashboard.putData(new DriveAdjustModuleZeroPoint());
+    SmartDashboard.putData("Drive Module 0", new DriveOneModule(0));
+    SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));
+    SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));
+    SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));
+    SmartDashboard.putData(new DriveFindMaxAccel());
+    SmartDashboard.putData(new DriveStopAllModules());
+    SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));
+    SmartDashboard.putData(new DriveAllModulesPositionOnly());
     SmartDashboard.putData(new BallHandlerIntakeIn());
     SmartDashboard.putData(new BallHandlerIntakeOut());
   }
@@ -134,7 +141,12 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    driverLB.whenPressed(new DriveResetGyroToZero());
+
+    driverBack.whenPressed(new DriveRobotCentric());
+    driverStart.whenPressed(new DriveFieldRelativeAdvanced());
+  }
 
   /**
    * Define all autonomous modes here to have them 
