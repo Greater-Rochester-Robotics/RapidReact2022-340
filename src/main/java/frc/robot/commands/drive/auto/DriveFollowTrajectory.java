@@ -7,19 +7,23 @@ package frc.robot.commands.drive.auto;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.swervelib.SwervePathController;
 import frc.robot.subsystems.swervelib.SwerveTrajectory;
-/*
-a good 85% of this code came from this database:
-https://github.com/3015RangerRobotics/RobotCode2021/blob/main/src/main/java/frc/robot/commands/DriveFollowPath.java 
-*/
+
+/**
+ * This helper class takes in a path and performs all necessary setup and tells the robot how to follow the provided path.
+ * The majority of this code came from this file: 
+ * https://github.com/3015RangerRobotics/RobotCode2021/blob/main/src/main/java/frc/robot/commands/DriveFollowPath.java
+ */
 public class DriveFollowTrajectory extends CommandBase {
-  /** Creates a new DriveFollowTrajectory. */
   Timer timer;
   SwerveTrajectory traj;
   SwervePathController pathController;
@@ -42,7 +46,6 @@ public class DriveFollowTrajectory extends CommandBase {
     this.pathController = new SwervePathController(posController, headingController, rotationController);
     this.ignoreHeading = ignoreHeading;
   }
-  
 
   // Called when the command is initially scheduled.
   @Override
@@ -53,18 +56,45 @@ public class DriveFollowTrajectory extends CommandBase {
     RobotContainer.swerveDrive.setCurPose2d(new Pose2d(RobotContainer.swerveDrive.getCurPose2d().getTranslation(), initialState.getRotation()));
     pathController.reset(RobotContainer.swerveDrive.getCurPose2d());
     lastTime = 0;
-}
+  }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    double time = timer.get();
+    SwerveTrajectory.State desiredState = traj.sample(time);
+
+    if(ignoreHeading) desiredState.rotation = new Rotation2d(0);
+
+    ChassisSpeeds targetSpeeds = pathController.calculate(RobotContainer.swerveDrive.getCurPose2d(), desiredState, time - lastTime, timer.hasElapsed(0.1));
+    RobotContainer.swerveDrive.driveRobotCentric(targetSpeeds, true);
+
+    lastTime = time;
+
+    // Position Graph
+    // SmartDashboard.putNumber("PIDTarget", desiredState.getPos());
+    // SmartDashboard.putNumber("PIDActual", pathController.getTotalDistance());
+
+    // Heading Graph
+    // SmartDashboard.putNumber("PIDTarget", desiredState.getHeading().getDegrees());
+    // SmartDashboard.putNumber("PIDActual", pathController.getCurrentHeading().getDegrees());
+
+    // Rotation Graph
+    // SmartDashboard.putNumber("PIDTarget", desiredState.getRotation().getDegrees());
+    // SmartDashboard.putNumber("PIDActual", RobotContainer.swerveDrive.getCurPose2d().getRotation().getDegrees());
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    // System.out.println(timer.get());
+    timer.stop();
+    RobotContainer.swerveDrive.driveRobotCentric(0, 0, 0, true);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return timer.hasElapsed(traj.getRuntime());
   }
 }
