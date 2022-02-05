@@ -230,4 +230,8 @@ public class RobotContainer {
   public boolean getCoDriverButton(int buttonNum) {
     return coDriver.getRawButton(buttonNum);
   }
+
+  public Button getClimberButton(){
+    return coDriverA;
+  }
 }

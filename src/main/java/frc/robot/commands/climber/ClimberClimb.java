@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -21,36 +22,31 @@ public class ClimberClimb extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ClimberExtendoHome(),
-      new ClimberExtendoToPosition(Constants.CLIMBER_TOP_POSITION),
-      new WaitUntilCommand(new ContinueButton()),
-      new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION),
-      new WaitUntilCommand(new ContinueButton()),
+      new ClimberExtendoHome().withName("StartClimber"),
+      new ClimberExtendoToPosition(Constants.CLIMBER_TOP_POSITION).withName("ExtendToSecondBar"),
+      new WaitUntilCommand(Robot.robotContainer.getClimberButton()).withName("WaitToPullUp"),
+      new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION).withName("PullUpToSecondBar"),
+      new WaitUntilCommand(Robot.robotContainer.getClimberButton()).withName("WaitToTiltRobot"),
       parallel(
         new ClimberTiltOut(),
         new ClimberExtendoToPosition(Constants.CLIMBER_TOP_POSITION)
-      ),
-      new WaitUntilCommand(new ContinueButton()),
-      new ClimberTiltIn(),
-      new WaitCommand(2.0),
-      new WaitUntilCommand(new ContinueButton()),
-      new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION),
-      new WaitUntilCommand(new ContinueButton()),
+      ).withName("TiltAndExtendToThirdBar"),
+      new WaitUntilCommand(Robot.robotContainer.getClimberButton() ).withName("WaitUntilThirdBarReached"),
+      new ClimberTiltIn().withName("TiltToNormal"),
+      new WaitCommand(2.0).withName("PauseToStopSwinging"),
+      new WaitUntilCommand(Robot.robotContainer.getClimberButton()).withName("WaitToStartClimbToFourthBar"),
+      new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION).withName("ExtendToFourthBar"),
+      new WaitUntilCommand(Robot.robotContainer.getClimberButton()).withName("WaitToTiltRobot"),
       parallel(
         new ClimberTiltOut(),
         new ClimberExtendoToPosition(Constants.CLIMBER_TOP_POSITION)
-      ),
-      new WaitUntilCommand(new ContinueButton()),
-      new ClimberTiltIn(),
-      new WaitCommand(2.0),
-      new WaitUntilCommand(new ContinueButton()),
-      new ClimberExtendoToPosition(Constants.CLIMBER_MIDDLE_POSITION)
+      ).withName("TiltAndSwingToFourthBar"),
+      new WaitUntilCommand(Robot.robotContainer.getClimberButton()).withName("WaitToTiltToNormal"),
+      new ClimberTiltIn().withName("TiltToNormal"),
+      new WaitCommand(2.0).withName("PauseToStopSwinging"),
+      new WaitUntilCommand(Robot.robotContainer.getClimberButton()).withName("WaitToPullUp"),
+      new ClimberExtendoToPosition(Constants.CLIMBER_MIDDLE_POSITION).withName("PullUpToFinalPosition")
     );
   }
 
-  public class ContinueButton implements BooleanSupplier{
-    public boolean getAsBoolean(){
-      return Robot.robotContainer.getCoDriverButton(1);
-    }
-  }
 }

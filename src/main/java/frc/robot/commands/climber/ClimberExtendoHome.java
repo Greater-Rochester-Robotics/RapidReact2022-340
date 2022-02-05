@@ -9,9 +9,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
+/**
+ * Command to return the extending arms to the bottom position and zeroizes
+ * the encoders at the bottom.
+ */
 public class ClimberExtendoHome extends CommandBase {
   Timer timer = new Timer();
-  /** Creates a new ClimberExtendoHome. */
+  
   public ClimberExtendoHome() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.climber);

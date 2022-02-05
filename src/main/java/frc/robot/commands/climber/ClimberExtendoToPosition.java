@@ -10,7 +10,7 @@ import frc.robot.RobotContainer;
 
 public class ClimberExtendoToPosition extends CommandBase {
   double position;
-  /** Creates a new ClimberExtendoToPosition. */
+  
   public ClimberExtendoToPosition(double position) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.climber);

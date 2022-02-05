@@ -37,6 +37,7 @@ public class Climber extends SubsystemBase {
     tiltRobot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
       Constants.CLIMBER_TILT_IN, Constants.CLIMBER_TILT_OUT);
 
+    // Configures the Left Extendo Motor
     extendoMotorLeft = new TalonFX(Constants.CLIMBER_LEFT_ARM);
     extendoMotorLeft.configFactoryDefault();
     // use the integrated sensor with the primary closed loop and timeout is 0.
@@ -56,6 +57,7 @@ public class Climber extends SubsystemBase {
     extendoMotorLeft.configMotionCruiseVelocity(Constants.EXTENDO_CRUISE_VELOCITY);
     extendoMotorLeft.configMotionAcceleration(Constants.EXTENDO_ACCELERATION);
 
+    // Configures the Right Extendo Motor
     extendoMotorRight = new TalonFX(Constants.CLIMBER_RIGHT_ARM);
     extendoMotorRight.configFactoryDefault();
     // use the integrated sensor with the primary closed loop and timeout is 0.
@@ -75,12 +77,15 @@ public class Climber extends SubsystemBase {
     extendoMotorRight.configMotionCruiseVelocity(Constants.EXTENDO_CRUISE_VELOCITY);
     extendoMotorRight.configMotionAcceleration(Constants.EXTENDO_ACCELERATION);
     
+    // Tells us if the extendo arms are all the way in.
     leftBottomSwitch = new DigitalInput(Constants.CLIMBER_LEFT_BOTTOM_SWITCH);
     rightBottomSwitch = new DigitalInput(Constants.CLIMBER_RIGHT_BOTTOM_SWITCH);
   }
 
   @Override
   public void periodic() {}
+
+  /* Functions for the fixed arm */
 
   public void climberTiltOut(){
     tiltRobot.set(Value.kForward);
@@ -90,26 +95,7 @@ public class Climber extends SubsystemBase {
     tiltRobot.set(Value.kReverse);
   }
 
-  //TODO: Make a method to move the extendoArm to a specific distance(use built-in MotionProfile?), def use postitioncontrol
-  // public void extendoArmOut(){
-  //   BufferedTrajectoryPointStream stream = new BufferedTrajectoryPointStream(); // Creates a set of points telling the motor how to move
-  //   TrajectoryPoint middleTrajectoryPoint = new TrajectoryPoint(); // Creates single point telling the motor how to move
-  //   TrajectoryPoint lastTrajectoryPoint = new TrajectoryPoint();
-
-  //   //TODO: Might need to make a start position
-
-  //   // The following sets our middle position and speed
-  //   middleTrajectoryPoint.position = 10;
-  //   middleTrajectoryPoint.velocity = Constants.CLIMBER_EXTENDO_SPEED_OUT;
-  //   stream.Write(middleTrajectoryPoint); // Add trajectory point to stream
-  //   // The following sets our last position and speed
-  //   lastTrajectoryPoint.position = 20;
-  //   lastTrajectoryPoint.velocity = 0; // Must be set to 0 or motor will spin indefinitely
-  //   stream.Write(lastTrajectoryPoint);
-
-  //   // Creates a motion profile using set of points in stream and the control mode
-  //   extendoMotorRight.startMotionProfile(stream, extendoMotorRight.getMotionProfileTopLevelBufferCount(), ControlMode.Position);
-  // }
+  /* Functions for the right extendo arm */
 
   public void extendoRightSetPos(double pos) {
     extendoMotorRight.set(TalonFXControlMode.MotionMagic, pos);
@@ -144,19 +130,8 @@ public class Climber extends SubsystemBase {
     extendoMotorRight.setSelectedSensorPosition(sensorPos);
   }
 
-  //TODO: Make match extendoArmOut()
-  // public void fixedArmOut(){
-  //   BufferedTrajectoryPointStream stream = new BufferedTrajectoryPointStream();
-  //   TrajectoryPoint trajectoryPoint = new TrajectoryPoint();
-
-  //   trajectoryPoint.position = 10;
-  //   trajectoryPoint.velocity = Constants.CLIMBER_EXTENDO_SPEED_OUT;
-  //   stream.Write(trajectoryPoint);
-    
-  //   int minBufferedPts = extendoMotorLeft.getMotionProfileTopLevelBufferCount();
-  //   extendoMotorLeft.startMotionProfile(stream, minBufferedPts, ControlMode.Position);
-  // }
-
+  /* Functions for the left extendo arm */
+  
   public void extendoLeftSetPos(double pos) {
     extendoMotorLeft.set(TalonFXControlMode.MotionMagic, pos);
   }
