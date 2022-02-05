@@ -83,8 +83,9 @@ public class SwerveModule {
                           Constants.SWERVE_ROT_D_VALUE, Constants.SWERVE_ROT_FF_VALUE);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
-        //TODO: use configAllowableClosedLoopError with SWERVE_MODULE_TOLLERANCE from constants
+
         rotationMotor.setSelectedSensorPosition(0.0);
+        rotationMotor.configAllowableClosedloopError(0, Constants.SWERVE_MODULE_TOLERANCE, 0); //TODO: Check for correct slotIdx
         
 
         //the following sensor is angle of the module, as an absolute value
