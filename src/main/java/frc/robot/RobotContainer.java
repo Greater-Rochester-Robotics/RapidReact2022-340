@@ -19,6 +19,9 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.autonomous.TestPath;
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
+import frc.robot.commands.climber.ClimberClimb;
+import frc.robot.commands.climber.ClimberExtendIn;
+import frc.robot.commands.climber.ClimberExtendOut;
 import frc.robot.commands.drive.DriveFieldRelativeAdvanced;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveStopAllModules;
@@ -53,7 +56,7 @@ public class RobotContainer {
   ////////////////////
 
   final Button driverA = new JoystickButton(driver, 1);
-  final Button driverB = new JoystickButton(driver, 2);
+  public final Button driverB = new JoystickButton(driver, 2);
   final Button driverX = new JoystickButton(driver, 3);
   final Button driverY = new JoystickButton(driver, 4);
   final Button driverLB = new JoystickButton(driver, 5);
@@ -108,8 +111,8 @@ public class RobotContainer {
 
     //create(construct) subsystems
     // compressor = new Compressor();//Let's keep compressor first
-    swerveDrive = new SwerveDrive();
-    // climber = new Climber();
+    // swerveDrive = new SwerveDrive();
+    climber = new Climber();
     // ballHandler = new BallHandler();
     // limeLight = new LimeLight();
     // shooter = new Shooter();
@@ -121,16 +124,16 @@ public class RobotContainer {
     configureButtonBindings();
 
     //add some commands to dashboard for testing/configuring
-    SmartDashboard.putData(new DriveResetAllModulePositionsToZero());
-    SmartDashboard.putData(new DriveAdjustModuleZeroPoint());
-    SmartDashboard.putData("Drive Module 0", new DriveOneModule(0));
-    SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));
-    SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));
-    SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));
-    SmartDashboard.putData(new DriveFindMaxAccel());
-    SmartDashboard.putData(new DriveStopAllModules());
-    SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));
-    SmartDashboard.putData(new DriveAllModulesPositionOnly());
+    // SmartDashboard.putData(new DriveResetAllModulePositionsToZero());
+    // SmartDashboard.putData(new DriveAdjustModuleZeroPoint());
+    // SmartDashboard.putData("Drive Module 0", new DriveOneModule(0));
+    // SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));
+    // SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));
+    // SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));
+    // SmartDashboard.putData(new DriveFindMaxAccel());
+    // SmartDashboard.putData(new DriveStopAllModules());
+    // SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));
+    // SmartDashboard.putData(new DriveAllModulesPositionOnly());
     // SmartDashboard.putData(new BallHandlerIntakeIn());
     // SmartDashboard.putData(new BallHandlerIntakeOut());
   }
@@ -142,10 +145,13 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    driverLB.whenPressed(new DriveResetGyroToZero());
+    // driverLB.whenPressed(new DriveResetGyroToZero());
 
-    driverBack.whenPressed(new DriveRobotCentric());
-    driverStart.whenPressed(new DriveFieldRelativeAdvanced());
+    // driverBack.whenPressed(new DriveRobotCentric());
+    // driverStart.whenPressed(new DriveFieldRelativeAdvanced());
+    // driverA.whenPressed(new ClimberClimb());
+    driverA.whileHeld(new ClimberExtendOut());
+    driverB.whileHeld(new ClimberExtendIn());
   }
 
   /**
@@ -232,6 +238,6 @@ public class RobotContainer {
   }
 
   public Button getClimberButton(){
-    return coDriverA;
+    return driverB;
   }
 }

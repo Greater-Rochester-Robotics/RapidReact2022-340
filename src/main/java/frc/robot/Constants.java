@@ -106,8 +106,8 @@ public final class Constants {
     public static final int INTAKE_PROXIMITY = 100;
 
     /* Climber Constants */
-    public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.6;
-    public static final double CLIMBER_EXTENDO_SPEED_IN = -0.6;
+    public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.3;
+    public static final double CLIMBER_EXTENDO_SPEED_IN = -0.3;
 
     public static final double EXTENDO_MOTOR_P = 0.0;
     public static final double EXTENDO_MOTOR_I = 0.0;
@@ -124,8 +124,8 @@ public final class Constants {
     /* IDENTIFICATION NUMBERS FOR DEVICES */
 
     /* CTRE motor and sensors */
-    public static final int CLIMBER_LEFT_ARM = 2;//Climber
-    public static final int CLIMBER_RIGHT_ARM = 3;//Climber
+    public static final int CLIMBER_LEFT_ARM = 52;//Climber
+    public static final int CLIMBER_RIGHT_ARM = 53;//Climber
 
     public static final int MAIN_SHOOTER_MOTOR = 4;//Shooter
     public static final int FOLLOW_SHOOTER_MOTOR = 5;//Shooter

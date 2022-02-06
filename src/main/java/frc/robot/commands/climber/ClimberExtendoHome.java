@@ -11,7 +11,7 @@ import frc.robot.RobotContainer;
 
 /**
  * Command to return the extending arms to the bottom position and zeroizes
- * the encoders at the bottom.
+ * the encoders at the 
  */
 public class ClimberExtendoHome extends CommandBase {
   Timer timer = new Timer();
@@ -41,7 +41,7 @@ public class ClimberExtendoHome extends CommandBase {
     if(isLeftAtBottom()){
       RobotContainer.climber.stopExtendoLeftArm();
     }else{
-        RobotContainer.climber.extendoArmLeftIn();
+      RobotContainer.climber.extendoArmLeftIn();
     }
 
   }
