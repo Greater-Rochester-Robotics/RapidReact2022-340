@@ -44,15 +44,15 @@ public final class Constants {
 
     /* Swerve Module Rotation constants */
     public static final double RAD_TO_ENC_CONV_FACTOR = 5029.08073;//swerveX 8T to 24T / 14T to 72T //the radian to enc factor
-    public static final double SWERVE_ROT_P_VALUE = 0.4;// TODO:find this value for real, .4 was from 2021
+    public static final double SWERVE_ROT_P_VALUE = 0.1;// TODO:find this value for real, .4 was from 2021
     public static final double SWERVE_ROT_I_VALUE = 0.0;
-    public static final double SWERVE_ROT_D_VALUE = 0.0; 
+    public static final double SWERVE_ROT_D_VALUE = 0.05; 
     public static final double SWERVE_ROT_I_ZONE_VALUE = 0;
     public static final double SWERVE_ROT_FF_VALUE = 0.0;
     public static final double SWERVE_ROT_ARB_FF_VOLTAGE = 0.0;//This is left over from NEO550
     public static final double SWERVE_ROT_PID_VOLTAGE_MINIMUM = -12.0;//This is left over from NEO550
     public static final double SWERVE_ROT_PID_VOLTAGE_MAXIMUM = 12.0;//This is left over from NEO550
-    public static final double SWERVE_MODULE_TOLERANCE = .051;//TODO: this is scaled from the NEO550, needs adjust for Falcon500
+    public static final double SWERVE_MODULE_TOLERANCE = 0.1;//TODO: this is scaled from the NEO550, needs adjust for Falcon500
 
     /* Robot Motion PID controller constants */
     public static final double ROBOT_SPIN_P = 1;//TODO:this can't be the number, adjust when have robot
@@ -77,8 +77,8 @@ public final class Constants {
     public static final double DRIVE_TARGETING_I_ZONE = 2;
 
     /* Driver Scaling Constants */
-    public static final double DRIVER_SPEED_SCALE_LINEAR = -.6;
-    public static final double DRIVER_SPEED_SCALE_ROTATIONAL = .6;
+    public static final double DRIVER_SPEED_SCALE_LINEAR = -0.6;
+    public static final double DRIVER_SPEED_SCALE_ROTATIONAL = 0.3;
 
     
     /* Compressor Pressure Constants */

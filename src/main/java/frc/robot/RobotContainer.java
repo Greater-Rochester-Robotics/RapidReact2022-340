@@ -107,10 +107,10 @@ public class RobotContainer {
   public RobotContainer() {
 
     //create(construct) subsystems
-    compressor = new Compressor();//Let's keep compressor first
-    // swerveDrive = new SwerveDrive();
+    // compressor = new Compressor();//Let's keep compressor first
+    swerveDrive = new SwerveDrive();
     // climber = new Climber();
-    ballHandler = new BallHandler();
+    // ballHandler = new BallHandler();
     // limeLight = new LimeLight();
     // shooter = new Shooter();
 
@@ -131,8 +131,8 @@ public class RobotContainer {
     SmartDashboard.putData(new DriveStopAllModules());
     SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));
     SmartDashboard.putData(new DriveAllModulesPositionOnly());
-    SmartDashboard.putData(new BallHandlerIntakeIn());
-    SmartDashboard.putData(new BallHandlerIntakeOut());
+    // SmartDashboard.putData(new BallHandlerIntakeIn());
+    // SmartDashboard.putData(new BallHandlerIntakeOut());
   }
 
   /**
@@ -157,7 +157,7 @@ public class RobotContainer {
     autoChooser.setDefaultOption("Wait 1 sec(do nothing)", new WaitCommand(1));
 
     // autoChooser.addOption("Barrel Racing 64", new AutoBarrelPath());
-    autoChooser.addOption("TestPath", new TestPath());
+  // autoChooser.addOption("TestPath", new TestPath());
 
     SmartDashboard.putData(RobotContainer.autoChooser);
   }

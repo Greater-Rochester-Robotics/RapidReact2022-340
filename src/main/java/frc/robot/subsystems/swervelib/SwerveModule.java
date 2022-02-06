@@ -49,7 +49,7 @@ public class SwerveModule {
      *                        rotation motor(expecting NEO 550)
      * @param canCoderID      The CAN ID of the rotation sensor
      */
-    public SwerveModule(int driveMotorID, int rotationMotorID, int canCoderID) {
+    public SwerveModule(int driveMotorID, int rotationMotorID, int canCoderID, boolean isInverted) {
         
         //contruct and setup drive falcon
         driveMotor = new TalonFX(driveMotorID);
@@ -60,13 +60,13 @@ public class SwerveModule {
         // above uses configSelectedFeedbackCoefficient(), to scale the
         // driveMotor to real distance, DRIVE_ENC_TO_METERS_FACTOR
         driveMotor.setNeutralMode(NeutralMode.Brake);
-        driveMotor.setInverted(false);// Set motor inverted(set to false)
+        driveMotor.setInverted(isInverted);// Set motor inverted(set to false)
         driveMotor.enableVoltageCompensation(true);
         driveMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setDriveMotorPIDF(Constants.SWERVE_DRIVE_P_VALUE, Constants.SWERVE_DRIVE_I_VALUE,
                           Constants.SWERVE_DRIVE_D_VALUE, Constants.SWERVE_DRIVE_FF_VALUE);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 100);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 100);
         driveMotor.setSelectedSensorPosition(0.0);
 
         //contruct and setup rotation falcon
@@ -79,10 +79,10 @@ public class SwerveModule {
         rotationMotor.setInverted(false);// Set motor inverted(set to false) TODO:Is this right in swerveX?
         rotationMotor.enableVoltageCompensation(true);
         rotationMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
-        setDriveMotorPIDF(Constants.SWERVE_ROT_P_VALUE, Constants.SWERVE_ROT_I_VALUE,
+        setRotationMotorPIDF(Constants.SWERVE_ROT_P_VALUE, Constants.SWERVE_ROT_I_VALUE,
                           Constants.SWERVE_ROT_D_VALUE, Constants.SWERVE_ROT_FF_VALUE);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 100);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 100);
 
         rotationMotor.setSelectedSensorPosition(0.0);
         rotationMotor.configAllowableClosedloopError(0, Constants.SWERVE_MODULE_TOLERANCE, 0); //TODO: Check for correct slotIdx
@@ -161,6 +161,21 @@ public class SwerveModule {
         driveMotor.config_kI(0, I);
         driveMotor.config_kD(0, D);
         driveMotor.config_kF(0, F);
+    }
+
+    /**
+     * sets the rotation motor's PIDF for the PIDF controller on the TalonFX
+     * 
+     * @param P value of the P constant
+     * @param I value of the I constant
+     * @param D value of the D constant
+     * @param F value of the F constant
+     */
+    public void setRotationMotorPIDF(double P, double I, double D, double F) {
+        rotationMotor.config_kP(0, P);
+        rotationMotor.config_kI(0, I);
+        rotationMotor.config_kD(0, D);
+        rotationMotor.config_kF(0, F);
     }
 
     /**
@@ -258,31 +273,32 @@ public class SwerveModule {
      */
     public void setModuleState(SwerveModuleState targetState, boolean isVeloMode){
         
-        //Instatiate Rotation2d object and fill with call from getCurRot2d()
+        // Instatiate Rotation2d object and fill with call from getCurRot2d()
         Rotation2d curPosition = getCurRot2d();
         
-        //optimize targetState with Rotation2d object pulled from above
-        SwerveModuleState.optimize(targetState, curPosition);
+        // Optimize targetState with Rotation2d object pulled from above
+        // TODO: This makes nothing move. Not sure why.
+        //SwerveModuleState.optimize(targetState, curPosition);
         
-        //find the difference between the target and current position
+        // Find the difference between the target and current position
         double posDiff = targetState.angle.getRadians() - curPosition.getRadians(); 
         double absDiff = Math.abs(posDiff);
-
-        // if the distance is more than a half circle,we going the wrong way, fix
+        
+        // if the distance is more than a half circle, we are going the wrong way
         if (absDiff > Math.PI) {
             // the distance the other way around the circle
-            posDiff = posDiff- (Constants.TWO_PI * Math.signum(posDiff));
+            posDiff = posDiff - (Constants.TWO_PI * Math.signum(posDiff));
         }
-
+        
         // Convert the shortest distance of rotation to relative encoder value(use convertion factor)
-        double targetAngle = posDiff * Constants.RAD_TO_ENC_CONV_FACTOR;
+        double targetAngle = posDiff * Constants.RAD_TO_ENC_CONV_FACTOR * -1;
         // add the encoder distance to the current encoder count
         double outputEncValue = targetAngle + getRelEncCount();
 
         // Set the setpoint using setReference on the TalonFX
         rotationMotor.set(TalonFXControlMode.Position, outputEncValue);
 
-        //output to drive motor based on velomode or not
+        // Output to drive motor based on velomode or not
         if (isVeloMode) {
             setDriveSpeed(targetState.speedMetersPerSecond);
         } else {
