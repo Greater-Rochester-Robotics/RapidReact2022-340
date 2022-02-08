@@ -22,6 +22,7 @@ import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.climber.ClimberClimb;
 import frc.robot.commands.climber.ClimberExtendIn;
 import frc.robot.commands.climber.ClimberExtendOut;
+import frc.robot.commands.drive.DriveFieldRelative;
 import frc.robot.commands.drive.DriveFieldRelativeAdvanced;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveStopAllModules;
@@ -111,29 +112,29 @@ public class RobotContainer {
 
     //create(construct) subsystems
     // compressor = new Compressor();//Let's keep compressor first
-    // swerveDrive = new SwerveDrive();
+    swerveDrive = new SwerveDrive();
     climber = new Climber();
     // ballHandler = new BallHandler();
     // limeLight = new LimeLight();
     // shooter = new Shooter();
 
     //Add all autos to the auto selector
-    configureAutoModes();
+    // configureAutoModes();
 
     // Configure the button bindings
     configureButtonBindings();
 
     //add some commands to dashboard for testing/configuring
-    // SmartDashboard.putData(new DriveResetAllModulePositionsToZero());
-    // SmartDashboard.putData(new DriveAdjustModuleZeroPoint());
-    // SmartDashboard.putData("Drive Module 0", new DriveOneModule(0));
-    // SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));
-    // SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));
-    // SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));
-    // SmartDashboard.putData(new DriveFindMaxAccel());
-    // SmartDashboard.putData(new DriveStopAllModules());
-    // SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));
-    // SmartDashboard.putData(new DriveAllModulesPositionOnly());
+    SmartDashboard.putData(new DriveResetAllModulePositionsToZero());
+    SmartDashboard.putData(new DriveAdjustModuleZeroPoint());
+    SmartDashboard.putData("Drive Module 0", new DriveOneModule(0));
+    SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));
+    SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));
+    SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));
+    // SmartDashboard.putData(new DriveFindMaxAccel());//This is for PathPlanning Parameters
+    SmartDashboard.putData(new DriveStopAllModules());
+    // SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));//this is for Velocity PID parameters, Path Planning by Extention
+    SmartDashboard.putData(new DriveAllModulesPositionOnly());
     // SmartDashboard.putData(new BallHandlerIntakeIn());
     // SmartDashboard.putData(new BallHandlerIntakeOut());
   }
@@ -145,13 +146,13 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    driverA.whileHeld(new ClimberExtendOut());
+    driverB.whileHeld(new ClimberExtendIn());
+
     // driverLB.whenPressed(new DriveResetGyroToZero());
 
     // driverBack.whenPressed(new DriveRobotCentric());
-    // driverStart.whenPressed(new DriveFieldRelativeAdvanced());
-    // driverA.whenPressed(new ClimberClimb());
-    driverA.whileHeld(new ClimberExtendOut());
-    driverB.whileHeld(new ClimberExtendIn());
+    // driverStart.whenPressed(new DriveFieldRelative());
   }
 
   /**

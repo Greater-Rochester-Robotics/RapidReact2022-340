@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.CalibrationTime;
 
 import frc.robot.Constants;
@@ -72,7 +73,7 @@ public class SwerveDrive extends SubsystemBase {
       Constants.REAR_RIGHT_POSITION, Constants.FRONT_RIGHT_POSITION);
 
     // Constructs IMU object
-    imu = new ADIS16470_IMU(IMUAxis.kY, SPI.Port.kOnboardCS0, CalibrationTime._4s);
+    imu = new ADIS16470_IMU(IMUAxis.kY, SPI.Port.kOnboardCS0, CalibrationTime._4s);//Must use params, won't work without
     
     //construct the odometry class.
     driveOdometry = new SwerveDriveOdometry(driveKinematics, getGyroRotation2d());
@@ -93,6 +94,7 @@ public class SwerveDrive extends SubsystemBase {
     }
     //run odometry update on the odometry object
     driveOdometry.update(getGyroRotation2d(), moduleStates);
+    SmartDashboard.putNumber("Gyro", this.getGyroInDeg());
   }
 
   /**

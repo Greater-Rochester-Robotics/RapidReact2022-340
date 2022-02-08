@@ -29,7 +29,6 @@ public class DriveFieldRelative extends CommandBase {
   /**
    * Creates a new DriveFieldCentric.
    */
-  @Deprecated
   public DriveFieldRelative() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.swerveDrive);

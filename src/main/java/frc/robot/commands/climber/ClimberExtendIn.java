@@ -5,9 +5,11 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
+/**
+ * This is a testing command to drive the Arms In. it should be bound to a whileHeld() button
+ */
 public class ClimberExtendIn extends CommandBase {
   /** Creates a new ClimberExtendOut. */
   public ClimberExtendIn() {

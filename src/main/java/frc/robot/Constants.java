@@ -152,6 +152,7 @@ public final class Constants {
     public static final int SELECTOR_MOTOR = 1;//Handler
     public static final int BALL_HANDLER_MOTOR_0 = 2;//Handler
     public static final int BALL_HANDLER_MOTOR_1 = 3;//Handler
+    public static final int SHOOTER_HOOD_MOTOR = 4; //Shooter
 
     /* Solenoid Channels */
     public static final int HARVESTER_TILT_IN = 0;//Intake

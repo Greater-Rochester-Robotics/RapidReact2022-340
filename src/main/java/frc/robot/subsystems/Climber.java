@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
@@ -45,7 +46,8 @@ public class Climber extends SubsystemBase {
     extendoMotorLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
     extendoMotorLeft.configSelectedFeedbackCoefficient(1);//TODO: based on gearing, find out
     extendoMotorLeft.setNeutralMode(NeutralMode.Brake);
-    extendoMotorLeft.setInverted(true);// Set motor inverted(set to false) TODO:Is this right?
+    extendoMotorLeft.setInverted(true);// Set motor inverted(set to true for left)
+    extendoMotorLeft.setSensorPhase(false);
     extendoMotorLeft.enableVoltageCompensation(true);
     extendoMotorLeft.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
     extendoMotorLeft.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
@@ -57,7 +59,7 @@ public class Climber extends SubsystemBase {
     extendoMotorLeft.config_kF(0, Constants.EXTENDO_MOTOR_F);
     extendoMotorLeft.configMotionCruiseVelocity(Constants.EXTENDO_CRUISE_VELOCITY);
     extendoMotorLeft.configMotionAcceleration(Constants.EXTENDO_ACCELERATION);
-    extendoMotorLeft.configReverseLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyOpen);
+    this.setLeftSwitchEnabled(true);
     extendoMotorLeft.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyOpen);
 
     // Configures the Right Extendo Motor
@@ -67,7 +69,8 @@ public class Climber extends SubsystemBase {
     extendoMotorRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
     extendoMotorRight.configSelectedFeedbackCoefficient(1);//TODO: based on gearing,find out
     extendoMotorRight.setNeutralMode(NeutralMode.Brake);
-    extendoMotorRight.setInverted(false);// Set motor inverted(set to false) TODO:Is this right?
+    extendoMotorRight.setInverted(false);// Set motor inverted(set to false for right)
+    extendoMotorRight.setSensorPhase(true);
     extendoMotorRight.enableVoltageCompensation(true);
     extendoMotorRight.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
     extendoMotorRight.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
@@ -79,7 +82,7 @@ public class Climber extends SubsystemBase {
     extendoMotorRight.config_kF(0, Constants.EXTENDO_MOTOR_F);
     extendoMotorRight.configMotionCruiseVelocity(Constants.EXTENDO_CRUISE_VELOCITY);
     extendoMotorRight.configMotionAcceleration(Constants.EXTENDO_ACCELERATION);
-    extendoMotorRight.configReverseLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyOpen);
+    this.setRightSwitchEnabled(true);
     extendoMotorRight.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyOpen);
     
     // Tells us if the extendo arms are all the way in.
@@ -88,7 +91,10 @@ public class Climber extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {}
+  public void periodic() {
+    SmartDashboard.putNumber("Left Encoder", extendoMotorLeft.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Right Encoder", extendoMotorRight.getSelectedSensorPosition());
+  }
 
   /* Functions for the fixed arm */
 
@@ -128,6 +134,14 @@ public class Climber extends SubsystemBase {
     return rightBottomSwitch.isRevLimitSwitchClosed()==1;
   }
 
+  public void setRightSwitchEnabled(boolean enable){
+    if(enable){
+      extendoMotorRight.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+    }else{
+      extendoMotorRight.configReverseLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyOpen);
+    }
+  }
+  
   public double getExtendoRightEncPos() {
     return extendoMotorRight.getSelectedSensorPosition();
   }
@@ -166,6 +180,14 @@ public class Climber extends SubsystemBase {
 
   public boolean getExtendoLeftSwitch() {
     return leftBottomSwitch.isRevLimitSwitchClosed()==1;
+  }
+  
+  public void setLeftSwitchEnabled(boolean enable){
+    if(enable){
+      extendoMotorLeft.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+    }else{
+      extendoMotorLeft.configReverseLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyOpen);
+    }
   }
 
   public double getExtendoLeftEncPos() {

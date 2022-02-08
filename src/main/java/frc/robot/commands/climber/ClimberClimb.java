@@ -28,21 +28,21 @@ public class ClimberClimb extends SequentialCommandGroup {
       new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION).withName("PullUpToSecondBar"),
       new WaitUntilCommand(Robot.robotContainer.getClimberButton()).withName("WaitToTiltRobot"),
       parallel(
-        // new ClimberTiltOut(),
+        new ClimberTiltOut(),
         new ClimberExtendoToPosition(Constants.CLIMBER_TOP_POSITION)
       ).withName("TiltAndExtendToThirdBar"),
       new WaitUntilCommand(Robot.robotContainer.getClimberButton() ).withName("WaitUntilThirdBarReached"),
-      // new ClimberTiltIn().withName("TiltToNormal"),
+      new ClimberTiltIn().withName("TiltToNormal"),
       new WaitCommand(2.0).withName("PauseToStopSwinging"),
       new WaitUntilCommand(Robot.robotContainer.getClimberButton()).withName("WaitToStartClimbToFourthBar"),
       new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION).withName("ExtendToFourthBar"),
       new WaitUntilCommand(Robot.robotContainer.getClimberButton()).withName("WaitToTiltRobot"),
       parallel(
-        // new ClimberTiltOut(),
+        new ClimberTiltOut(),
         new ClimberExtendoToPosition(Constants.CLIMBER_TOP_POSITION)
       ).withName("TiltAndSwingToFourthBar"),
       new WaitUntilCommand(Robot.robotContainer.getClimberButton()).withName("WaitToTiltToNormal"),
-      // new ClimberTiltIn().withName("TiltToNormal"),
+      new ClimberTiltIn().withName("TiltToNormal"),
       new WaitCommand(2.0).withName("PauseToStopSwinging"),
       new WaitUntilCommand(Robot.robotContainer.getClimberButton()).withName("WaitToPullUp"),
       new ClimberExtendoToPosition(Constants.CLIMBER_MIDDLE_POSITION).withName("PullUpToFinalPosition")
