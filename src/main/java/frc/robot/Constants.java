@@ -105,6 +105,9 @@ public final class Constants {
     
     public static final int INTAKE_PROXIMITY = 100;
 
+    /* Shooter Constants */
+    public static final double SHOOTER_HOOD_DEGREE_CONVERSION = 1;//TODO: get the gear ratio on the versa, then the gear tooth number on drive gear, and the teah per degree on rack, then dimensional analysis
+
     /* Climber Constants */
     public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.3;
     public static final double CLIMBER_EXTENDO_SPEED_IN = -0.3;

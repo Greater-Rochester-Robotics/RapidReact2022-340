@@ -65,8 +65,8 @@ public class SwerveModule {
         driveMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setDriveMotorPIDF(Constants.SWERVE_DRIVE_P_VALUE, Constants.SWERVE_DRIVE_I_VALUE,
                           Constants.SWERVE_DRIVE_D_VALUE, Constants.SWERVE_DRIVE_FF_VALUE);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 100);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 100);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
         driveMotor.setSelectedSensorPosition(0.0);
 
         //contruct and setup rotation falcon
@@ -81,8 +81,8 @@ public class SwerveModule {
         rotationMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setRotationMotorPIDF(Constants.SWERVE_ROT_P_VALUE, Constants.SWERVE_ROT_I_VALUE,
                           Constants.SWERVE_ROT_D_VALUE, Constants.SWERVE_ROT_FF_VALUE);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 100);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 100);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
 
         rotationMotor.setSelectedSensorPosition(0.0);
         rotationMotor.configAllowableClosedloopError(0, Constants.SWERVE_MODULE_TOLERANCE, 0); //TODO: Check for correct slotIdx
