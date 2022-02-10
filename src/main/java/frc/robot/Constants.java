@@ -106,7 +106,20 @@ public final class Constants {
     public static final int INTAKE_PROXIMITY = 100;
 
     /* Shooter Constants */
+    public static final int SHOOTER_HOOD_MOTOR_COUNTS_PER_REV = 5000; //TODO: get actual counts per revolution
     public static final double SHOOTER_HOOD_DEGREE_CONVERSION = 1;//TODO: get the gear ratio on the versa, then the gear tooth number on drive gear, and the teah per degree on rack, then dimensional analysis
+    
+    public static final double SHOOTER_MAIN_MOTOR_P = 0.0;
+    public static final double SHOOTER_MAIN_MOTOR_I = 0.0;
+    public static final double SHOOTER_MAIN_MOTOR_D = 0.0;
+    public static final double SHOOTER_MAIN_MOTOR_F = 0.0;
+
+    public static final double SHOOTER_HOOD_MOTOR_P = 0.0;
+    public static final double SHOOTER_HOOD_MOTOR_I = 0.0;
+    public static final double SHOOTER_HOOD_MOTOR_D = 0.0;
+    public static final double SHOOTER_HOOD_MOTOR_FF = 0.0;
+
+    public static final double SHOOTER_MOTOR_ALLOWABLE_ERROR = 0.0;
 
     /* Climber Constants */
     public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.3;
@@ -131,7 +144,6 @@ public final class Constants {
     public static final int CLIMBER_RIGHT_ARM = 53;//Climber
 
     public static final int MAIN_SHOOTER_MOTOR = 4;//Shooter
-    public static final int FOLLOW_SHOOTER_MOTOR = 5;//Shooter
 
     public static final int HARVESTER_MOTOR = 6;//Handler
 

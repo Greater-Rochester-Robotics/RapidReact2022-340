@@ -9,8 +9,16 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -24,11 +32,10 @@ public class Shooter extends SubsystemBase {
   private static final double speedError = 0.01;
   private double goalSpeed;
   TalonFX mainMotor;
-  TalonFX followMotor;//TODO: remove this motor, we hve a one wheel shooter
   CANSparkMax hoodMotor;
-  //TODO: instantiate spark motor encoder object
-  //TODO: instantiate sparkmax Pidcontroller
-  //TODO: instantiate DigitalInput for hoodLimit switch
+  RelativeEncoder hoodEncoder;
+  SparkMaxPIDController pidController;
+  DigitalOutput hoodLimitSwitch;
 
   /** Creates a new Shooter. */
   public Shooter() {
@@ -41,17 +48,32 @@ public class Shooter extends SubsystemBase {
     mainMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
     mainMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
     mainMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
-    //TODO: set up PID for the shooter, use config_kP through config_kF (P,I,D, F) put constants in Constants place in slot0
-    //TODO: configAllowableCloseLoopError, put constant in Constants, again slot0
 
-    followMotor = new TalonFX(Constants.FOLLOW_SHOOTER_MOTOR);
+    mainMotor.config_kP(0, Constants.SHOOTER_MAIN_MOTOR_P);
+    mainMotor.config_kI(0, Constants.SHOOTER_MAIN_MOTOR_I);
+    mainMotor.config_kD(0, Constants.SHOOTER_MAIN_MOTOR_D);
+    mainMotor.config_kF(0, Constants.SHOOTER_MAIN_MOTOR_F);
+
+    mainMotor.configAllowableClosedloopError(0, Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR);
+
     hoodMotor = new CANSparkMax(Constants.SHOOTER_HOOD_MOTOR, MotorType.kBrushless);
-    //TODO: write configure the hoodMotor. restoreDefaults, idle to brake, voltage comp on and at 10.5, set inverted(not sure T or F) but write it 
-    //TODO: pull encoder from motor object, set position convertion factor on encoder (USE SHOOTER_HOOD_DEGREE_CONVERSION)
-    //TODO: pull pidController from sparkmax motor object, then set P, I, D, FF. methods are setP() etc put constants in Constants 
-    //TODO: burn flash of sparkmax
+    hoodMotor.restoreFactoryDefaults();
+    hoodMotor.setIdleMode(IdleMode.kBrake);
+    hoodMotor.enableVoltageCompensation(10.5);
+    hoodMotor.setInverted(false); //TODO: check if this is right
 
-    //TODO: construct hoodLimit switch
+    hoodEncoder = hoodMotor.getEncoder();
+    hoodEncoder.setPositionConversionFactor(Constants.SHOOTER_HOOD_DEGREE_CONVERSION);
+
+    pidController = hoodMotor.getPIDController();
+    pidController.setP(Constants.SHOOTER_HOOD_MOTOR_P);
+    pidController.setI(Constants.SHOOTER_HOOD_MOTOR_I);
+    pidController.setD(Constants.SHOOTER_HOOD_MOTOR_D);
+    pidController.setFF(Constants.SHOOTER_HOOD_MOTOR_FF);
+
+    hoodMotor.burnFlash();
+
+    hoodLimitSwitch = new DigitalOutput(0); //TODO: set correct channel
   }
 
   @Override
@@ -81,10 +103,30 @@ public class Shooter extends SubsystemBase {
   }
 
   //TODO: create a setHoodPosition for the hoodMotor. use the pidController object to set in method
+  public void setHoodPosition() {}
 
   //TODO: create accessor method for the position of the hood. use the sparkmax encoderObject as source
+  public double getHoodPosition() {
+    return hoodEncoder.getPosition();
+  }
 
   //TODO: create reset position modifier method that will set the position of the encoder object. this will act as our reset device, use setPosion of encoder object
-  
+  public void resetHoodEncoderPosition(){
+    resetHoodEncoderPosition(0);
+  }
+  public void resetHoodEncoderPosition(double position) {
+    hoodEncoder.setPosition(position);
+  }
+
   //TODO: create a homeMethod that returns a true when limit switch is pressed, and drives motor backwards with percentVoltage.(this would be using hoodMotor.set) use the previous resetPosition
+  public boolean homeHoodPosition() {
+    for(int i=0;i<1;) {
+      hoodMotor.set(-1);
+      if(hoodLimitSwitch.get()) {
+        i++;
+        resetHoodEncoderPosition();
+      }
+    }
+    return true;
+  }
 }
