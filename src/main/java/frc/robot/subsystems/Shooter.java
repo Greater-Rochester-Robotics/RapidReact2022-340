@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxRelativeEncoder.Type;
@@ -36,6 +37,7 @@ public class Shooter extends SubsystemBase {
   RelativeEncoder hoodEncoder;
   SparkMaxPIDController pidController;
   DigitalOutput hoodLimitSwitch;
+  
 
   /** Creates a new Shooter. */
   public Shooter() {
@@ -102,15 +104,23 @@ public class Shooter extends SubsystemBase {
     mainMotor.set(TalonFXControlMode.PercentOutput, 0.0);
   }
 
-  //TODO: create a setHoodPosition for the hoodMotor. use the pidController object to set in method
-  public void setHoodPosition() {}
+  /**
+   * create a setHoodPosition for the hoodMotor. use the pidController object to set in method
+   */
+  public void setHoodPosition(double hoodPos) {
+    pidController.setReference(hoodPos, ControlType.kPosition);
+  }
 
-  //TODO: create accessor method for the position of the hood. use the sparkmax encoderObject as source
+  /**
+   * create accessor method for the position of the hood. use the sparkmax encoderObject as source
+   */
   public double getHoodPosition() {
     return hoodEncoder.getPosition();
   }
 
-  //TODO: create reset position modifier method that will set the position of the encoder object. this will act as our reset device, use setPosion of encoder object
+  /**
+   * create reset position modifier method that will set the position of the encoder object. this will act as our reset device, use setPosion of encoder object
+   */
   public void resetHoodEncoderPosition(){
     resetHoodEncoderPosition(0);
   }
@@ -118,15 +128,16 @@ public class Shooter extends SubsystemBase {
     hoodEncoder.setPosition(position);
   }
 
-  //TODO: create a homeMethod that returns a true when limit switch is pressed, and drives motor backwards with percentVoltage.(this would be using hoodMotor.set) use the previous resetPosition
+  /**
+   * create a homeMethod that returns a true when limit switch is pressed, and drives motor backwards with percentVoltage.(this would be using hoodMotor.set) use the previous resetPosition
+   */
   public boolean homeHoodPosition() {
-    for(int i=0;i<1;) {
       hoodMotor.set(-1);
       if(hoodLimitSwitch.get()) {
-        i++;
         resetHoodEncoderPosition();
+        hoodMotor.set(0.0);
+        return true;
       }
-    }
-    return true;
+    return false;
   }
 }
