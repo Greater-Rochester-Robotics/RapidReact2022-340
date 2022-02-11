@@ -44,7 +44,7 @@ public class Climber extends SubsystemBase {
     extendoMotorLeft.configFactoryDefault();
     // use the integrated sensor with the primary closed loop and timeout is 0.
     extendoMotorLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-    extendoMotorLeft.configSelectedFeedbackCoefficient(1);//TODO: based on gearing, find out
+    extendoMotorLeft.configSelectedFeedbackCoefficient(Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);
     extendoMotorLeft.setNeutralMode(NeutralMode.Brake);
     extendoMotorLeft.setInverted(true);// Set motor inverted(set to true for left)
     extendoMotorLeft.setSensorPhase(false);
@@ -67,7 +67,7 @@ public class Climber extends SubsystemBase {
     extendoMotorRight.configFactoryDefault();
     // use the integrated sensor with the primary closed loop and timeout is 0.
     extendoMotorRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-    extendoMotorRight.configSelectedFeedbackCoefficient(1);//TODO: based on gearing,find out
+    extendoMotorRight.configSelectedFeedbackCoefficient(Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);
     extendoMotorRight.setNeutralMode(NeutralMode.Brake);
     extendoMotorRight.setInverted(false);// Set motor inverted(set to false for right)
     extendoMotorRight.setSensorPhase(true);
@@ -94,6 +94,7 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Left Encoder", extendoMotorLeft.getSelectedSensorPosition());
     SmartDashboard.putNumber("Right Encoder", extendoMotorRight.getSelectedSensorPosition());
+    System.out.println(extendoMotorRight.getSelectedSensorPosition());
   }
 
   /* Functions for the fixed arm */

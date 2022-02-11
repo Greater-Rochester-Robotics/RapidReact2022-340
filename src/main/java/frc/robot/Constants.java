@@ -21,10 +21,10 @@ public final class Constants {
     public static final double TWO_PI = 2*Math.PI;
 
     /* Swerve Module Positions */
-    public static final Translation2d FRONT_LEFT_POSITION = new Translation2d(.2,.2);//TODO:Confirm distances from CAD, correct values, must be in meters
-    public static final Translation2d FRONT_RIGHT_POSITION = new Translation2d(-.2,.2);
-    public static final Translation2d REAR_LEFT_POSITION = new Translation2d(-.2,-.2);
-    public static final Translation2d REAR_RIGHT_POSITION = new Translation2d(.2,-.2); 
+    public static final Translation2d FRONT_LEFT_POSITION = new Translation2d(.3016,.3016);//These are in meters
+    public static final Translation2d REAR_LEFT_POSITION = new Translation2d(-.3016,.3016);
+    public static final Translation2d REAR_RIGHT_POSITION = new Translation2d(-.3016,-.3016);
+    public static final Translation2d FRONT_RIGHT_POSITION = new Translation2d(.3016,-.3016); 
 
     /* Swerve Module Drive Motor Constants */
     public static final double DRIVE_ENC_TO_METERS_FACTOR = 0.00002153;//7.13:1//the ratio from mechanical specs
@@ -77,8 +77,8 @@ public final class Constants {
     public static final double DRIVE_TARGETING_I_ZONE = 2;
 
     /* Driver Scaling Constants */
-    public static final double DRIVER_SPEED_SCALE_LINEAR = -0.6;
-    public static final double DRIVER_SPEED_SCALE_ROTATIONAL = 0.3;
+    public static final double DRIVER_SPEED_SCALE_LINEAR = 0.6;
+    public static final double DRIVER_SPEED_SCALE_ROTATIONAL = 0.6;
 
     
     /* Compressor Pressure Constants */
@@ -109,12 +109,12 @@ public final class Constants {
     public static final int SHOOTER_HOOD_MOTOR_COUNTS_PER_REV = 5000; //TODO: get actual counts per revolution
     public static final double SHOOTER_HOOD_DEGREE_CONVERSION = 1;//TODO: get the gear ratio on the versa, then the gear tooth number on drive gear, and the teah per degree on rack, then dimensional analysis
     
-    public static final double SHOOTER_MAIN_MOTOR_P = 0.0;
+    public static final double SHOOTER_MAIN_MOTOR_P = 1.0;
     public static final double SHOOTER_MAIN_MOTOR_I = 0.0;
     public static final double SHOOTER_MAIN_MOTOR_D = 0.0;
     public static final double SHOOTER_MAIN_MOTOR_F = 0.0;
 
-    public static final double SHOOTER_HOOD_MOTOR_P = 0.0;
+    public static final double SHOOTER_HOOD_MOTOR_P = 1.0;
     public static final double SHOOTER_HOOD_MOTOR_I = 0.0;
     public static final double SHOOTER_HOOD_MOTOR_D = 0.0;
     public static final double SHOOTER_HOOD_MOTOR_FF = 0.0;
@@ -125,17 +125,18 @@ public final class Constants {
     public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.3;
     public static final double CLIMBER_EXTENDO_SPEED_IN = -0.3;
 
-    public static final double EXTENDO_MOTOR_P = 0.0;
+    public static final double EXTENDO_MOTOR_P = 1.0;
     public static final double EXTENDO_MOTOR_I = 0.0;
     public static final double EXTENDO_MOTOR_D = 0.0;
     public static final double EXTENDO_MOTOR_F = 0.0;
-    public static final double EXTENDO_CRUISE_VELOCITY = 15000.0;
-    public static final double EXTENDO_ACCELERATION = 6000.0;
+    public static final double EXTENDO_CRUISE_VELOCITY = 15.0;
+    public static final double EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR = 5.105 / 24576;
+    public static final double EXTENDO_ACCELERATION = 6.0;
     public static final double EXTENDO_HOMING_CURRENT = 20.0;
     public static final double EXTENDO_ALLOWABLE_ERROR = 0.1;
-    public static final double CLIMBER_TOP_POSITION = 1000;
+    public static final double CLIMBER_TOP_POSITION = 24;
     public static final double CLIMBER_BOTTOM_POSITION = 0;
-    public static final double CLIMBER_MIDDLE_POSITION = 900;
+    public static final double CLIMBER_MIDDLE_POSITION = 12;
 
     /* IDENTIFICATION NUMBERS FOR DEVICES */
 
@@ -180,6 +181,6 @@ public final class Constants {
     public static final int BALL_SENSOR_1 = 1;
     public static final int CLIMBER_LEFT_BOTTOM_SWITCH = 2;
     public static final int CLIMBER_RIGHT_BOTTOM_SWITCH = 3;
-
+    public static final int SHOOTER_HOOD_SWITCH = 4;
 
 }

@@ -149,10 +149,10 @@ public class RobotContainer {
     driverA.whileHeld(new ClimberExtendOut());
     driverB.whileHeld(new ClimberExtendIn());
 
-    // driverLB.whenPressed(new DriveResetGyroToZero());
+    driverLB.whenPressed(new DriveResetGyroToZero());
 
-    // driverBack.whenPressed(new DriveRobotCentric());
-    // driverStart.whenPressed(new DriveFieldRelative());
+    driverBack.whenPressed(new DriveRobotCentric());
+    driverStart.whenPressed(new DriveFieldRelative());
   }
 
   /**
@@ -181,7 +181,7 @@ public class RobotContainer {
   public double getDriverAxis(Axis axis) {
     return (driver.getRawAxis(axis.value) < -.1 || driver.getRawAxis(axis.value) > .1)
         ? driver.getRawAxis(axis.value)
-        : 0;
+        : 0.0;
   }
 
   /**

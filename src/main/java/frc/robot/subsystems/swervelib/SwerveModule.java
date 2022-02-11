@@ -65,8 +65,8 @@ public class SwerveModule {
         driveMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setDriveMotorPIDF(Constants.SWERVE_DRIVE_P_VALUE, Constants.SWERVE_DRIVE_I_VALUE,
                           Constants.SWERVE_DRIVE_D_VALUE, Constants.SWERVE_DRIVE_FF_VALUE);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
         driveMotor.setSelectedSensorPosition(0.0);
 
         //contruct and setup rotation falcon
@@ -76,13 +76,13 @@ public class SwerveModule {
         rotationMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
         rotationMotor.configSelectedFeedbackCoefficient(1);
         rotationMotor.setNeutralMode(NeutralMode.Brake);
-        rotationMotor.setInverted(false);// Set motor inverted(set to false) TODO:Is this right in swerveX?
+        rotationMotor.setInverted(true);// Set motor inverted(set to true)
         rotationMotor.enableVoltageCompensation(true);
         rotationMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setRotationMotorPIDF(Constants.SWERVE_ROT_P_VALUE, Constants.SWERVE_ROT_I_VALUE,
                           Constants.SWERVE_ROT_D_VALUE, Constants.SWERVE_ROT_FF_VALUE);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 200);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
 
         rotationMotor.setSelectedSensorPosition(0.0);
         rotationMotor.configAllowableClosedloopError(0, Constants.SWERVE_MODULE_TOLERANCE, 0); //TODO: Check for correct slotIdx
@@ -277,9 +277,10 @@ public class SwerveModule {
         Rotation2d curPosition = getCurRot2d();
         
         // Optimize targetState with Rotation2d object pulled from above
-        // TODO: This makes nothing move. Not sure why.
-        //SwerveModuleState.optimize(targetState, curPosition);
+        targetState = SwerveModuleState.optimize(targetState, curPosition);
         
+        // System.out.println("curAngle: "+curPosition.getDegrees()+"\t\t\t tarAngle: "+targetState.angle.getDegrees());
+
         // Find the difference between the target and current position
         double posDiff = targetState.angle.getRadians() - curPosition.getRadians(); 
         double absDiff = Math.abs(posDiff);
@@ -291,20 +292,25 @@ public class SwerveModule {
         }
         
         // Convert the shortest distance of rotation to relative encoder value(use convertion factor)
-        double targetAngle = posDiff * Constants.RAD_TO_ENC_CONV_FACTOR * -1;
+        double targetAngle = posDiff * Constants.RAD_TO_ENC_CONV_FACTOR;
         // add the encoder distance to the current encoder count
         double outputEncValue = targetAngle + getRelEncCount();
 
-        // Set the setpoint using setReference on the TalonFX
-        rotationMotor.set(TalonFXControlMode.Position, outputEncValue);
-
-        // Output to drive motor based on velomode or not
-        if (isVeloMode) {
-            setDriveSpeed(targetState.speedMetersPerSecond);
+        if(Math.abs(targetState.speedMetersPerSecond) < (isVeloMode?Constants.MINIMUM_DRIVE_SPEED:Constants.MINIMUM_DRIVE_DUTY_CYCLE)) {
+            stopAll();
         } else {
-            setDriveMotor(targetState.speedMetersPerSecond);
+            // Set the setpoint using setReference on the TalonFX
+            rotationMotor.set(TalonFXControlMode.Position, outputEncValue);
+
+            // Output to drive motor based on velomode or not
+            if (isVeloMode) {
+                setDriveSpeed(targetState.speedMetersPerSecond);
+            } else {
+                setDriveMotor(targetState.speedMetersPerSecond);
+            }
         }
     }  
+    
 
     /**
      * This is a testing method, used to drive the module's rotation.

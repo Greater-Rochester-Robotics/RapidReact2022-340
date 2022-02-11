@@ -75,7 +75,7 @@ public class Shooter extends SubsystemBase {
 
     hoodMotor.burnFlash();
 
-    hoodLimitSwitch = new DigitalOutput(0); //TODO: set correct channel
+    hoodLimitSwitch = new DigitalOutput(Constants.SHOOTER_HOOD_SWITCH);
   }
 
   @Override

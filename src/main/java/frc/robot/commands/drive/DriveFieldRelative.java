@@ -44,6 +44,13 @@ public class DriveFieldRelative extends CommandBase {
   public void execute() {
     double  awaySpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftY);
     double lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftX);
+    //check if secondary sticks are being used
+    if(Math.abs(Robot.robotContainer.getDriverAxis(Axis.kRightY))>.1 ||
+     Math.abs(Robot.robotContainer.getDriverAxis(Axis.kRightX))>.1){
+     //if secondary sticks used, replace with secondary sticks witha slow factor
+     awaySpeed = Robot.robotContainer.getDriverAxis(Axis.kRightY)*.5;
+     lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightX)*.5;
+    }
     double rotSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightTrigger) - Robot.robotContainer.getDriverAxis(Axis.kLeftTrigger);
 
     RobotContainer.swerveDrive.driveFieldRelative(
