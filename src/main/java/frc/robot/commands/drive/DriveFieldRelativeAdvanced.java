@@ -75,15 +75,26 @@ public class DriveFieldRelativeAdvanced extends CommandBase {
       );
       //for when rotation speed is zero, update the current angle
       currentAngle = RobotContainer.swerveDrive.getGyroInRad();
+
     }
     else {
-      //if the test is false, still use driveFieldCentric(), but for last parameter use PIDController accessor function
-      RobotContainer.swerveDrive.driveFieldRelative(
-        awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
-        lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
-        RobotContainer.swerveDrive.getRobotRotationPIDOut(currentAngle),
-        false
-      );
+      if(Math.abs(RobotContainer.swerveDrive.getRotationalVelocity()) > 90.0){
+        RobotContainer.swerveDrive.driveFieldRelative(
+          awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
+          lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
+          0,
+          false
+        );
+        currentAngle = RobotContainer.swerveDrive.getGyroInRad();
+      }else{
+        //if the test is false, still use driveFieldCentric(), but for last parameter use PIDController accessor function
+        RobotContainer.swerveDrive.driveFieldRelative(
+          awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
+          lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
+          RobotContainer.swerveDrive.getRobotRotationPIDOut(currentAngle),
+          false
+        );
+      }
     }
   }
 

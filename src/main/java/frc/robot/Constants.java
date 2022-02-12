@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -19,6 +20,7 @@ public final class Constants {
     public static final double PI_OVER_TWO = Math.PI/2;
     public static final double THREE_PI_OVER_TWO = 3*PI_OVER_TWO;
     public static final double TWO_PI = 2*Math.PI;
+    public static final Rotation2d ROTATE_BY_PI = Rotation2d.fromDegrees(180);
 
     /* Swerve Module Positions */
     public static final Translation2d FRONT_LEFT_POSITION = new Translation2d(.3016,.3016);//These are in meters
@@ -55,9 +57,9 @@ public final class Constants {
     public static final double SWERVE_MODULE_TOLERANCE = 0.1;//TODO: this is scaled from the NEO550, needs adjust for Falcon500
 
     /* Robot Motion PID controller constants */
-    public static final double ROBOT_SPIN_P = 1;//TODO:this can't be the number, adjust when have robot
+    public static final double ROBOT_SPIN_P = 1.1;//TODO:this can't be the number, adjust when have robot
     public static final double ROBOT_SPIN_I = 0;
-    public static final double ROBOT_SPIN_D = 0;
+    public static final double ROBOT_SPIN_D = 0.001;
 
     
     /* We stole 3015's constants for DriveFollowTrajectory */
@@ -77,8 +79,8 @@ public final class Constants {
     public static final double DRIVE_TARGETING_I_ZONE = 2;
 
     /* Driver Scaling Constants */
-    public static final double DRIVER_SPEED_SCALE_LINEAR = 0.6;
-    public static final double DRIVER_SPEED_SCALE_ROTATIONAL = 0.6;
+    public static final double DRIVER_SPEED_SCALE_LINEAR = 0.4;
+    public static final double DRIVER_SPEED_SCALE_ROTATIONAL = 1.5;
 
     
     /* Compressor Pressure Constants */

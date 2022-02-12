@@ -92,7 +92,7 @@ public class SwerveModule {
         //the following sensor is angle of the module, as an absolute value
         rotateAbsSensor = new CANCoder(canCoderID);
         rotateAbsSensor.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-        // rotateAbsSensor.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 20);//TODO: the default on this is 10, but 20 might be better given our code loop rate
+        rotateAbsSensor.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 20);//The default on this is 10, but 20 might be better given our code loop rate
 
     }
 
@@ -279,7 +279,7 @@ public class SwerveModule {
         Rotation2d curPosition = getCurRot2d();
         
         // Optimize targetState with Rotation2d object pulled from above
-        targetState = SwerveModuleState.optimize(targetState, curPosition);
+        targetState = optimize(targetState, curPosition);
         
         // System.out.println("curAngle: "+curPosition.getDegrees()+"\t\t\t tarAngle: "+targetState.angle.getDegrees());
 
@@ -337,5 +337,24 @@ public class SwerveModule {
         rotationMotor.set(TalonFXControlMode.PercentOutput, 0.0);
     }
 
+    /**
+   * Minimize the change in heading the desired swerve module state would require by potentially
+   * reversing the direction the wheel spins. If this is used with the PIDController class's
+   * continuous input functionality, the furthest a wheel will ever rotate is 90 degrees.
+   *
+   * @param desiredState The desired state.
+   * @param currentAngle The current module angle.
+   * @return Optimized swerve module state.
+   */
+    public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
+    var delta = desiredState.angle.minus(currentAngle);
+    if (Math.abs(delta.getRadians()) > Constants.PI_OVER_TWO) {
+        return new SwerveModuleState(
+            -desiredState.speedMetersPerSecond,
+            desiredState.angle.rotateBy(Constants.ROTATE_BY_PI));
+    } else {
+        return new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
+    }
+}
     
 }

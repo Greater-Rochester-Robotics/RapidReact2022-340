@@ -95,6 +95,7 @@ public class SwerveDrive extends SubsystemBase {
     //run odometry update on the odometry object
     driveOdometry.update(getGyroRotation2d(), moduleStates);
     SmartDashboard.putNumber("Gyro", this.getGyroInDeg());
+    SmartDashboard.putNumber("GyroRate", this.getRotationalVelocity());
   }
 
   /**
@@ -249,6 +250,14 @@ public class SwerveDrive extends SubsystemBase {
   public double getGyroInDeg(){
     return imu.getAngle();//getYawAxis();//*-1;//Pull gyro in degrees
     //note counterclockwise rotation is positive
+  }
+
+  /**
+   * 
+   * @return degrees per second
+   */
+  public double getRotationalVelocity(){
+    return imu.getRate();
   }
 
   /**

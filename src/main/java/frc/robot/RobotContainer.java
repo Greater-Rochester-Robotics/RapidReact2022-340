@@ -26,6 +26,7 @@ import frc.robot.commands.drive.DriveFieldRelative;
 import frc.robot.commands.drive.DriveFieldRelativeAdvanced;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveStopAllModules;
+import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.util.DriveAdjustModuleZeroPoint;
 import frc.robot.commands.drive.util.DriveAllModulesPositionOnly;
 import frc.robot.commands.drive.util.DriveFindMaxAccel;
@@ -33,6 +34,7 @@ import frc.robot.commands.drive.util.DriveOneModule;
 import frc.robot.commands.drive.util.DriveResetAllModulePositionsToZero;
 import frc.robot.commands.drive.util.DriveResetGyroToZero;
 import frc.robot.commands.drive.util.DriveTuneDriveMotorFeedForward;
+import frc.robot.commands.drive.util.DriveTurnToAngle;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.BallHandler;
@@ -148,11 +150,13 @@ public class RobotContainer {
   private void configureButtonBindings() {
     driverA.whileHeld(new ClimberExtendOut());
     driverB.whileHeld(new ClimberExtendIn());
-
+    driverX.whenPressed(new DriveTurnToAngle(0));
+    driverY.whenPressed(new DriveTurnToAngle(Constants.PI_OVER_TWO));
     driverLB.whenPressed(new DriveResetGyroToZero());
+    driverRB.whileHeld(new DriveFollowTrajectory("DriveStraight", false));
 
     driverBack.whenPressed(new DriveRobotCentric());
-    driverStart.whenPressed(new DriveFieldRelative());
+    driverStart.whenPressed(new DriveFieldRelativeAdvanced());
   }
 
   /**

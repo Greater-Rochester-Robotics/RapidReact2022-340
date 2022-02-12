@@ -39,7 +39,7 @@ public class Climber extends SubsystemBase {
     extendoMotorLeft.configFactoryDefault();
     // use the integrated sensor with the primary closed loop and timeout is 0.
     extendoMotorLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-    extendoMotorLeft.configSelectedFeedbackCoefficient(Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);//TODO:change this to 1, then use the Constant to translate in methods below
+    extendoMotorLeft.configSelectedFeedbackCoefficient(1);//TODO:change this to 1, then use the Constant to translate in methods below
     extendoMotorLeft.setNeutralMode(NeutralMode.Brake);
     extendoMotorLeft.setInverted(true);// Set motor inverted(set to true for left)
     extendoMotorLeft.setSensorPhase(false);
@@ -89,7 +89,6 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Left Encoder", extendoMotorLeft.getSelectedSensorPosition());
     SmartDashboard.putNumber("Right Encoder", extendoMotorRight.getSelectedSensorPosition());
-    System.out.println(extendoMotorRight.getSelectedSensorPosition());
   }
 
   /* ==================== Functions for the fixed arms ==================== */
@@ -111,7 +110,7 @@ public class Climber extends SubsystemBase {
   /* ==================== Functions for the right extendo arm ==================== */
 
   public void extendoRightSetPos(double pos) {
-    extendoMotorRight.set(TalonFXControlMode.MotionMagic, pos);//TODO: convert here by multipling pos by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
+    extendoMotorRight.set(TalonFXControlMode.MotionMagic, (pos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR));//TODO: convert here by multipling pos by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
   }
 
   /**
@@ -151,11 +150,11 @@ public class Climber extends SubsystemBase {
   }
   
   public double getExtendoRightEncPos() {
-    return extendoMotorRight.getSelectedSensorPosition();//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
+    return extendoMotorRight.getSelectedSensorPosition() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
   }
 
   public double getExtendoRightEncVel() {
-    return extendoMotorRight.getSelectedSensorVelocity();//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
+    return extendoMotorRight.getSelectedSensorVelocity() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
   }
 
   public void setExtendoRightEnc(double sensorPos) {
@@ -165,7 +164,7 @@ public class Climber extends SubsystemBase {
   /* ==================== Functions for the left extendo arm ==================== */
   
   public void extendoLeftSetPos(double pos) {
-    extendoMotorLeft.set(TalonFXControlMode.MotionMagic, pos);//TODO: convert here by multipling pos by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
+    extendoMotorLeft.set(TalonFXControlMode.MotionMagic, pos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);//TODO: convert here by multipling pos by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
   }
 
   /**
@@ -205,11 +204,11 @@ public class Climber extends SubsystemBase {
   }
 
   public double getExtendoLeftEncPos() {
-    return extendoMotorLeft.getSelectedSensorPosition();//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
+    return extendoMotorLeft.getSelectedSensorPosition() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
   }
 
   public double getExtendoLeftEncVel() {
-    return extendoMotorLeft.getSelectedSensorVelocity();//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
+    return extendoMotorLeft.getSelectedSensorVelocity() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
   }
 
   public void setExtendoLeftEnc(double sensorPos) {

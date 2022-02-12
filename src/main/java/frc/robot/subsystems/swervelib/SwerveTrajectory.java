@@ -90,14 +90,17 @@ public class SwerveTrajectory {
             String line = "";
             while ((line = br.readLine()) != null) {
                 String[] point = line.split(",");
+                if(point[0].startsWith("#")){
+                    continue;
+                }
+                double time = Double.parseDouble(point[0]);
+                double pos = Double.parseDouble(point[1]);
+                double vel = Double.parseDouble(point[2]);
+                double acc = Double.parseDouble(point[3]);
+                double heading = Double.parseDouble(point[4]);
+                double rotation = Double.parseDouble(point[5]);
 
-                double pos = Double.parseDouble(point[0]);
-                double vel = Double.parseDouble(point[1]);
-                double acc = Double.parseDouble(point[2]);
-                double heading = Double.parseDouble(point[3]);
-                double rotation = Double.parseDouble(point[4]);
-
-                traj.states.add(new State(pos, Rotation2d.fromDegrees(heading), vel, acc, Rotation2d.fromDegrees(rotation), (traj.numStates() + 1) * TIME_STEP));
+                traj.states.add(new State(pos, Rotation2d.fromDegrees(heading), vel, acc, Rotation2d.fromDegrees(rotation), time));
             }
         } catch (Exception e) {
             e.printStackTrace();
