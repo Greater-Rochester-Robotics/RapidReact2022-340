@@ -4,11 +4,7 @@
 
 package frc.robot.subsystems;
 
-import java.io.File;
 
-import com.ctre.phoenix.motion.BufferedTrajectoryPointStream;
-import com.ctre.phoenix.motion.TrajectoryPoint;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -18,7 +14,6 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -44,14 +39,14 @@ public class Climber extends SubsystemBase {
     extendoMotorLeft.configFactoryDefault();
     // use the integrated sensor with the primary closed loop and timeout is 0.
     extendoMotorLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-    extendoMotorLeft.configSelectedFeedbackCoefficient(Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);
+    extendoMotorLeft.configSelectedFeedbackCoefficient(Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);//TODO:change this to 1, then use the Constant to translate in methods below
     extendoMotorLeft.setNeutralMode(NeutralMode.Brake);
     extendoMotorLeft.setInverted(true);// Set motor inverted(set to true for left)
     extendoMotorLeft.setSensorPhase(false);
     extendoMotorLeft.enableVoltageCompensation(true);
     extendoMotorLeft.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
-    extendoMotorLeft.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
-    extendoMotorLeft.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
+    extendoMotorLeft.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);//for limit switch
+    extendoMotorLeft.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);//for encoder
     extendoMotorLeft.setSelectedSensorPosition(0.0);
     extendoMotorLeft.config_kP(0, Constants.EXTENDO_MOTOR_P);
     extendoMotorLeft.config_kI(0, Constants.EXTENDO_MOTOR_I);
@@ -67,14 +62,14 @@ public class Climber extends SubsystemBase {
     extendoMotorRight.configFactoryDefault();
     // use the integrated sensor with the primary closed loop and timeout is 0.
     extendoMotorRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-    extendoMotorRight.configSelectedFeedbackCoefficient(Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);
+    extendoMotorRight.configSelectedFeedbackCoefficient(Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);//TODO:change this to 1, then use the Constant to translate in methods below
     extendoMotorRight.setNeutralMode(NeutralMode.Brake);
-    extendoMotorRight.setInverted(false);// Set motor inverted(set to false for right)
+    extendoMotorRight.setInverted(false);// Set motor not inverted(set to false for right)
     extendoMotorRight.setSensorPhase(true);
     extendoMotorRight.enableVoltageCompensation(true);
     extendoMotorRight.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
-    extendoMotorRight.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
-    extendoMotorRight.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
+    extendoMotorRight.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);//for the limit switch
+    extendoMotorRight.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);//for encoder
     extendoMotorRight.setSelectedSensorPosition(0.0);
     extendoMotorRight.config_kP(0, Constants.EXTENDO_MOTOR_P);
     extendoMotorRight.config_kI(0, Constants.EXTENDO_MOTOR_I);
@@ -97,27 +92,39 @@ public class Climber extends SubsystemBase {
     System.out.println(extendoMotorRight.getSelectedSensorPosition());
   }
 
-  /* Functions for the fixed arm */
+  /* ==================== Functions for the fixed arms ==================== */
 
+  /**
+   * 
+   */
   public void climberTiltOut(){
     tiltRobot.set(Value.kForward);
   }
 
+  /**
+   * 
+   */
   public void climberTiltIn(){
     tiltRobot.set(Value.kReverse);
   }
 
-  /* Functions for the right extendo arm */
+  /* ==================== Functions for the right extendo arm ==================== */
 
   public void extendoRightSetPos(double pos) {
-    extendoMotorRight.set(TalonFXControlMode.MotionMagic, pos);
+    extendoMotorRight.set(TalonFXControlMode.MotionMagic, pos);//TODO: convert here by multipling pos by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
   }
 
+  /**
+   * Intendend for testing, drives arm in at low power
+   */
   public void extendoArmRightIn(){
     extendoMotorRight.set(TalonFXControlMode.PercentOutput, 
     Constants.CLIMBER_EXTENDO_SPEED_IN);
   }
 
+  /**
+   * Intendend for testing, drives arm out at low power
+   */
   public void extendoArmRightOut(){
     extendoMotorRight.set(TalonFXControlMode.PercentOutput, 
     Constants.CLIMBER_EXTENDO_SPEED_OUT);
@@ -144,28 +151,34 @@ public class Climber extends SubsystemBase {
   }
   
   public double getExtendoRightEncPos() {
-    return extendoMotorRight.getSelectedSensorPosition();
+    return extendoMotorRight.getSelectedSensorPosition();//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
   }
 
   public double getExtendoRightEncVel() {
-    return extendoMotorRight.getSelectedSensorVelocity();
+    return extendoMotorRight.getSelectedSensorVelocity();//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
   }
 
   public void setExtendoRightEnc(double sensorPos) {
     extendoMotorRight.setSelectedSensorPosition(sensorPos);
   }
 
-  /* Functions for the left extendo arm */
+  /* ==================== Functions for the left extendo arm ==================== */
   
   public void extendoLeftSetPos(double pos) {
-    extendoMotorLeft.set(TalonFXControlMode.MotionMagic, pos);
+    extendoMotorLeft.set(TalonFXControlMode.MotionMagic, pos);//TODO: convert here by multipling pos by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
   }
 
+  /**
+   * Intendend for testing, drives arm in at low power
+   */
   public void extendoArmLeftIn(){
     extendoMotorLeft.set(TalonFXControlMode.PercentOutput, 
     Constants.CLIMBER_EXTENDO_SPEED_IN);
   }
   
+  /**
+   * Intendend for testing, drives arm out at low power
+   */
   public void extendoArmLeftOut(){
     extendoMotorLeft.set(TalonFXControlMode.PercentOutput, 
     Constants.CLIMBER_EXTENDO_SPEED_OUT);
@@ -192,11 +205,11 @@ public class Climber extends SubsystemBase {
   }
 
   public double getExtendoLeftEncPos() {
-    return extendoMotorLeft.getSelectedSensorPosition();
+    return extendoMotorLeft.getSelectedSensorPosition();//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
   }
 
   public double getExtendoLeftEncVel() {
-    return extendoMotorLeft.getSelectedSensorVelocity();
+    return extendoMotorLeft.getSelectedSensorVelocity();//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
   }
 
   public void setExtendoLeftEnc(double sensorPos) {

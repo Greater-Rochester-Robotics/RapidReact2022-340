@@ -122,8 +122,8 @@ public final class Constants {
     public static final double SHOOTER_MOTOR_ALLOWABLE_ERROR = 0.0;
 
     /* Climber Constants */
-    public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.3;
-    public static final double CLIMBER_EXTENDO_SPEED_IN = -0.3;
+    public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.3;//This is for testing up 
+    public static final double CLIMBER_EXTENDO_SPEED_IN = -0.3;//This is for testing down and homing
 
     public static final double EXTENDO_MOTOR_P = 1.0;
     public static final double EXTENDO_MOTOR_I = 0.0;
@@ -179,8 +179,8 @@ public final class Constants {
     /* Digital Input */
     public static final int BALL_SENSOR_0 = 0;
     public static final int BALL_SENSOR_1 = 1;
-    public static final int CLIMBER_LEFT_BOTTOM_SWITCH = 2;
-    public static final int CLIMBER_RIGHT_BOTTOM_SWITCH = 3;
+    // public static final int CLIMBER_LEFT_BOTTOM_SWITCH = 2;
+    // public static final int CLIMBER_RIGHT_BOTTOM_SWITCH = 3;
     public static final int SHOOTER_HOOD_SWITCH = 4;
 
 }

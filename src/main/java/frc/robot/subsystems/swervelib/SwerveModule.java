@@ -18,6 +18,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 
 import frc.robot.Constants;
@@ -65,7 +66,7 @@ public class SwerveModule {
         driveMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setDriveMotorPIDF(Constants.SWERVE_DRIVE_P_VALUE, Constants.SWERVE_DRIVE_I_VALUE,
                           Constants.SWERVE_DRIVE_D_VALUE, Constants.SWERVE_DRIVE_FF_VALUE);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);//TODO: rethink if we need this speed
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
         driveMotor.setSelectedSensorPosition(0.0);
 
@@ -81,8 +82,8 @@ public class SwerveModule {
         rotationMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setRotationMotorPIDF(Constants.SWERVE_ROT_P_VALUE, Constants.SWERVE_ROT_I_VALUE,
                           Constants.SWERVE_ROT_D_VALUE, Constants.SWERVE_ROT_FF_VALUE);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 200);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 200);//This packet is the motor output, limit switches, faults, we care about none of those
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);//This is the sensor feedback, i.e. relative encoder
 
         rotationMotor.setSelectedSensorPosition(0.0);
         rotationMotor.configAllowableClosedloopError(0, Constants.SWERVE_MODULE_TOLERANCE, 0); //TODO: Check for correct slotIdx
@@ -91,6 +92,7 @@ public class SwerveModule {
         //the following sensor is angle of the module, as an absolute value
         rotateAbsSensor = new CANCoder(canCoderID);
         rotateAbsSensor.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+        // rotateAbsSensor.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 20);//TODO: the default on this is 10, but 20 might be better given our code loop rate
 
     }
 
