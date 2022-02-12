@@ -96,6 +96,8 @@ public class SwerveDrive extends SubsystemBase {
     driveOdometry.update(getGyroRotation2d(), moduleStates);
     SmartDashboard.putNumber("Gyro", this.getGyroInDeg());
     SmartDashboard.putNumber("GyroRate", this.getRotationalVelocity());
+    SmartDashboard.putNumber("Odometry X", getCurPose2d().getX());
+    SmartDashboard.putNumber("Odometry Y", getCurPose2d().getY());
   }
 
   /**

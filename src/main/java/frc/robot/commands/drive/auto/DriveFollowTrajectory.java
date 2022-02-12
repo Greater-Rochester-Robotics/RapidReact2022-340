@@ -38,7 +38,7 @@ public class DriveFollowTrajectory extends CommandBase {
     addRequirements(RobotContainer.swerveDrive);
     this.timer = new Timer();
     this.traj = SwerveTrajectory.fromCSV(trajName);
-    System.out.println("numbner of states" + this.traj.numStates());
+
     PIDController posController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_P, Constants.DRIVE_POS_ERROR_CONTROLLER_I, Constants.DRIVE_POS_ERROR_CONTROLLER_D);
     PIDController headingController = new PIDController(Constants.DRIVE_HEADING_ERROR_CONTROLLER_P, Constants.DRIVE_HEADING_ERROR_CONTROLLER_I, Constants.DRIVE_HEADING_ERROR_CONTROLLER_D);
     ProfiledPIDController rotationController = new ProfiledPIDController(Constants.DRIVE_ROTATION_CONTROLLER_P, Constants.DRIVE_ROTATION_CONTROLLER_I, Constants.DRIVE_ROTATION_CONTROLLER_D,
@@ -67,17 +67,17 @@ public class DriveFollowTrajectory extends CommandBase {
     if(ignoreHeading) desiredState.rotation = new Rotation2d(0);
 
     ChassisSpeeds targetSpeeds = pathController.calculate(RobotContainer.swerveDrive.getCurPose2d(), desiredState, time - lastTime, timer.hasElapsed(0.1));
-    RobotContainer.swerveDrive.driveRobotCentric(targetSpeeds, true);
+    RobotContainer.swerveDrive.driveFieldRelative(targetSpeeds.vxMetersPerSecond, targetSpeeds.vyMetersPerSecond, targetSpeeds.omegaRadiansPerSecond, true);
 
     lastTime = time;
 
     // Position Graph
-    // SmartDashboard.putNumber("PIDTarget", desiredState.getPos());
-    // SmartDashboard.putNumber("PIDActual", pathController.getTotalDistance());
+    SmartDashboard.putNumber("PIDTarget", desiredState.getPos());
+    SmartDashboard.putNumber("PIDActual", pathController.getTotalDistance());
 
     // Heading Graph
-    // SmartDashboard.putNumber("PIDTarget", desiredState.getHeading().getDegrees());
-    // SmartDashboard.putNumber("PIDActual", pathController.getCurrentHeading().getDegrees());
+    SmartDashboard.putNumber("PIDTarget", desiredState.getHeading().getDegrees());
+    SmartDashboard.putNumber("PIDActual", pathController.getCurrentHeading().getDegrees());
 
     // Rotation Graph
     // SmartDashboard.putNumber("PIDTarget", desiredState.getRotation().getDegrees());

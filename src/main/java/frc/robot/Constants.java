@@ -57,7 +57,7 @@ public final class Constants {
     public static final double SWERVE_MODULE_TOLERANCE = 0.1;//TODO: this is scaled from the NEO550, needs adjust for Falcon500
 
     /* Robot Motion PID controller constants */
-    public static final double ROBOT_SPIN_P = 1.1;//TODO:this can't be the number, adjust when have robot
+    public static final double ROBOT_SPIN_P = 1.1;//tuned for drive/climber bot
     public static final double ROBOT_SPIN_I = 0;
     public static final double ROBOT_SPIN_D = 0.001;
 
@@ -129,13 +129,15 @@ public final class Constants {
 
     public static final double EXTENDO_MOTOR_P = 1.0;
     public static final double EXTENDO_MOTOR_I = 0.0;
-    public static final double EXTENDO_MOTOR_D = 0.0;
+    public static final double EXTENDO_MOTOR_D = 1.5;
     public static final double EXTENDO_MOTOR_F = 0.0;
+
     public static final double EXTENDO_CRUISE_VELOCITY = 15.0;
     public static final double EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR = 5.105 / 24576;
     public static final double EXTENDO_ACCELERATION = 6.0;
     public static final double EXTENDO_HOMING_CURRENT = 20.0;
-    public static final double EXTENDO_ALLOWABLE_ERROR = 0.1;
+    public static final double EXTENDO_ALLOWABLE_ERROR = 0.25;
+
     public static final double CLIMBER_TOP_POSITION = 24;
     public static final double CLIMBER_BOTTOM_POSITION = 0;
     public static final double CLIMBER_MIDDLE_POSITION = 12;
@@ -181,8 +183,6 @@ public final class Constants {
     /* Digital Input */
     public static final int BALL_SENSOR_0 = 0;
     public static final int BALL_SENSOR_1 = 1;
-    // public static final int CLIMBER_LEFT_BOTTOM_SWITCH = 2;
-    // public static final int CLIMBER_RIGHT_BOTTOM_SWITCH = 3;
     public static final int SHOOTER_HOOD_SWITCH = 4;
 
 }

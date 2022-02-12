@@ -62,7 +62,7 @@ public class Climber extends SubsystemBase {
     extendoMotorRight.configFactoryDefault();
     // use the integrated sensor with the primary closed loop and timeout is 0.
     extendoMotorRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-    extendoMotorRight.configSelectedFeedbackCoefficient(Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);//TODO:change this to 1, then use the Constant to translate in methods below
+    extendoMotorRight.configSelectedFeedbackCoefficient(1);//TODO:change this to 1, then use the Constant to translate in methods below
     extendoMotorRight.setNeutralMode(NeutralMode.Brake);
     extendoMotorRight.setInverted(false);// Set motor not inverted(set to false for right)
     extendoMotorRight.setSensorPhase(true);
@@ -87,8 +87,8 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Left Encoder", extendoMotorLeft.getSelectedSensorPosition());
-    SmartDashboard.putNumber("Right Encoder", extendoMotorRight.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Left Climb Encoder", getExtendoLeftEncPos());
+    SmartDashboard.putNumber("Right Climb Encoder", getExtendoRightEncPos());
   }
 
   /* ==================== Functions for the fixed arms ==================== */
@@ -110,7 +110,7 @@ public class Climber extends SubsystemBase {
   /* ==================== Functions for the right extendo arm ==================== */
 
   public void extendoRightSetPos(double pos) {
-    extendoMotorRight.set(TalonFXControlMode.MotionMagic, (pos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR));//TODO: convert here by multipling pos by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
+    extendoMotorRight.set(TalonFXControlMode.Position, (pos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR));
   }
 
   /**
@@ -164,7 +164,7 @@ public class Climber extends SubsystemBase {
   /* ==================== Functions for the left extendo arm ==================== */
   
   public void extendoLeftSetPos(double pos) {
-    extendoMotorLeft.set(TalonFXControlMode.MotionMagic, pos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);//TODO: convert here by multipling pos by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
+    extendoMotorLeft.set(TalonFXControlMode.Position, pos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);//TODO: convert here by multipling pos by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
   }
 
   /**

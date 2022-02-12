@@ -22,6 +22,7 @@ import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.climber.ClimberClimb;
 import frc.robot.commands.climber.ClimberExtendIn;
 import frc.robot.commands.climber.ClimberExtendOut;
+import frc.robot.commands.climber.ClimberExtendoToPosition;
 import frc.robot.commands.drive.DriveFieldRelative;
 import frc.robot.commands.drive.DriveFieldRelativeAdvanced;
 import frc.robot.commands.drive.DriveRobotCentric;
@@ -148,8 +149,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    driverA.whileHeld(new ClimberExtendOut());
-    driverB.whileHeld(new ClimberExtendIn());
+    driverA.whenPressed(new ClimberExtendoToPosition(Constants.CLIMBER_MIDDLE_POSITION));
+    driverB.whenPressed(new ClimberExtendIn());//ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION));
     driverX.whenPressed(new DriveTurnToAngle(0));
     driverY.whenPressed(new DriveTurnToAngle(Constants.PI_OVER_TWO));
     driverLB.whenPressed(new DriveResetGyroToZero());

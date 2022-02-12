@@ -57,7 +57,7 @@ public class SwerveModule {
         driveMotor.configFactoryDefault();
         // use the integrated sensor with the primary closed loop and timeout is 0.
         driveMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-        driveMotor.configSelectedFeedbackCoefficient(Constants.DRIVE_ENC_TO_METERS_FACTOR);
+        driveMotor.configSelectedFeedbackCoefficient(1);//Constants.DRIVE_ENC_TO_METERS_FACTOR);
         // above uses configSelectedFeedbackCoefficient(), to scale the
         // driveMotor to real distance, DRIVE_ENC_TO_METERS_FACTOR
         driveMotor.setNeutralMode(NeutralMode.Brake);
@@ -93,7 +93,7 @@ public class SwerveModule {
         rotateAbsSensor = new CANCoder(canCoderID);
         rotateAbsSensor.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         rotateAbsSensor.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 20);//The default on this is 10, but 20 might be better given our code loop rate
-
+        rotateAbsSensor.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 1000);
     }
 
 
@@ -130,7 +130,7 @@ public class SwerveModule {
      * @return the distance the drive wheel has traveled
      */
     public double getDriveDistance() {
-        return driveMotor.getSensorCollection().getIntegratedSensorPosition();//*Constants.DRIVE_ENC_TO_METERS_FACTOR;
+        return driveMotor.getSensorCollection().getIntegratedSensorPosition()*Constants.DRIVE_ENC_TO_METERS_FACTOR;
     }
 
     /**
@@ -139,7 +139,7 @@ public class SwerveModule {
      * @return speed of the drive wheel
      */
     public double getDriveVelocity() {
-        return driveMotor.getSensorCollection().getIntegratedSensorVelocity()*10;//*Constants.DRIVE_ENC_TO_METERS_FACTOR;
+        return driveMotor.getSensorCollection().getIntegratedSensorVelocity()*10*Constants.DRIVE_ENC_TO_METERS_FACTOR;
     }
 
     /**
