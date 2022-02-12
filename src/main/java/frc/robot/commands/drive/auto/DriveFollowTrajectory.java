@@ -64,7 +64,9 @@ public class DriveFollowTrajectory extends CommandBase {
     double time = timer.get();
     SwerveTrajectory.State desiredState = traj.sample(time);
 
-    if(ignoreHeading) desiredState.rotation = new Rotation2d(0);
+    if(ignoreHeading) {
+      desiredState.rotation = new Rotation2d(0);
+    }
 
     ChassisSpeeds targetSpeeds = pathController.calculate(RobotContainer.swerveDrive.getCurPose2d(), desiredState, time - lastTime, timer.hasElapsed(0.1));
     RobotContainer.swerveDrive.driveFieldRelative(targetSpeeds.vxMetersPerSecond, targetSpeeds.vyMetersPerSecond, targetSpeeds.omegaRadiansPerSecond, true);

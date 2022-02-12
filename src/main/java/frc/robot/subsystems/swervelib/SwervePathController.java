@@ -59,7 +59,7 @@ public class SwervePathController {
     public void reset(Pose2d currentPose) {
         this.posErrorController.reset();
         this.headingErrorController.reset();
-        if(rotationController != null) this.rotationController.reset(currentPose.getRotation().getDegrees());
+        if(rotationController != null) this.rotationController.reset(currentPose.getRotation().getRadians());
         this.lastPosition = currentPose.getTranslation();
         this.totalDistance = 0;
         this.currentHeading = new Rotation2d(0);
@@ -91,11 +91,11 @@ public class SwervePathController {
 
         double vel = goalState.getVelocity();
         Rotation2d heading = goalState.getHeading();
-        double rotSpeed = (rotationController != null) ? rotationController.calculate(currentRotation.getDegrees(), goalState.getRotation().getDegrees()) : 0;
+        double rotSpeed = (rotationController != null) ? rotationController.calculate(currentRotation.getRadians(), goalState.getRotation().getRadians()) : 0;
 
         vel += posErrorController.calculate(totalDistance, goalState.getPos());
         if(doHeading) {
-            heading = heading.plus(Rotation2d.fromDegrees(headingErrorController.calculate(this.currentHeading.getDegrees(), goalState.getHeading().getDegrees())));
+            heading = heading.plus(new Rotation2d(headingErrorController.calculate(this.currentHeading.getRadians(), goalState.getHeading().getRadians())));
         }
 
         double xVel = vel * heading.getCos();
@@ -103,6 +103,6 @@ public class SwervePathController {
 
         this.lastPosition = currentPos;
 
-        return ChassisSpeeds.fromFieldRelativeSpeeds(xVel, yVel, Units.degreesToRadians(rotSpeed), currentRotation);
+        return ChassisSpeeds.fromFieldRelativeSpeeds(xVel, yVel, rotSpeed, currentRotation);
     }
 }

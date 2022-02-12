@@ -152,6 +152,7 @@ public final class Constants {
 
     public static final int HARVESTER_MOTOR = 6;//Handler
 
+    // TODO: Change all motor ids to 1-12 in order to increase priority
     public static final int FRONT_LEFT_MOVE_MOTOR = 40;//drive module 0
     public static final int FRONT_LEFT_ROTATE_MOTOR = 41;//drive module 0
     public static final int FRONT_LEFT_ROTATE_SENSOR = 42;//drive module 0
