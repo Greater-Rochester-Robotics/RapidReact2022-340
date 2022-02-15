@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.sql.Driver;
 import java.util.Arrays;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -38,7 +37,7 @@ public class BallHandler extends SubsystemBase {
   double[] currentSpeeds = new double[] { 0.0, 0.0, 0.0, 0.0};
   DigitalInput ballSensor0;
   DigitalInput ballSensor1;
-  // ColorSensorV3 colorSensor;
+  // ColorSensorV3 colorSensor; //TODO: reenable this once we get protection for when the color sensor isn't plugged in.
   Timer selectorTimer = new Timer();
 
   public enum State {
@@ -62,13 +61,15 @@ public class BallHandler extends SubsystemBase {
   
   /** Creates a new Intake. */
   public BallHandler() {
+    //TODO: is there a way to have the solenoid not drop so many errors when PH not plugged in.
     // harvesterTilt = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
     //   Constants.HARVESTER_TILT_IN, Constants.HARVESTER_TILT_OUT);
     harvesterMotor = new TalonSRX(Constants.HARVESTER_MOTOR);
     harvesterMotor.setInverted(false);
     harvesterMotor.setNeutralMode(NeutralMode.Coast);
     harvesterMotor.configVoltageCompSaturation(10.5);
-     
+    
+    //TODO: move selector motor into the ballHandler array
     selectorMotor = new CANSparkMax(Constants.SELECTOR_MOTOR, MotorType.kBrushless);
     selectorMotor.restoreFactoryDefaults();
     selectorMotor.setIdleMode(IdleMode.kBrake);
@@ -83,15 +84,16 @@ public class BallHandler extends SubsystemBase {
       handlerMotors[i].restoreFactoryDefaults();
       handlerMotors[i].setIdleMode(IdleMode.kBrake);// set brake mode, so motors stop on a dime
       handlerMotors[i].enableVoltageCompensation(10.50);// enable volatge compensation mode
-      handlerMotors[i].setInverted(i == 0);
+      handlerMotors[i].setInverted(i == 0);// only the second NEO in the ballHandler needs to be inverted.
 
-      // handleEncoders[i] = handlerMotors[i].getEncoder();
+      // handleEncoders[i] = handlerMotors[i].getEncoder();//TODO: figure out if we need to get the encoder. also why did it cause the code to crash
 
       handlerMotors[i].burnFlash();//this saves settings, BUT MUST BE DONE LAST, SparkMAX won't accept commands for a moment after this call
     }
     ballSensor0 = new DigitalInput(Constants.BALL_SENSOR_0);
     ballSensor1 = new DigitalInput(Constants.BALL_SENSOR_1);
     
+    //TODO: reenable this once we get protection for when the color sensor isn't plugged in.
     // colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
 
     selectorTimer.reset();
@@ -138,6 +140,7 @@ public class BallHandler extends SubsystemBase {
         System.out.println("default ball handler case reached");
     }
 
+    //TODO: uncomment this once we get some protection for when the Pneumatic hub isn't connected
     //if state has changed, check to move harvester in or out
     // if(state != prevState){
     //   if(state == State.kFillTo1 || state == State.kFillTo0){
@@ -160,7 +163,7 @@ public class BallHandler extends SubsystemBase {
     }
 
     //If the wrong ball color is detected, reset spitout timer
-    if((state == State.kFillTo1 || state == State.kFillTo0)){// && !shouldIntakeBall()){
+    if((state == State.kFillTo1 || state == State.kFillTo0)){// && !shouldIntakeBall()){ //TODO: reenable this once we get protection for when the color sensor isn't plugged in.
       selectorTimer.reset();
     }
 
@@ -184,6 +187,7 @@ public class BallHandler extends SubsystemBase {
     harvesterTilt.set(Value.kForward);
   }
 
+  //TODO: following was commented out because they were running without the intake
   // public void intake(){
   //   harvesterMotor.set(TalonSRXControlMode.PercentOutput, Constants.HARVESTER_INTAKE_SPEED);
   // }
@@ -204,6 +208,7 @@ public class BallHandler extends SubsystemBase {
     return ballSensor1.get();
   }
 
+  //TODO: reenable this once we get protection for when the color sensor isn't plugged in.
   // public boolean shouldIntakeBall(){
   //   //Checking proximity to intake balls
   //   if(colorSensor.getProximity() < Constants.INTAKE_PROXIMITY){

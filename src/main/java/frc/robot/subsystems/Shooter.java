@@ -58,6 +58,7 @@ public class Shooter extends SubsystemBase {
 
     mainMotor.configAllowableClosedloopError(0, Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR);
 
+    //TODO: uncomment, this was done because they needed to test an incomplete shooter
     // hoodMotor = new CANSparkMax(Constants.SHOOTER_HOOD_MOTOR, MotorType.kBrushless);
     // hoodMotor.restoreFactoryDefaults();
     // hoodMotor.setIdleMode(IdleMode.kBrake);

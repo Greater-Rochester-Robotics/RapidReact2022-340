@@ -11,7 +11,13 @@ import frc.robot.subsystems.Shooter;
 
 public class ShooterPercentOutput extends CommandBase {
   public double output;
-  /** Creates a new ShooterPercentOutput. */
+  /**
+   * A testing command to run the shooter at a percentVoltage
+   * output. This command does not by itself, and stops the motor
+   * when it is interupted.
+   * 
+   * @param output The percent voltage to give the shooter [-1,1]
+   */
   public ShooterPercentOutput(double output) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooter);
