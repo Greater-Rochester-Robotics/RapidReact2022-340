@@ -58,22 +58,22 @@ public class Shooter extends SubsystemBase {
 
     mainMotor.configAllowableClosedloopError(0, Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR);
 
-    hoodMotor = new CANSparkMax(Constants.SHOOTER_HOOD_MOTOR, MotorType.kBrushless);
-    hoodMotor.restoreFactoryDefaults();
-    hoodMotor.setIdleMode(IdleMode.kBrake);
-    hoodMotor.enableVoltageCompensation(10.5);
-    hoodMotor.setInverted(false); //TODO: check if this is right
+    // hoodMotor = new CANSparkMax(Constants.SHOOTER_HOOD_MOTOR, MotorType.kBrushless);
+    // hoodMotor.restoreFactoryDefaults();
+    // hoodMotor.setIdleMode(IdleMode.kBrake);
+    // hoodMotor.enableVoltageCompensation(10.5);
+    // hoodMotor.setInverted(false); //TODO: check if this is right
 
-    hoodEncoder = hoodMotor.getEncoder();
-    hoodEncoder.setPositionConversionFactor(Constants.SHOOTER_HOOD_DEGREE_CONVERSION);
+    // hoodEncoder = hoodMotor.getEncoder();
+    // hoodEncoder.setPositionConversionFactor(Constants.SHOOTER_HOOD_DEGREE_CONVERSION);
 
-    pidController = hoodMotor.getPIDController();
-    pidController.setP(Constants.SHOOTER_HOOD_MOTOR_P);
-    pidController.setI(Constants.SHOOTER_HOOD_MOTOR_I);
-    pidController.setD(Constants.SHOOTER_HOOD_MOTOR_D);
-    pidController.setFF(Constants.SHOOTER_HOOD_MOTOR_FF);
+    // pidController = hoodMotor.getPIDController();
+    // pidController.setP(Constants.SHOOTER_HOOD_MOTOR_P);
+    // pidController.setI(Constants.SHOOTER_HOOD_MOTOR_I);
+    // pidController.setD(Constants.SHOOTER_HOOD_MOTOR_D);
+    // pidController.setFF(Constants.SHOOTER_HOOD_MOTOR_FF);
 
-    hoodMotor.burnFlash();
+    // hoodMotor.burnFlash();
 
     hoodLimitSwitch = new DigitalOutput(Constants.SHOOTER_HOOD_SWITCH);
   }
@@ -89,6 +89,10 @@ public class Shooter extends SubsystemBase {
 
   public void setSpeed(double speed){
     mainMotor.set(TalonFXControlMode.Velocity, speed);
+  }
+
+  public void setOutput(double percentOutput){
+    mainMotor.set(TalonFXControlMode.PercentOutput, percentOutput);
   }
   
   /**

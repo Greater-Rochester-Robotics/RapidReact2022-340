@@ -38,7 +38,7 @@ public class BallHandler extends SubsystemBase {
   double[] currentSpeeds = new double[] { 0.0, 0.0, 0.0, 0.0};
   DigitalInput ballSensor0;
   DigitalInput ballSensor1;
-  ColorSensorV3 colorSensor;
+  // ColorSensorV3 colorSensor;
   Timer selectorTimer = new Timer();
 
   public enum State {
@@ -62,8 +62,8 @@ public class BallHandler extends SubsystemBase {
   
   /** Creates a new Intake. */
   public BallHandler() {
-    harvesterTilt = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
-      Constants.HARVESTER_TILT_IN, Constants.HARVESTER_TILT_OUT);
+    // harvesterTilt = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
+    //   Constants.HARVESTER_TILT_IN, Constants.HARVESTER_TILT_OUT);
     harvesterMotor = new TalonSRX(Constants.HARVESTER_MOTOR);
     harvesterMotor.setInverted(false);
     harvesterMotor.setNeutralMode(NeutralMode.Coast);
@@ -83,16 +83,16 @@ public class BallHandler extends SubsystemBase {
       handlerMotors[i].restoreFactoryDefaults();
       handlerMotors[i].setIdleMode(IdleMode.kBrake);// set brake mode, so motors stop on a dime
       handlerMotors[i].enableVoltageCompensation(10.50);// enable volatge compensation mode
-      handlerMotors[i].setInverted(false);
+      handlerMotors[i].setInverted(i == 0);
 
-      handleEncoders[i] = handlerMotors[i].getEncoder();
+      // handleEncoders[i] = handlerMotors[i].getEncoder();
 
       handlerMotors[i].burnFlash();//this saves settings, BUT MUST BE DONE LAST, SparkMAX won't accept commands for a moment after this call
     }
     ballSensor0 = new DigitalInput(Constants.BALL_SENSOR_0);
     ballSensor1 = new DigitalInput(Constants.BALL_SENSOR_1);
     
-    colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+    // colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
 
     selectorTimer.reset();
     selectorTimer.start();
@@ -108,7 +108,7 @@ public class BallHandler extends SubsystemBase {
         speeds = new double[] { 0, 0, 0, BALL1_SHOOT };
         break;
       case kShoot0:
-        speeds = new double[] { 0, 0, BALL0_SHOOT, BALL1_SHOOT };
+        speeds = new double[] { 0, BALL0_SHOOT, BALL0_SHOOT, BALL1_SHOOT };
         break;
       case kSpit:
         speeds = new double[] { HARV_OUT, SEL_OUT, BALL0_OUT, BALL1_OUT };
@@ -139,13 +139,13 @@ public class BallHandler extends SubsystemBase {
     }
 
     //if state has changed, check to move harvester in or out
-    if(state != prevState){
-      if(state == State.kFillTo1 || state == State.kFillTo0){
-        tiltOut();
-      }else{
-        tiltIn();
-      }
-    }
+    // if(state != prevState){
+    //   if(state == State.kFillTo1 || state == State.kFillTo0){
+    //     tiltOut();
+    //   }else{
+    //     tiltIn();
+    //   }
+    // }
 
     //If speed have changed, update the motor output speeds
     if(!DriverStation.isDisabled() && 
@@ -153,14 +153,14 @@ public class BallHandler extends SubsystemBase {
       harvesterMotor.set(TalonSRXControlMode.PercentOutput, speeds[0]);
       selectorMotor.set(speeds[1]);
       for (int i = 2; i <= 3; i++) {
-          handlerMotors[i].set(speeds[i]);
+          handlerMotors[i-2].set(speeds[i]);
       }
       //store the speeds sent to the motors as current speeds
       currentSpeeds = speeds;
     }
 
     //If the wrong ball color is detected, reset spitout timer
-    if((state == State.kFillTo1 || state == State.kFillTo0) && !shouldIntakeBall()){
+    if((state == State.kFillTo1 || state == State.kFillTo0)){// && !shouldIntakeBall()){
       selectorTimer.reset();
     }
 
@@ -204,21 +204,21 @@ public class BallHandler extends SubsystemBase {
     return ballSensor1.get();
   }
 
-  public boolean shouldIntakeBall(){
-    //Checking proximity to intake balls
-    if(colorSensor.getProximity() < Constants.INTAKE_PROXIMITY){
-      if(DriverStation.getAlliance() == Alliance.Blue){
-        return colorSensor.getBlue() >= Constants.BLUE_LEVEL;
-      }
-      else if(DriverStation.getAlliance() == Alliance.Red){
-        return colorSensor.getRed() >= Constants.RED_LEVEL;
-      }
-      else{
-        return true;
-      }
-    }
-    return true;
-  }
+  // public boolean shouldIntakeBall(){
+  //   //Checking proximity to intake balls
+  //   if(colorSensor.getProximity() < Constants.INTAKE_PROXIMITY){
+  //     if(DriverStation.getAlliance() == Alliance.Blue){
+  //       return colorSensor.getBlue() >= Constants.BLUE_LEVEL;
+  //     }
+  //     else if(DriverStation.getAlliance() == Alliance.Red){
+  //       return colorSensor.getRed() >= Constants.RED_LEVEL;
+  //     }
+  //     else{
+  //       return true;
+  //     }
+  //   }
+  //   return true;
+  // }
   
   public void setState(State state){
     this.state = state;
