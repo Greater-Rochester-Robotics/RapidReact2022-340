@@ -91,13 +91,12 @@ public final class Constants {
     public static final double HARVESTER_INTAKE_SPEED = 0.6;
     public static final double HARVESTER_EXTAKE_SPEED = -0.6;
 
-    public static final double SELECTOR_INTAKE_SPEED = 0.6;
-    public static final double SELECTOR_EXTAKE_SPEED = -0.6;
-
     public static final double BALL_HANDLER_0_INTAKE_SPEED = 0.6;
     public static final double BALL_HANDLER_0_EXTAKE_SPEED = -0.6;
     public static final double BALL_HANDLER_1_INTAKE_SPEED = 0.6;
     public static final double BALL_HANDLER_1_EXTAKE_SPEED = -0.6;
+    public static final double BALL_HANDLER_2_EXTAKE_SPEED = -0.6;
+    public static final double BALL_HANDLER_2_SHOOT_SPEED = 0.6;
     public static final double BALL_HANDLER_1_SHOOT_SPEED = 0.6;
     public static final double BALL_HANDLER_0_SHOOT_SPEED = 0.5;
 
@@ -170,9 +169,9 @@ public final class Constants {
     public static final int FRONT_RIGHT_ROTATE_SENSOR = 51;//drive module 3
 
     /* Rev Robotics SparkMAXs */
-    public static final int SELECTOR_MOTOR = 1;//Handler
-    public static final int BALL_HANDLER_MOTOR_0 = 2;//Handler
-    public static final int BALL_HANDLER_MOTOR_1 = 3;//Handler
+    public static final int BALL_HANDLER_MOTOR_0 = 1;//Handler
+    public static final int BALL_HANDLER_MOTOR_1 = 2;//Handler
+    public static final int BALL_HANDLER_MOTOR_2 = 3;
     public static final int SHOOTER_HOOD_MOTOR = 4; //Shooter
 
     /* Solenoid Channels */

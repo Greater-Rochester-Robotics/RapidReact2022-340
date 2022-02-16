@@ -20,6 +20,7 @@ import com.revrobotics.SparkMaxRelativeEncoder.Type;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -37,7 +38,6 @@ public class Shooter extends SubsystemBase {
   RelativeEncoder hoodEncoder;
   SparkMaxPIDController pidController;
   DigitalOutput hoodLimitSwitch;
-  
 
   /** Creates a new Shooter. */
   public Shooter() {
@@ -55,9 +55,7 @@ public class Shooter extends SubsystemBase {
     mainMotor.config_kI(0, Constants.SHOOTER_MAIN_MOTOR_I);
     mainMotor.config_kD(0, Constants.SHOOTER_MAIN_MOTOR_D);
     mainMotor.config_kF(0, Constants.SHOOTER_MAIN_MOTOR_F);
-
     mainMotor.configAllowableClosedloopError(0, Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR);
-
     //TODO: uncomment, this was done because they needed to test an incomplete shooter
     // hoodMotor = new CANSparkMax(Constants.SHOOTER_HOOD_MOTOR, MotorType.kBrushless);
     // hoodMotor.restoreFactoryDefaults();
@@ -99,7 +97,7 @@ public class Shooter extends SubsystemBase {
   /**
    * @return if it is at speed within tolerance
    */
-  public boolean isAtSpeed(){
+  public boolean isAtSpeed(double goalSpeed) {
     //TalonFX has an isAtSpeed() with tolerance already
     return ((goalSpeed * (1.00 - speedError) <= getSpeed()) && 
             (goalSpeed * (1.00 + speedError) >= getSpeed()));

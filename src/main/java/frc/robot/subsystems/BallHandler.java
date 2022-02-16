@@ -31,7 +31,7 @@ public class BallHandler extends SubsystemBase {
 
   DoubleSolenoid harvesterTilt;
   TalonSRX harvesterMotor;
-  CANSparkMax selectorMotor, handlerMotors[];
+  CANSparkMax handlerMotors[];
   RelativeEncoder handleEncoders[];
   double[] speeds = new double[4];
   double[] currentSpeeds = new double[] { 0.0, 0.0, 0.0, 0.0};
@@ -49,12 +49,12 @@ public class BallHandler extends SubsystemBase {
 
   private static final double HARV_IN = Constants.HARVESTER_INTAKE_SPEED;
   private static final double HARV_OUT = Constants.HARVESTER_EXTAKE_SPEED;
-  private static final double SEL_IN = Constants.SELECTOR_INTAKE_SPEED;
-  private static final double SEL_OUT = Constants.SELECTOR_EXTAKE_SPEED;
   private static final double BALL0_IN = Constants.BALL_HANDLER_0_INTAKE_SPEED;
   private static final double BALL0_OUT = Constants.BALL_HANDLER_0_EXTAKE_SPEED;
   private static final double BALL1_IN = Constants.BALL_HANDLER_1_INTAKE_SPEED;
   private static final double BALL1_OUT = Constants.BALL_HANDLER_1_EXTAKE_SPEED;
+  private static final double BALL2_OUT = Constants.BALL_HANDLER_2_EXTAKE_SPEED;
+  private static final double BALL2_SHOOT = Constants.BALL_HANDLER_2_SHOOT_SPEED;
   private static final double BALL1_SHOOT = Constants.BALL_HANDLER_1_SHOOT_SPEED;
   private static final double BALL0_SHOOT = Constants.BALL_HANDLER_0_SHOOT_SPEED;
     
@@ -68,23 +68,18 @@ public class BallHandler extends SubsystemBase {
     harvesterMotor.setInverted(false);
     harvesterMotor.setNeutralMode(NeutralMode.Coast);
     harvesterMotor.configVoltageCompSaturation(10.5);
-    
-    //TODO: move selector motor into the ballHandler array
-    selectorMotor = new CANSparkMax(Constants.SELECTOR_MOTOR, MotorType.kBrushless);
-    selectorMotor.restoreFactoryDefaults();
-    selectorMotor.setIdleMode(IdleMode.kBrake);
-    selectorMotor.burnFlash();
 
     handlerMotors = new CANSparkMax[]{
       new CANSparkMax(Constants.BALL_HANDLER_MOTOR_0, MotorType.kBrushless),//axleWheels,
-      new CANSparkMax(Constants.BALL_HANDLER_MOTOR_1, MotorType.kBrushless)
+      new CANSparkMax(Constants.BALL_HANDLER_MOTOR_1, MotorType.kBrushless),
+      new CANSparkMax(Constants.BALL_HANDLER_MOTOR_2, MotorType.kBrushless)
     };
 
-    for (int i = 0; i <= 1; i++) {
+    for (int i = 0; i <= 2; i++) {
       handlerMotors[i].restoreFactoryDefaults();
       handlerMotors[i].setIdleMode(IdleMode.kBrake);// set brake mode, so motors stop on a dime
       handlerMotors[i].enableVoltageCompensation(10.50);// enable volatge compensation mode
-      handlerMotors[i].setInverted(i == 0);// only the second NEO in the ballHandler needs to be inverted.
+      handlerMotors[i].setInverted(i == 1);// only the second NEO in the ballHandler needs to be inverted.
 
       // handleEncoders[i] = handlerMotors[i].getEncoder();//TODO: figure out if we need to get the encoder. also why did it cause the code to crash
 
@@ -107,16 +102,16 @@ public class BallHandler extends SubsystemBase {
     //BallHandler State Machine
     switch(state){
       case kShoot1:
-        speeds = new double[] { 0, 0, 0, BALL1_SHOOT };
+        speeds = new double[] { 0, 0, BALL1_SHOOT, BALL2_SHOOT };
         break;
       case kShoot0:
-        speeds = new double[] { 0, BALL0_SHOOT, BALL0_SHOOT, BALL1_SHOOT };
+        speeds = new double[] { 0, BALL0_SHOOT, BALL1_SHOOT, BALL2_SHOOT };
         break;
       case kSpit:
-        speeds = new double[] { HARV_OUT, SEL_OUT, BALL0_OUT, BALL1_OUT };
+        speeds = new double[] { HARV_OUT, BALL0_OUT, BALL1_OUT, BALL2_OUT };
         break;
       case kFillTo1:
-        speeds = new double[] { HARV_IN, SEL_IN, BALL0_IN, BALL1_IN };
+        speeds = new double[] { HARV_IN, BALL0_IN, BALL1_IN, 0 };
         if(isBall1()){
           state = State.kFillTo0;
         }
@@ -124,7 +119,7 @@ public class BallHandler extends SubsystemBase {
           break;
         }
       case kFillTo0:
-        speeds = new double[] { HARV_IN, SEL_IN, BALL0_IN, 0 };
+        speeds = new double[] { HARV_IN, BALL0_IN, 0, 0 };
 
         if(isBall0()){
           state = State.kOff;
@@ -141,7 +136,7 @@ public class BallHandler extends SubsystemBase {
     }
 
     //TODO: uncomment this once we get some protection for when the Pneumatic hub isn't connected
-    //if state has changed, check to move harvester in or out
+    // //if state has changed, check to move harvester in or out
     // if(state != prevState){
     //   if(state == State.kFillTo1 || state == State.kFillTo0){
     //     tiltOut();
@@ -154,9 +149,8 @@ public class BallHandler extends SubsystemBase {
     if(!DriverStation.isDisabled() && 
       !Arrays.equals(speeds,currentSpeeds)){
       harvesterMotor.set(TalonSRXControlMode.PercentOutput, speeds[0]);
-      selectorMotor.set(speeds[1]);
-      for (int i = 2; i <= 3; i++) {
-          handlerMotors[i-2].set(speeds[i]);
+      for (int i = 1; i <= 3; i++) {
+          handlerMotors[i-1].set(speeds[i]);
       }
       //store the speeds sent to the motors as current speeds
       currentSpeeds = speeds;
@@ -169,10 +163,10 @@ public class BallHandler extends SubsystemBase {
 
     //if timer reset, run spit out timer for half second
     if(!selectorTimer.hasElapsed(0.5)){
-      selectorMotor.setInverted(true);
+      handlerMotors[0].setInverted(true);
     }
     else{
-      selectorMotor.setInverted(false);
+      handlerMotors[0].setInverted(false);
     }
 
     //store current state as prevState for next loop
