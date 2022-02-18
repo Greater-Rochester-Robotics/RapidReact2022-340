@@ -8,7 +8,9 @@ import java.util.Arrays;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
@@ -23,6 +25,8 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.motorcontrol.Victor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
@@ -30,18 +34,18 @@ import frc.robot.Constants;
 public class BallHandler extends SubsystemBase {
 
   DoubleSolenoid harvesterTilt;
-  TalonSRX harvesterMotor;
+  VictorSPX harvesterMotor; 
   CANSparkMax handlerMotors[];
   RelativeEncoder handleEncoders[];
   double[] speeds = new double[4];
   double[] currentSpeeds = new double[] { 0.0, 0.0, 0.0, 0.0};
   DigitalInput ballSensor0;
   DigitalInput ballSensor1;
-  // ColorSensorV3 colorSensor; //TODO: reenable this once we get protection for when the color sensor isn't plugged in.
+  ColorSensorV3 colorSensor; 
   Timer selectorTimer = new Timer();
 
   public enum State {
-   kOff, kFillTo1, kFillTo0, kShoot1, kShoot0, kSpit
+   kOff, kFillTo1, kFillTo0, kShoot1, kShoot0, kSpitLow, kSpitMid, kSpitHigh
   }
 
   private State state = State.kOff;
@@ -61,10 +65,9 @@ public class BallHandler extends SubsystemBase {
   
   /** Creates a new Intake. */
   public BallHandler() {
-    //TODO: is there a way to have the solenoid not drop so many errors when PH not plugged in.
-    // harvesterTilt = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
-    //   Constants.HARVESTER_TILT_IN, Constants.HARVESTER_TILT_OUT);
-    harvesterMotor = new TalonSRX(Constants.HARVESTER_MOTOR);
+    harvesterTilt = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
+      Constants.HARVESTER_TILT_IN, Constants.HARVESTER_TILT_OUT);
+    harvesterMotor = new VictorSPX(Constants.HARVESTER_MOTOR);
     harvesterMotor.setInverted(false);
     harvesterMotor.setNeutralMode(NeutralMode.Coast);
     harvesterMotor.configVoltageCompSaturation(10.5);
@@ -88,8 +91,7 @@ public class BallHandler extends SubsystemBase {
     ballSensor0 = new DigitalInput(Constants.BALL_SENSOR_0);
     ballSensor1 = new DigitalInput(Constants.BALL_SENSOR_1);
     
-    //TODO: reenable this once we get protection for when the color sensor isn't plugged in.
-    // colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
+    colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
 
     selectorTimer.reset();
     selectorTimer.start();
@@ -99,6 +101,11 @@ public class BallHandler extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Red Color", colorSensor.getRed());
+    SmartDashboard.putNumber("Blue Color", colorSensor.getBlue());
+    SmartDashboard.putNumber("Proximity", colorSensor.getProximity());
+    SmartDashboard.putBoolean("connected",colorSensor.isConnected());
+
     //BallHandler State Machine
     switch(state){
       case kShoot1:
@@ -107,7 +114,13 @@ public class BallHandler extends SubsystemBase {
       case kShoot0:
         speeds = new double[] { 0, BALL0_SHOOT, BALL1_SHOOT, BALL2_SHOOT };
         break;
-      case kSpit:
+      case kSpitHigh:
+        speeds = new double[] { HARV_IN, BALL0_OUT, BALL1_OUT, BALL2_OUT};
+        break;
+      case kSpitMid:
+        speeds = new double[] { 0, BALL0_OUT, BALL1_OUT, BALL2_OUT};
+        break;
+      case kSpitLow:
         speeds = new double[] { HARV_OUT, BALL0_OUT, BALL1_OUT, BALL2_OUT };
         break;
       case kFillTo1:
@@ -135,20 +148,19 @@ public class BallHandler extends SubsystemBase {
         System.out.println("default ball handler case reached");
     }
 
-    //TODO: uncomment this once we get some protection for when the Pneumatic hub isn't connected
-    // //if state has changed, check to move harvester in or out
-    // if(state != prevState){
-    //   if(state == State.kFillTo1 || state == State.kFillTo0){
-    //     tiltOut();
-    //   }else{
-    //     tiltIn();
-    //   }
-    // }
+    //if state has changed, check to move harvester in or out
+    if(state != prevState){
+      if(state == State.kFillTo1 || state == State.kFillTo0){
+        tiltOut();
+      }else{
+        tiltIn();
+      }
+    }
 
     //If speed have changed, update the motor output speeds
     if(!DriverStation.isDisabled() && 
       !Arrays.equals(speeds,currentSpeeds)){
-      harvesterMotor.set(TalonSRXControlMode.PercentOutput, speeds[0]);
+      harvesterMotor.set(VictorSPXControlMode.PercentOutput, speeds[0]);
       for (int i = 1; i <= 3; i++) {
           handlerMotors[i-1].set(speeds[i]);
       }
@@ -157,7 +169,7 @@ public class BallHandler extends SubsystemBase {
     }
 
     //If the wrong ball color is detected, reset spitout timer
-    if((state == State.kFillTo1 || state == State.kFillTo0)){// && !shouldIntakeBall()){ //TODO: reenable this once we get protection for when the color sensor isn't plugged in.
+    if((state == State.kFillTo1 || state == State.kFillTo0) && !shouldIntakeBall()){
       selectorTimer.reset();
     }
 
@@ -181,7 +193,6 @@ public class BallHandler extends SubsystemBase {
     harvesterTilt.set(Value.kForward);
   }
 
-  //TODO: following was commented out because they were running without the intake
   // public void intake(){
   //   harvesterMotor.set(TalonSRXControlMode.PercentOutput, Constants.HARVESTER_INTAKE_SPEED);
   // }
@@ -202,22 +213,29 @@ public class BallHandler extends SubsystemBase {
     return ballSensor1.get();
   }
 
-  //TODO: reenable this once we get protection for when the color sensor isn't plugged in.
-  // public boolean shouldIntakeBall(){
-  //   //Checking proximity to intake balls
-  //   if(colorSensor.getProximity() < Constants.INTAKE_PROXIMITY){
-  //     if(DriverStation.getAlliance() == Alliance.Blue){
-  //       return colorSensor.getBlue() >= Constants.BLUE_LEVEL;
-  //     }
-  //     else if(DriverStation.getAlliance() == Alliance.Red){
-  //       return colorSensor.getRed() >= Constants.RED_LEVEL;
-  //     }
-  //     else{
-  //       return true;
-  //     }
-  //   }
-  //   return true;
-  // }
+  public boolean shouldIntakeBall(){
+    int proximity = colorSensor.getProximity();
+    
+    int blue = colorSensor.getBlue();
+    int red = colorSensor.getRed();
+
+    if(!colorSensor.isConnected() || (proximity == 0 && blue == 0 && red == 0)) {
+      return true;
+    }
+    //Checking proximity to intake balls
+    if(proximity > Constants.INTAKE_PROXIMITY){
+      if(DriverStation.getAlliance() == Alliance.Blue){
+        return blue - red >= Constants.BLUE_LEVEL;
+      }
+      else if(DriverStation.getAlliance() == Alliance.Red){
+        return red - blue >= Constants.RED_LEVEL;
+      }
+      else{
+        return true;
+      }
+    }
+    return true;
+  }
   
   public void setState(State state){
     this.state = state;

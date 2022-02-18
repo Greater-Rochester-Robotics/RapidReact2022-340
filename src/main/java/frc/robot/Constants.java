@@ -101,14 +101,14 @@ public final class Constants {
     public static final double BALL_HANDLER_0_SHOOT_SPEED = 0.5;
 
     /* Intake Levels */
-    public static final int BLUE_LEVEL = 100;
-    public static final int RED_LEVEL = 100;
+    public static final int BLUE_LEVEL = 500;
+    public static final int RED_LEVEL = 500;
     
-    public static final int INTAKE_PROXIMITY = 100;
+    public static final int INTAKE_PROXIMITY = 500;
 
     /* Shooter Constants */
     public static final int SHOOTER_HOOD_MOTOR_COUNTS_PER_REV = 5000; //TODO: get actual counts per revolution
-    public static final double SHOOTER_HOOD_DEGREE_CONVERSION = 1;//TODO: get the gear ratio on the versa, then the gear tooth number on drive gear, and the teah per degree on rack, then dimensional analysis
+    public static final double SHOOTER_HOOD_DEGREE_CONVERSION = (30/7) * (32/51);// gear ratio on the versa, 7:1 ratio w/ 30T gear, 51T rack, 32 degrees
     
     public static final double SHOOTER_MAIN_MOTOR_P = 1.0;
     public static final double SHOOTER_MAIN_MOTOR_I = 0.0;

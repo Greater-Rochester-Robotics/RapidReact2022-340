@@ -117,7 +117,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     //create(construct) subsystems
-    // compressor = new Compressor();//Let's keep compressor first
+    compressor = new Compressor();//Let's keep compressor first
     // swerveDrive = new SwerveDrive();
     // climber = new Climber();
     ballHandler = new BallHandler();

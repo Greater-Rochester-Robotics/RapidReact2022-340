@@ -94,6 +94,7 @@ public class SwerveModule {
         rotateAbsSensor.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         rotateAbsSensor.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 20);//The default on this is 10, but 20 might be better given our code loop rate
         rotateAbsSensor.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 1000);
+        // rotateAbsSensor.getStatusFramePeriod(frame);
     }
 
 
