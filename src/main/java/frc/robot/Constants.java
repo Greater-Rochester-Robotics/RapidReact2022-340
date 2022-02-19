@@ -185,4 +185,7 @@ public final class Constants {
     public static final int BALL_SENSOR_1 = 1;
     public static final int SHOOTER_HOOD_SWITCH = 4;
 
+    /* Aiming Values*/
+    public static final Translation2d FIELD_CENTER = new Translation2d();
+
 }
