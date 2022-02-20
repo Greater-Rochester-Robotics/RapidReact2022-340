@@ -108,14 +108,14 @@ public final class Constants {
 
     /* Shooter Constants */
     public static final int SHOOTER_HOOD_MOTOR_COUNTS_PER_REV = 5000; //TODO: get actual counts per revolution
-    public static final double SHOOTER_HOOD_DEGREE_CONVERSION = (30/7) * (32/51);// gear ratio on the versa, 7:1 ratio w/ 30T gear, 51T rack, 32 degrees
+    public static final double SHOOTER_HOOD_DEGREE_CONVERSION = 30.0 * 32.0 / 7.0 / 51.0;// gear ratio on the versa, 7:1 ratio w/ 30T gear, 51T rack, 32 degrees
     
-    public static final double SHOOTER_MAIN_MOTOR_P = 1.0;
+    public static final double SHOOTER_MAIN_MOTOR_P = 2.5;
     public static final double SHOOTER_MAIN_MOTOR_I = 0.0;
     public static final double SHOOTER_MAIN_MOTOR_D = 0.0;
     public static final double SHOOTER_MAIN_MOTOR_F = 0.0;
 
-    public static final double SHOOTER_HOOD_MOTOR_P = 1.0;
+    public static final double SHOOTER_HOOD_MOTOR_P = 0.5;//TODO: This probably needs to be smaller once it gets mechanically fixed
     public static final double SHOOTER_HOOD_MOTOR_I = 0.0;
     public static final double SHOOTER_HOOD_MOTOR_D = 0.0;
     public static final double SHOOTER_HOOD_MOTOR_FF = 0.0;
@@ -130,16 +130,22 @@ public final class Constants {
     public static final double EXTENDO_MOTOR_I = 0.0;
     public static final double EXTENDO_MOTOR_D = 1.5;
     public static final double EXTENDO_MOTOR_F = 0.0;
+    public static final double EXTENDO_MOTOR_P_COMPENSATE = 0.1;
+    public static final double EXTENDO_MOTOR_I_COMPENSATE = 0.0;
+    public static final double EXTENDO_MOTOR_D_COMPENSATE = 0.0;
+    public static final double EXTENDO_MOTOR_F_COMPENSATE = 0.0;
 
     public static final double EXTENDO_CRUISE_VELOCITY = 15.0;
     public static final double EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR = 5.105 / 24576;
     public static final double EXTENDO_ACCELERATION = 6.0;
-    public static final double EXTENDO_HOMING_CURRENT = 20.0;
+    public static final double EXTENDO_HOMING_CURRENT = 20.0;//TODO: is this too big?
     public static final double EXTENDO_ALLOWABLE_ERROR = 0.25;
 
     public static final double CLIMBER_TOP_POSITION = 24;
     public static final double CLIMBER_BOTTOM_POSITION = 0;
     public static final double CLIMBER_MIDDLE_POSITION = 12;
+
+    public static final int SELECTED_FEEDBACK_COEFFICIENT = 1;
 
     /* IDENTIFICATION NUMBERS FOR DEVICES */
 
@@ -147,43 +153,42 @@ public final class Constants {
     public static final int CLIMBER_LEFT_ARM = 52;//Climber
     public static final int CLIMBER_RIGHT_ARM = 53;//Climber
 
-    public static final int MAIN_SHOOTER_MOTOR = 4;//Shooter
+    public static final int MAIN_SHOOTER_MOTOR = 20;//Shooter
 
-    public static final int HARVESTER_MOTOR = 6;//Handler
+    public static final int HARVESTER_MOTOR = 21;//Handler
 
-    // TODO: Change all motor ids to 1-12 in order to increase priority
-    public static final int FRONT_LEFT_MOVE_MOTOR = 40;//drive module 0
-    public static final int FRONT_LEFT_ROTATE_MOTOR = 41;//drive module 0
-    public static final int FRONT_LEFT_ROTATE_SENSOR = 42;//drive module 0
+    public static final int FRONT_LEFT_MOVE_MOTOR = 3;//drive module 0
+    public static final int FRONT_LEFT_ROTATE_MOTOR = 4;//drive module 0
+    public static final int FRONT_LEFT_ROTATE_SENSOR = 5;//drive module 0
 
-    public static final int REAR_LEFT_MOVE_MOTOR = 43;//drive module 1
-    public static final int REAR_LEFT_ROTATE_MOTOR = 44;//drive module 1
-    public static final int REAR_LEFT_ROTATE_SENSOR = 45;//drive module 1
+    public static final int REAR_LEFT_MOVE_MOTOR = 6;//drive module 1
+    public static final int REAR_LEFT_ROTATE_MOTOR = 7;//drive module 1
+    public static final int REAR_LEFT_ROTATE_SENSOR = 8;//drive module 1
 
-    public static final int REAR_RIGHT_MOVE_MOTOR = 46;//drive module 2
-    public static final int REAR_RIGHT_ROTATE_MOTOR = 47;//drive module 2
-    public static final int REAR_RIGHT_ROTATE_SENSOR = 48;//drive module 2
+    public static final int REAR_RIGHT_MOVE_MOTOR = 9;//drive module 2
+    public static final int REAR_RIGHT_ROTATE_MOTOR = 10;//drive module 2
+    public static final int REAR_RIGHT_ROTATE_SENSOR = 11;//drive module 2
     
-    public static final int FRONT_RIGHT_MOVE_MOTOR = 49;//drive module 3
-    public static final int FRONT_RIGHT_ROTATE_MOTOR = 50;//drive module 3
-    public static final int FRONT_RIGHT_ROTATE_SENSOR = 51;//drive module 3
+    public static final int FRONT_RIGHT_MOVE_MOTOR = 12;//drive module 3
+    public static final int FRONT_RIGHT_ROTATE_MOTOR = 13;//drive module 3
+    public static final int FRONT_RIGHT_ROTATE_SENSOR = 14;//drive module 3
 
     /* Rev Robotics SparkMAXs */
-    public static final int BALL_HANDLER_MOTOR_0 = 1;//Handler
-    public static final int BALL_HANDLER_MOTOR_1 = 2;//Handler
-    public static final int BALL_HANDLER_MOTOR_2 = 3;
-    public static final int SHOOTER_HOOD_MOTOR = 4; //Shooter
+    public static final int BALL_HANDLER_MOTOR_0 = 15;//Handler
+    public static final int BALL_HANDLER_MOTOR_1 = 16;//Handler
+    public static final int BALL_HANDLER_MOTOR_2 = 17;
+    public static final int SHOOTER_HOOD_MOTOR = 18; //Shooter
 
     /* Solenoid Channels */
-    public static final int HARVESTER_TILT_IN = 0;//Intake
-    public static final int HARVESTER_TILT_OUT = 1;//Intake
-    public static final int CLIMBER_TILT_IN = 2;//Climber
-    public static final int CLIMBER_TILT_OUT = 3;//Climber
+    public static final int HARVESTER_TILT_IN = 8;//Intake
+    public static final int HARVESTER_TILT_OUT = 9;//Intake
+    public static final int CLIMBER_TILT_IN = 13;//Climber
+    public static final int CLIMBER_TILT_OUT = 12;//Climber
 
     /* Digital Input */
     public static final int BALL_SENSOR_0 = 0;
     public static final int BALL_SENSOR_1 = 1;
-    public static final int SHOOTER_HOOD_SWITCH = 4;
+    public static final int SHOOTER_HOOD_SWITCH = 2;
 
     /* Aiming Values*/
     public static final Translation2d FIELD_CENTER = new Translation2d();

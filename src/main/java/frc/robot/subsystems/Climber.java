@@ -5,14 +5,20 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -31,15 +37,15 @@ public class Climber extends SubsystemBase {
 
   /** Creates a new Climber. */
   public Climber() {
-    // tiltRobot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
-      // Constants.CLIMBER_TILT_IN, Constants.CLIMBER_TILT_OUT);
+    tiltRobot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
+      Constants.CLIMBER_TILT_IN, Constants.CLIMBER_TILT_OUT);
 
     // Configures the Left Extendo Motor
     extendoMotorLeft = new TalonFX(Constants.CLIMBER_LEFT_ARM);
     extendoMotorLeft.configFactoryDefault();
     // use the integrated sensor with the primary closed loop and timeout is 0.
     extendoMotorLeft.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-    extendoMotorLeft.configSelectedFeedbackCoefficient(1);//TODO:change this to 1, then use the Constant to translate in methods below
+    extendoMotorLeft.configSelectedFeedbackCoefficient(Constants.SELECTED_FEEDBACK_COEFFICIENT);
     extendoMotorLeft.setNeutralMode(NeutralMode.Brake);
     extendoMotorLeft.setInverted(true);// Set motor inverted(set to true for left)
     extendoMotorLeft.setSensorPhase(false);
@@ -62,7 +68,7 @@ public class Climber extends SubsystemBase {
     extendoMotorRight.configFactoryDefault();
     // use the integrated sensor with the primary closed loop and timeout is 0.
     extendoMotorRight.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 0);
-    extendoMotorRight.configSelectedFeedbackCoefficient(1);//TODO:change this to 1, then use the Constant to translate in methods below
+    extendoMotorRight.configSelectedFeedbackCoefficient(Constants.SELECTED_FEEDBACK_COEFFICIENT);
     extendoMotorRight.setNeutralMode(NeutralMode.Brake);
     extendoMotorRight.setInverted(false);// Set motor not inverted(set to false for right)
     extendoMotorRight.setSensorPhase(true);
@@ -75,6 +81,10 @@ public class Climber extends SubsystemBase {
     extendoMotorRight.config_kI(0, Constants.EXTENDO_MOTOR_I);
     extendoMotorRight.config_kD(0, Constants.EXTENDO_MOTOR_D);
     extendoMotorRight.config_kF(0, Constants.EXTENDO_MOTOR_F);
+    extendoMotorRight.config_kP(1, Constants.EXTENDO_MOTOR_P_COMPENSATE);
+    extendoMotorRight.config_kI(1, Constants.EXTENDO_MOTOR_I_COMPENSATE);
+    extendoMotorRight.config_kD(1, Constants.EXTENDO_MOTOR_D_COMPENSATE);
+    extendoMotorRight.config_kF(1, Constants.EXTENDO_MOTOR_F_COMPENSATE);
     extendoMotorRight.configMotionCruiseVelocity(Constants.EXTENDO_CRUISE_VELOCITY);
     extendoMotorRight.configMotionAcceleration(Constants.EXTENDO_ACCELERATION);
     this.setRightSwitchEnabled(true);
@@ -89,6 +99,8 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Left Climb Encoder", getExtendoLeftEncPos());
     SmartDashboard.putNumber("Right Climb Encoder", getExtendoRightEncPos());
+    SmartDashboard.putBoolean("Left Climber Switch", getExtendoLeftSwitch());
+    SmartDashboard.putBoolean("Right Climber Switch", getExtendoRightSwitch());
   }
 
   /* ==================== Functions for the fixed arms ==================== */
@@ -97,14 +109,62 @@ public class Climber extends SubsystemBase {
    * 
    */
   public void climberTiltOut(){
-    tiltRobot.set(Value.kForward);
+    tiltRobot.set(Value.kReverse);
   }
 
   /**
    * 
    */
   public void climberTiltIn(){
-    tiltRobot.set(Value.kReverse);
+    tiltRobot.set(Value.kForward);
+  }
+/* ======================Functions for the pair of arms=====================*/
+  public void assignRemoteSensor(){
+    TalonFXConfiguration rightConfig = new TalonFXConfiguration();
+    TalonFXConfiguration leftConfig = new TalonFXConfiguration();
+    rightConfig.remoteFilter1.remoteSensorDeviceID = extendoMotorLeft.getDeviceID(); //Device ID of Remote Source
+		rightConfig.remoteFilter1.remoteSensorSource = RemoteSensorSource.TalonFX_SelectedSensor; //Remote Source Type
+    /* Master is not inverted, both sides are positive so we can diff them. */
+    rightConfig.diff0Term = TalonFXFeedbackDevice.RemoteSensor1.toFeedbackDevice();    //Aux Selected Sensor
+    rightConfig.diff1Term = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(); //Local IntegratedSensor
+    rightConfig.auxiliaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.SensorDifference.toFeedbackDevice(); //Sum0 + Sum1
+    /* With current diff terms, a counterclockwise rotation results in negative heading with a right master */
+    rightConfig.auxPIDPolarity = true;
+    //rightConfig.auxiliaryPID.selectedFeedbackCoefficient = Constants.kTurnTravelUnitsPerRotation / Constants.kEncoderUnitsPerRotation;
+    int closedLoopTimeMs = 1;
+		rightConfig.slot0.closedLoopPeriod = closedLoopTimeMs;
+		rightConfig.slot1.closedLoopPeriod = closedLoopTimeMs;
+    leftConfig.peakOutputForward = +1.0;
+		leftConfig.peakOutputReverse = -1.0;
+		rightConfig.peakOutputForward = +1.0;
+		rightConfig.peakOutputReverse = -1.0;
+    leftConfig.neutralDeadband = .001;
+		rightConfig.neutralDeadband = .001;
+    leftConfig.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();
+    extendoMotorLeft.configAllSettings(leftConfig);
+		extendoMotorRight.configAllSettings(rightConfig);
+    
+
+  }
+  public void speedSensorFeedback(){
+    extendoMotorRight.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 20);
+		extendoMotorRight.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 20);
+		extendoMotorRight.setStatusFramePeriod(StatusFrame.Status_14_Turn_PIDF1, 20);
+		extendoMotorLeft.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5);
+  }
+  public void slowSensorFeedback(){
+    extendoMotorRight.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 1000);
+		extendoMotorRight.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 1000);
+		extendoMotorRight.setStatusFramePeriod(StatusFrame.Status_14_Turn_PIDF1, 1000);
+		extendoMotorLeft.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 1000);
+  }
+  public void setBothMotors(double position){
+    extendoMotorRight.set(TalonFXControlMode.Position, position / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR, DemandType.AuxPID, 0.0);
+		extendoMotorLeft.follow(extendoMotorRight, FollowerType.AuxOutput1);
+  }
+  public void stopBothMotors(){
+    extendoMotorRight.set(ControlMode.PercentOutput, 0.0);
+    extendoMotorLeft.set(ControlMode.PercentOutput, 0.0);
   }
 
   /* ==================== Functions for the right extendo arm ==================== */
@@ -150,21 +210,21 @@ public class Climber extends SubsystemBase {
   }
   
   public double getExtendoRightEncPos() {
-    return extendoMotorRight.getSelectedSensorPosition() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
+    return extendoMotorRight.getSelectedSensorPosition() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;
   }
 
   public double getExtendoRightEncVel() {
-    return extendoMotorRight.getSelectedSensorVelocity() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
+    return extendoMotorRight.getSelectedSensorVelocity() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;
   }
 
   public void setExtendoRightEnc(double sensorPos) {
-    extendoMotorRight.setSelectedSensorPosition(sensorPos);
+    extendoMotorRight.setSelectedSensorPosition(sensorPos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);
   }
 
   /* ==================== Functions for the left extendo arm ==================== */
   
   public void extendoLeftSetPos(double pos) {
-    extendoMotorLeft.set(TalonFXControlMode.Position, pos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);//TODO: convert here by multipling pos by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
+    extendoMotorLeft.set(TalonFXControlMode.Position, pos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);
   }
 
   /**
@@ -204,15 +264,15 @@ public class Climber extends SubsystemBase {
   }
 
   public double getExtendoLeftEncPos() {
-    return extendoMotorLeft.getSelectedSensorPosition() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
+    return extendoMotorLeft.getSelectedSensorPosition() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;
   }
 
   public double getExtendoLeftEncVel() {
-    return extendoMotorLeft.getSelectedSensorVelocity() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;//TODO: convert here by dividing returned value by EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR
+    return extendoMotorLeft.getSelectedSensorVelocity() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;
   }
 
   public void setExtendoLeftEnc(double sensorPos) {
-    extendoMotorLeft.setSelectedSensorPosition(sensorPos);
+    extendoMotorLeft.setSelectedSensorPosition(sensorPos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);
   }
 
 }

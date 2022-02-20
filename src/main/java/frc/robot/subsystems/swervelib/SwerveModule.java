@@ -68,6 +68,12 @@ public class SwerveModule {
                           Constants.SWERVE_DRIVE_D_VALUE, Constants.SWERVE_DRIVE_FF_VALUE);
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);//TODO: rethink if we need this speed
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 239);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 252);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 263);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 274);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 286);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_15_FirmwareApiStatus, 297);
         driveMotor.setSelectedSensorPosition(0.0);
 
         //contruct and setup rotation falcon
@@ -82,9 +88,26 @@ public class SwerveModule {
         rotationMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setRotationMotorPIDF(Constants.SWERVE_ROT_P_VALUE, Constants.SWERVE_ROT_I_VALUE,
                           Constants.SWERVE_ROT_D_VALUE, Constants.SWERVE_ROT_FF_VALUE);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 200);//This packet is the motor output, limit switches, faults, we care about none of those
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 240);//This packet is the motor output, limit switches, faults, we care about none of those
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);//This is the sensor feedback, i.e. relative encoder
-
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 238);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 251);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 262);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 273);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 284);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_15_FirmwareApiStatus, 296);
+        // System.out.println( "Status_10_MotionMagic" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic));
+        // System.out.println( "Status_1_General" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_1_General));
+        // System.out.println( "11_UartGadgeteer" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer));
+        // System.out.println( "Status_13_Base_PIDF0" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0));
+        // System.out.println( "Status_14_Turn_PIDF1" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1));
+        // System.out.println( "Status_15_FirmwareApiStatus" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_15_FirmwareApiStatus));
+        // System.out.println( "Status_3_Quadrature" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature));
+        // System.out.println( "Status_4_AinTempVbat" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat));
+        // System.out.println( "Status_6_Misc" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc));
+        // System.out.println( "Status_7_CommStatus" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus));
+        // System.out.println( "Status_8_PulseWidth" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth));
+        // System.out.println( "Status_9_MotProfBuffer" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer));
         rotationMotor.setSelectedSensorPosition(0.0);
         rotationMotor.configAllowableClosedloopError(0, Constants.SWERVE_MODULE_TOLERANCE, 0); //TODO: Check for correct slotIdx
         
@@ -93,7 +116,8 @@ public class SwerveModule {
         rotateAbsSensor = new CANCoder(canCoderID);
         rotateAbsSensor.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         rotateAbsSensor.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 20);//The default on this is 10, but 20 might be better given our code loop rate
-        rotateAbsSensor.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 1000);
+        rotateAbsSensor.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 333);
+        System.out.println( "VbatFaults" + rotateAbsSensor.getStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults));
         // rotateAbsSensor.getStatusFramePeriod(frame);
     }
 

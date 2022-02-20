@@ -20,6 +20,6 @@ public class ShooterStop extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.shooter.stopMotors();
+    RobotContainer.shooter.stopShooterMotor();
   }
 }

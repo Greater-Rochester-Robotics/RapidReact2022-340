@@ -18,9 +18,11 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -37,14 +39,14 @@ public class Shooter extends SubsystemBase {
   CANSparkMax hoodMotor;
   RelativeEncoder hoodEncoder;
   SparkMaxPIDController pidController;
-  DigitalOutput hoodLimitSwitch;
+  DigitalInput hoodLimitSwitch;
 
   /** Creates a new Shooter. */
   public Shooter() {
     mainMotor = new TalonFX(Constants.MAIN_SHOOTER_MOTOR);
     mainMotor.configFactoryDefault();
     // mainMotor.configSelectedFeedbackCoefficient(coefficient);//TODO: set to an RPM based on the gear ratio
-    mainMotor.setNeutralMode(NeutralMode.Coast);
+    mainMotor.setNeutralMode(NeutralMode.Brake);
     mainMotor.setInverted(false);//TODO: check if, on robot, forward is out.
     mainMotor.enableVoltageCompensation(true);
     mainMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
@@ -57,29 +59,32 @@ public class Shooter extends SubsystemBase {
     mainMotor.config_kF(0, Constants.SHOOTER_MAIN_MOTOR_F);
     mainMotor.configAllowableClosedloopError(0, Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR);
     //TODO: uncomment, this was done because they needed to test an incomplete shooter
-    // hoodMotor = new CANSparkMax(Constants.SHOOTER_HOOD_MOTOR, MotorType.kBrushless);
-    // hoodMotor.restoreFactoryDefaults();
-    // hoodMotor.setIdleMode(IdleMode.kBrake);
-    // hoodMotor.enableVoltageCompensation(10.5);
-    // hoodMotor.setInverted(false); //TODO: check if this is right
+    hoodMotor = new CANSparkMax(Constants.SHOOTER_HOOD_MOTOR, MotorType.kBrushless);
+    hoodMotor.restoreFactoryDefaults();
+    hoodMotor.setIdleMode(IdleMode.kBrake);
+    hoodMotor.enableVoltageCompensation(10.5);
+    hoodMotor.setInverted(false); //TODO: check if this is right
 
-    // hoodEncoder = hoodMotor.getEncoder();
-    // hoodEncoder.setPositionConversionFactor(Constants.SHOOTER_HOOD_DEGREE_CONVERSION);
+    hoodEncoder = hoodMotor.getEncoder();
+    hoodEncoder.setPositionConversionFactor(Constants.SHOOTER_HOOD_DEGREE_CONVERSION);
 
-    // pidController = hoodMotor.getPIDController();
-    // pidController.setP(Constants.SHOOTER_HOOD_MOTOR_P);
-    // pidController.setI(Constants.SHOOTER_HOOD_MOTOR_I);
-    // pidController.setD(Constants.SHOOTER_HOOD_MOTOR_D);
-    // pidController.setFF(Constants.SHOOTER_HOOD_MOTOR_FF);
+    pidController = hoodMotor.getPIDController();
+    pidController.setP(Constants.SHOOTER_HOOD_MOTOR_P);
+    pidController.setI(Constants.SHOOTER_HOOD_MOTOR_I);
+    pidController.setD(Constants.SHOOTER_HOOD_MOTOR_D);
+    pidController.setFF(Constants.SHOOTER_HOOD_MOTOR_FF);//TODO: May need arbitrary ff
 
-    // hoodMotor.burnFlash();
+    hoodMotor.burnFlash();
 
-    hoodLimitSwitch = new DigitalOutput(Constants.SHOOTER_HOOD_SWITCH);
+    hoodLimitSwitch = new DigitalInput(Constants.SHOOTER_HOOD_SWITCH);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("HoodLimit", !hoodLimitSwitch.get());
+    SmartDashboard.putNumber("Hood Position", getHoodPosition());
+    SmartDashboard.putNumber("Shooter Speed", getSpeed());
   }
 
   public double getSpeed(){
@@ -103,8 +108,12 @@ public class Shooter extends SubsystemBase {
             (goalSpeed * (1.00 + speedError) >= getSpeed()));
   }
 
-  public void stopMotors(){
+  public void stopShooterMotor(){
     mainMotor.set(TalonFXControlMode.PercentOutput, 0.0);
+  }
+
+  public void stopHoodMotor(){
+    hoodMotor.set(0.0);
   }
 
   /**
@@ -137,7 +146,7 @@ public class Shooter extends SubsystemBase {
    */
   public boolean homeHoodPosition() {
     hoodMotor.set(-1);
-    if(hoodLimitSwitch.get()) {
+    if(!hoodLimitSwitch.get()) {
       resetHoodEncoderPosition();
       hoodMotor.set(0.0);
       return true;

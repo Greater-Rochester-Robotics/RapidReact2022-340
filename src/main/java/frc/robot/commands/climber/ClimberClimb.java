@@ -24,7 +24,7 @@ public class ClimberClimb extends SequentialCommandGroup {
     addCommands(
       new ClimberExtendoHome().withName("StartClimber"),
       new ClimberExtendoToPosition(Constants.CLIMBER_TOP_POSITION).withName("ExtendToSecondBar"),
-      new WaitUntilCommand(Robot.robotContainer.driverB).withName("WaitToPullUp"),
+      new WaitUntilCommand(Robot.robotContainer.getClimberButton()::get).withName("WaitToPullUp"),
       new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION).withName("PullUpToSecondBar"),
       new WaitUntilCommand(Robot.robotContainer.getClimberButton()::get).withName("WaitToTiltRobot"),
       parallel(

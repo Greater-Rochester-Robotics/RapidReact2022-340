@@ -39,6 +39,7 @@ public class BallHandler extends SubsystemBase {
   RelativeEncoder handleEncoders[];
   double[] speeds = new double[4];
   double[] currentSpeeds = new double[] { 0.0, 0.0, 0.0, 0.0};
+  boolean isSelectorReversed;
   DigitalInput ballSensor0;
   DigitalInput ballSensor1;
   ColorSensorV3 colorSensor; 
@@ -68,7 +69,7 @@ public class BallHandler extends SubsystemBase {
     harvesterTilt = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
       Constants.HARVESTER_TILT_IN, Constants.HARVESTER_TILT_OUT);
     harvesterMotor = new VictorSPX(Constants.HARVESTER_MOTOR);
-    harvesterMotor.setInverted(false);
+    harvesterMotor.setInverted(true);
     harvesterMotor.setNeutralMode(NeutralMode.Coast);
     harvesterMotor.configVoltageCompSaturation(10.5);
 
@@ -96,15 +97,16 @@ public class BallHandler extends SubsystemBase {
     selectorTimer.reset();
     selectorTimer.start();
 
+    isSelectorReversed = false;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Red Color", colorSensor.getRed());
-    SmartDashboard.putNumber("Blue Color", colorSensor.getBlue());
-    SmartDashboard.putNumber("Proximity", colorSensor.getProximity());
-    SmartDashboard.putBoolean("connected",colorSensor.isConnected());
+    // SmartDashboard.putNumber("Red Color", colorSensor.getRed());
+    // SmartDashboard.putNumber("Blue Color", colorSensor.getBlue());
+    // SmartDashboard.putNumber("Proximity", colorSensor.getProximity());
+    // SmartDashboard.putBoolean("connected",colorSensor.isConnected());
 
     //BallHandler State Machine
     switch(state){
@@ -174,23 +176,27 @@ public class BallHandler extends SubsystemBase {
     }
 
     //if timer reset, run spit out timer for half second
-    if(!selectorTimer.hasElapsed(0.5)){
+    if(!selectorTimer.hasElapsed(0.5) && !isSelectorReversed){
       handlerMotors[0].setInverted(true);
-    }
-    else{
+      isSelectorReversed = true;
+    }else if(selectorTimer.hasElapsed(0.5) && isSelectorReversed){
       handlerMotors[0].setInverted(false);
+      isSelectorReversed = false;
     }
+
+    SmartDashboard.putBoolean("ball0", isBall0());
+    SmartDashboard.putBoolean("ball1", isBall1());
 
     //store current state as prevState for next loop
     prevState = state;
   }
   
   public void tiltIn(){
-    harvesterTilt.set(Value.kReverse);
+    harvesterTilt.set(Value.kForward);
   }
 
   public void tiltOut(){
-    harvesterTilt.set(Value.kForward);
+    harvesterTilt.set(Value.kReverse);
   }
 
   // public void intake(){
@@ -206,11 +212,11 @@ public class BallHandler extends SubsystemBase {
   // }
 
   public boolean isBall0(){
-    return ballSensor0.get();
+    return !ballSensor0.get();
   }
   
   public boolean isBall1(){
-    return ballSensor1.get();
+    return !ballSensor1.get();
   }
 
   public boolean shouldIntakeBall(){

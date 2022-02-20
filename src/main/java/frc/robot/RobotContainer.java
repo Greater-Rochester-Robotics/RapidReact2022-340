@@ -24,6 +24,8 @@ import frc.robot.commands.climber.ClimberClimb;
 import frc.robot.commands.climber.ClimberExtendIn;
 import frc.robot.commands.climber.ClimberExtendOut;
 import frc.robot.commands.climber.ClimberExtendoToPosition;
+import frc.robot.commands.climber.ClimberTiltIn;
+import frc.robot.commands.climber.ClimberTiltOut;
 import frc.robot.commands.drive.DriveFieldRelative;
 import frc.robot.commands.drive.DriveFieldRelativeAdvanced;
 import frc.robot.commands.drive.DriveRobotCentric;
@@ -37,7 +39,9 @@ import frc.robot.commands.drive.util.DriveResetAllModulePositionsToZero;
 import frc.robot.commands.drive.util.DriveResetGyroToZero;
 import frc.robot.commands.drive.util.DriveTuneDriveMotorFeedForward;
 import frc.robot.commands.drive.util.DriveTurnToAngle;
+import frc.robot.commands.shooter.ShooterHoodToPosition;
 import frc.robot.commands.shooter.ShooterPercentOutput;
+import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.BallHandler;
@@ -118,8 +122,8 @@ public class RobotContainer {
 
     //create(construct) subsystems
     compressor = new Compressor();//Let's keep compressor first
-    // swerveDrive = new SwerveDrive();
-    // climber = new Climber();
+    swerveDrive = new SwerveDrive();
+    climber = new Climber();
     ballHandler = new BallHandler();
     // limeLight = new LimeLight();
     shooter = new Shooter();
@@ -152,13 +156,15 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    driverA.whileHeld(new ShooterPercentOutput(.8));//new ClimberExtendoToPosition(Constants.CLIMBER_MIDDLE_POSITION));
-    driverB.whenPressed(new BallHandlerSetState(State.kShoot0));//ClimberExtendIn());//ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION));
+    driverA.whileHeld(new ShooterSetSpeed(15000));//ShooterPercentOutput(.8));//new ClimberExtendoToPosition(Constants.CLIMBER_MIDDLE_POSITION));
+    driverB.whenPressed(new BallHandlerSetState(State.kFillTo1));//ClimberExtendIn());//ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION));
     driverB.whenReleased(new BallHandlerSetState(State.kOff));
-    // driverX.whenPressed(new DriveTurnToAngle(0));
-    // driverY.whenPressed(new DriveTurnToAngle(Constants.PI_OVER_TWO));
+    // driverX.whenPressed(new ClimberTiltOut());
+    // driverX.whenReleased(new ClimberTiltIn());
+    driverY.whenPressed(new BallHandlerSetState(State.kSpitMid));
+    driverY.whenReleased(new BallHandlerSetState(State.kOff));
     // driverLB.whenPressed(new DriveResetGyroToZero());
-    // driverRB.whileHeld(new DriveFollowTrajectory("DriveStraight", false));
+    driverRB.whileHeld(new ShooterHoodToPosition(8));
   
     // driverBack.whenPressed(new DriveRobotCentric());
     // driverStart.whenPressed(new DriveFieldRelativeAdvanced());
