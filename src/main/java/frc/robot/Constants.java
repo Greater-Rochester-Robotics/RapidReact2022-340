@@ -55,6 +55,10 @@ public final class Constants {
     public static final double SWERVE_ROT_PID_VOLTAGE_MINIMUM = -12.0;//This is left over from NEO550
     public static final double SWERVE_ROT_PID_VOLTAGE_MAXIMUM = 12.0;//This is left over from NEO550
     public static final double SWERVE_MODULE_TOLERANCE = 0.1;//TODO: this is scaled from the NEO550, needs adjust for Falcon500
+    public static final double ROTATIONAL_VELOCITY_TOLERANCE = 1.0;
+
+    /* */
+    public static final double LL_ANGLE_TOLERANCE = 1.0;
 
     /* Robot Motion PID controller constants */
     public static final double ROBOT_SPIN_P = 1.1;//tuned for drive/climber bot
@@ -85,7 +89,7 @@ public final class Constants {
     
     /* Compressor Pressure Constants */
     public static final double MIN_PRESSURE = 95.0;
-    public static final double MAX_PRESSURE = 120.0;
+    public static final double MAX_PRESSURE = 100.0;
 
     /* Harvester Constants */
     public static final double HARVESTER_INTAKE_SPEED = 0.6;
@@ -108,7 +112,7 @@ public final class Constants {
 
     /* Shooter Constants */
     public static final int SHOOTER_HOOD_MOTOR_COUNTS_PER_REV = 5000; //TODO: get actual counts per revolution
-    public static final double SHOOTER_HOOD_DEGREE_CONVERSION = 30.0 * 32.0 / 7.0 / 51.0;// gear ratio on the versa, 7:1 ratio w/ 30T gear, 51T rack, 32 degrees
+    public static final double SHOOTER_HOOD_DEGREE_CONVERSION = 30.0 * 32.0 / 35.0 / 51.0;// gear ratio on the versa, 5:1+7:1 ratio w/ 30T gear, 51T rack, 32 degrees
     
     public static final double SHOOTER_MAIN_MOTOR_P = 2.5;
     public static final double SHOOTER_MAIN_MOTOR_I = 0.0;
@@ -138,7 +142,7 @@ public final class Constants {
     public static final double EXTENDO_CRUISE_VELOCITY = 15.0;
     public static final double EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR = 5.105 / 24576;
     public static final double EXTENDO_ACCELERATION = 6.0;
-    public static final double EXTENDO_HOMING_CURRENT = 20.0;//TODO: is this too big?
+    public static final double EXTENDO_HOMING_CURRENT = 20.0;
     public static final double EXTENDO_ALLOWABLE_ERROR = 0.25;
 
     public static final double CLIMBER_TOP_POSITION = 24;

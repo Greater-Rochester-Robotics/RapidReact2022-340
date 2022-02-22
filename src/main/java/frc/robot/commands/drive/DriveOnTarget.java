@@ -13,12 +13,12 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
-public class DriveTurnToTarget extends CommandBase {
+public class DriveOnTarget extends CommandBase {
   Timer timer = new Timer();
   boolean hasHadTarget;
   double setPointAngle;
 
-  public DriveTurnToTarget() {
+  public DriveOnTarget() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.swerveDrive, RobotContainer.limeLight);
   }
@@ -65,10 +65,21 @@ public class DriveTurnToTarget extends CommandBase {
     // Set the rotate to angle to the target if limelight sees it
     
 
+    // Sets away and lateral speeds using driver axis
+    double  awaySpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftY);
+    double lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftX);
+    // Check if secondary sticks are being used
+    if(Math.abs(Robot.robotContainer.getDriverAxis(Axis.kRightY))>.1 ||
+       Math.abs(Robot.robotContainer.getDriverAxis(Axis.kRightX))>.1){
+      // If secondary sticks used, replace with secondary sticks witha slow factor
+      awaySpeed = Robot.robotContainer.getDriverAxis(Axis.kRightY)*.5;
+      lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightX)*.5;
+    }
+
     // Drive robot using driver axis and rotateToAngle
     RobotContainer.swerveDrive.driveFieldRelative(
-      0.0,
-      0.0,
+      awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
+      lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
       RobotContainer.swerveDrive.getRobotRotationPIDOut(setPointAngle), 
       false
     );
@@ -77,14 +88,12 @@ public class DriveTurnToTarget extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.swerveDrive.stopAllModules();
+    RobotContainer.limeLight.setLightState(1);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.limeLight.haveTarget() 
-          && Math.abs(RobotContainer.swerveDrive.getRotationalVelocity()) < Constants.ROTATIONAL_VELOCITY_TOLERANCE 
-          && Math.abs(RobotContainer.limeLight.angleToTarget()) < Constants.LL_ANGLE_TOLERANCE;
+    return false;
   }
 }

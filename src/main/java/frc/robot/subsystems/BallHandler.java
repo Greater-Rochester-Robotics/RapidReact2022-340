@@ -171,10 +171,11 @@ public class BallHandler extends SubsystemBase {
     }
 
     //If the wrong ball color is detected, reset spitout timer
-    if((state == State.kFillTo1 || state == State.kFillTo0) && !shouldIntakeBall()){
+    if(!shouldIntakeBall() && (state == State.kFillTo1 || state == State.kFillTo0)){//TODO:rob reverse this again-rob
       selectorTimer.reset();
     }
 
+    // System.out.println("should ball "+ shouldIntakeBall());
     //if timer reset, run spit out timer for half second
     if(!selectorTimer.hasElapsed(0.5) && !isSelectorReversed){
       handlerMotors[0].setInverted(true);
@@ -225,6 +226,8 @@ public class BallHandler extends SubsystemBase {
     int blue = colorSensor.getBlue();
     int red = colorSensor.getRed();
 
+    System.out.println("prox"+proximity+"blue diff red "+(blue - red));
+
     if(!colorSensor.isConnected() || (proximity == 0 && blue == 0 && red == 0)) {
       return true;
     }
@@ -239,8 +242,9 @@ public class BallHandler extends SubsystemBase {
       else{
         return true;
       }
+    }else{
+      return true;
     }
-    return true;
   }
   
   public void setState(State state){

@@ -31,6 +31,7 @@ public class SwerveDrive extends SubsystemBase {
   private SwerveDriveKinematics driveKinematics;
   public SwerveDriveOdometry driveOdometry;
   public PIDController robotSpinController;
+  private boolean hasPosBeenSet = false;
 
   /**
    * This enumeration clarifies the numbering of the swerve module for new users.
@@ -81,6 +82,7 @@ public class SwerveDrive extends SubsystemBase {
     //construct the wpilib PIDcontroller for rotation.
     robotSpinController = new PIDController(Constants.ROBOT_SPIN_P, Constants.ROBOT_SPIN_I, Constants.ROBOT_SPIN_D);
 
+    hasPosBeenSet = false;
   }
 
   @Override
@@ -207,6 +209,16 @@ public class SwerveDrive extends SubsystemBase {
    */
   public void setCurPose2d(Pose2d pose) {
     driveOdometry.resetPosition(pose, getGyroRotation2d());
+    hasPosBeenSet = true;
+  }
+
+  /**
+   * Returns whether or not the position of the robo on the 
+   * field is known because Pose2D has been set
+   * @return
+   */
+  public boolean hasPosBeenSet() {
+    return hasPosBeenSet;
   }
 
   /**

@@ -11,16 +11,22 @@ import frc.robot.Constants;
 
 public class Compressor extends SubsystemBase {
   PneumaticHub pneumaticHub;
+  int count;
   /** Creates a new Compressor. */
   public Compressor() {
     pneumaticHub = new PneumaticHub();
     pneumaticHub.enableCompressorAnalog(Constants.MIN_PRESSURE, Constants.MAX_PRESSURE);
+    count = 0;
   }
 
   @Override
   public void periodic() {
     // push value of getPressure() to SmartDashboard, round the output before pushing to SD. decimal is not needed
-    SmartDashboard.putNumber("Pressure", Math.round(getPressure()));
+    if(count == 0){
+      SmartDashboard.putNumber("Pressure", Math.round(getPressure()));
+    }else if(count > 10){
+      count = 0;
+    }
   }
 
   /**

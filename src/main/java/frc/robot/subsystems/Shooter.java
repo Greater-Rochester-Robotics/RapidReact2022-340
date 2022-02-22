@@ -145,12 +145,14 @@ public class Shooter extends SubsystemBase {
    * create a homeMethod that returns a true when limit switch is pressed, and drives motor backwards with percentVoltage.(this would be using hoodMotor.set) use the previous resetPosition
    */
   public boolean homeHoodPosition() {
-    hoodMotor.set(-1);
+    
     if(!hoodLimitSwitch.get()) {
       resetHoodEncoderPosition();
       hoodMotor.set(0.0);
       return true;
+    }else{
+      hoodMotor.set(-.10);
+      return false;
     }
-    return false;
   }
 }
