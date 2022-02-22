@@ -7,19 +7,23 @@ package frc.robot.commands.drive;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class DriveTurnToTarget extends CommandBase {
   Timer timer = new Timer();
   boolean hasHadTarget;
   double setPointAngle;
+  double offsetDistance;//TODO: impliment so we can shoot off to the side of the goal
 
-  public DriveTurnToTarget() {
+  public DriveTurnToTarget(){
+    this(0.0);
+  }
+
+  public DriveTurnToTarget(double offsetDistance) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.offsetDistance = offsetDistance;
     addRequirements(RobotContainer.swerveDrive, RobotContainer.limeLight);
   }
 
@@ -44,7 +48,7 @@ public class DriveTurnToTarget extends CommandBase {
     // Point robot in the general direction of the target if the limelight doesn't see the target
     if(isOnTarget) {
       setPointAngle = RobotContainer.swerveDrive.getGyroInRad() - Math.toRadians(RobotContainer.limeLight.angleToTarget());
-    }else if(!hasHadTarget && timer.hasElapsed(.2)){
+    }else if(RobotContainer.swerveDrive.hasPoseBeenSet() && !hasHadTarget && timer.hasElapsed(.2)){
       // Finds where we are relative to the center of the field
       Translation2d target = RobotContainer.swerveDrive.driveOdometry.getPoseMeters().getTranslation().minus(Constants.FIELD_CENTER);
       double desiredAngle = Math.atan2(target.getY(), target.getX());

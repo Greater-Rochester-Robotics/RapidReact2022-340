@@ -17,9 +17,15 @@ public class DriveOnTarget extends CommandBase {
   Timer timer = new Timer();
   boolean hasHadTarget;
   double setPointAngle;
+  double offsetDistance;//TODO: impliment so we can shoot off to the side of the goal
 
-  public DriveOnTarget() {
+  public DriveOnTarget(){
+    this(0.0);
+  }
+
+  public DriveOnTarget(double offsetDistance) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.offsetDistance = offsetDistance;
     addRequirements(RobotContainer.swerveDrive, RobotContainer.limeLight);
   }
 
@@ -44,7 +50,7 @@ public class DriveOnTarget extends CommandBase {
     // Point robot in the general direction of the target if the limelight doesn't see the target
     if(isOnTarget) {
       setPointAngle = RobotContainer.swerveDrive.getGyroInRad() - Math.toRadians(RobotContainer.limeLight.angleToTarget());
-    }else if(!hasHadTarget && timer.hasElapsed(.2)){
+    }else if(RobotContainer.swerveDrive.hasPoseBeenSet() && !hasHadTarget && timer.hasElapsed(.2)){
       // Finds where we are relative to the center of the field
       Translation2d target = RobotContainer.swerveDrive.driveOdometry.getPoseMeters().getTranslation().minus(Constants.FIELD_CENTER);
       double desiredAngle = Math.atan2(target.getY(), target.getX());

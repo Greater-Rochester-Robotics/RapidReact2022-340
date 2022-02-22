@@ -71,4 +71,19 @@ public class LimeLight extends SubsystemBase {
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0); //returns the vertical angle offset
   }
 
+  public double getShooterHighSpeed(){
+    return 0.0;//TODO:link to look up table
+  }
+
+  public double getShooterLowSpeed(){
+    return 0.0;//TODO:link to look up table
+  }
+
+  public double getHoodHighAngle(){
+    return 0.0;//TODO:link to look up table
+  }
+
+  public double getHoodLowAngle(){
+    return 0.0;//TODO:link to look up table
+  }
 }

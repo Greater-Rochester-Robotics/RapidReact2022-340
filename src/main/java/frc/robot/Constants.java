@@ -20,7 +20,7 @@ public final class Constants {
     public static final double PI_OVER_TWO = Math.PI/2;
     public static final double THREE_PI_OVER_TWO = 3*PI_OVER_TWO;
     public static final double TWO_PI = 2*Math.PI;
-    public static final Rotation2d ROTATE_BY_PI = Rotation2d.fromDegrees(180);
+    public static final Rotation2d ROTATE_BY_PI = Rotation2d.fromDegrees(180);//I only make this once
 
     /* Swerve Module Positions */
     public static final Translation2d FRONT_LEFT_POSITION = new Translation2d(.3016,.3016);//These are in meters
@@ -51,14 +51,11 @@ public final class Constants {
     public static final double SWERVE_ROT_D_VALUE = 0.05; 
     public static final double SWERVE_ROT_I_ZONE_VALUE = 0;
     public static final double SWERVE_ROT_FF_VALUE = 0.0;
-    public static final double SWERVE_ROT_ARB_FF_VOLTAGE = 0.0;//This is left over from NEO550
-    public static final double SWERVE_ROT_PID_VOLTAGE_MINIMUM = -12.0;//This is left over from NEO550
-    public static final double SWERVE_ROT_PID_VOLTAGE_MAXIMUM = 12.0;//This is left over from NEO550
+    // public static final double SWERVE_ROT_ARB_FF_VOLTAGE = 0.0;//This is left over from NEO550 consider deleting
+    // public static final double SWERVE_ROT_PID_VOLTAGE_MINIMUM = -12.0;//This is left over from NEO550 consider deleting
+    // public static final double SWERVE_ROT_PID_VOLTAGE_MAXIMUM = 12.0;//This is left over from NEO550 consider deleting
     public static final double SWERVE_MODULE_TOLERANCE = 0.1;//TODO: this is scaled from the NEO550, needs adjust for Falcon500
     public static final double ROTATIONAL_VELOCITY_TOLERANCE = 1.0;
-
-    /* */
-    public static final double LL_ANGLE_TOLERANCE = 1.0;
 
     /* Robot Motion PID controller constants */
     public static final double ROBOT_SPIN_P = 1.1;//tuned for drive/climber bot
@@ -86,10 +83,8 @@ public final class Constants {
     public static final double DRIVER_SPEED_SCALE_LINEAR = 0.4;
     public static final double DRIVER_SPEED_SCALE_ROTATIONAL = 1.5;
 
-    
-    /* Compressor Pressure Constants */
-    public static final double MIN_PRESSURE = 95.0;
-    public static final double MAX_PRESSURE = 100.0;
+    /* Limelight Values*/
+    public static final double LL_ANGLE_TOLERANCE = 1.0;
 
     /* Harvester Constants */
     public static final double HARVESTER_INTAKE_SPEED = 0.6;
@@ -111,20 +106,38 @@ public final class Constants {
     public static final int INTAKE_PROXIMITY = 500;
 
     /* Shooter Constants */
-    public static final int SHOOTER_HOOD_MOTOR_COUNTS_PER_REV = 5000; //TODO: get actual counts per revolution
-    public static final double SHOOTER_HOOD_DEGREE_CONVERSION = 30.0 * 32.0 / 35.0 / 51.0;// gear ratio on the versa, 5:1+7:1 ratio w/ 30T gear, 51T rack, 32 degrees
-    
+    public static final int SHOOTER_MOTOR_PUSLES_PER_REV = 5000; //TODO: get actual counts per revolution
+
     public static final double SHOOTER_MAIN_MOTOR_P = 2.5;
     public static final double SHOOTER_MAIN_MOTOR_I = 0.0;
     public static final double SHOOTER_MAIN_MOTOR_D = 0.0;
     public static final double SHOOTER_MAIN_MOTOR_F = 0.0;
 
-    public static final double SHOOTER_HOOD_MOTOR_P = 0.5;//TODO: This probably needs to be smaller once it gets mechanically fixed
-    public static final double SHOOTER_HOOD_MOTOR_I = 0.0;
-    public static final double SHOOTER_HOOD_MOTOR_D = 0.0;
-    public static final double SHOOTER_HOOD_MOTOR_FF = 0.0;
+    public static final double SHOOTER_MOTOR_ALLOWABLE_ERROR = 0.0;//TODO: get a real number here, and this is in pulses, so rescale maybe
+    
+    public static final double SHOOOTER_PREP_SPEED = 100;
+    public static final LookUpTable SHOOTER_SPEEDS_TABLE = new LookUpTable();
+    static {
+        //use put(distance, speed)
+        SHOOTER_SPEEDS_TABLE.put(5, 8000);
+       
+    }
 
-    public static final double SHOOTER_MOTOR_ALLOWABLE_ERROR = 0.0;
+    /* Hood Constants */
+    public static final double HOOD_DEGREE_CONVERSION = 30.0 * 32.0 / 35.0 / 51.0;// gear ratio on the versa, 5:1+7:1 ratio w/ 30T gear, 51T rack, 32 degrees
+    
+    public static final double HOOD_MOTOR_P = 0.5;//This seems to work
+    public static final double HOOD_MOTOR_I = 0.0;
+    public static final double HOOD_MOTOR_D = 0.0;;
+    public static final double HOOD_MOTOR_FF = 0.0;
+
+    public static final double HOOD_HOMING_SPEED = -.10;
+    public static final LookUpTable HOOD_POSITION_TABLE = new LookUpTable();
+    static {
+        //use put(distance, angle)
+        HOOD_POSITION_TABLE.put(5, 8);
+       
+    }
 
     /* Climber Constants */
     public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.3;//This is for testing up 
@@ -151,13 +164,17 @@ public final class Constants {
 
     public static final int SELECTED_FEEDBACK_COEFFICIENT = 1;
 
+    /* Compressor Pressure Constants */
+    public static final double MIN_PRESSURE = 95.0;
+    public static final double MAX_PRESSURE = 100.0;//TODO: change this on comp bot, the sensor on prac is broken
+
     /* IDENTIFICATION NUMBERS FOR DEVICES */
 
     /* CTRE motor and sensors */
     public static final int CLIMBER_LEFT_ARM = 52;//Climber
     public static final int CLIMBER_RIGHT_ARM = 53;//Climber
 
-    public static final int MAIN_SHOOTER_MOTOR = 20;//Shooter
+    public static final int SHOOTER_SHOOTING_MOTOR = 20;//Shooter
 
     public static final int HARVESTER_MOTOR = 21;//Handler
 

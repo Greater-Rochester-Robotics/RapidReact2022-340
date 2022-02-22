@@ -34,8 +34,7 @@ import frc.robot.Constants;
  */
 public class Shooter extends SubsystemBase { 
   private static final double speedError = 0.01;
-  private double goalSpeed;
-  TalonFX mainMotor;
+  TalonFX shooterMotor;
   CANSparkMax hoodMotor;
   RelativeEncoder hoodEncoder;
   SparkMaxPIDController pidController;
@@ -43,36 +42,36 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shooter. */
   public Shooter() {
-    mainMotor = new TalonFX(Constants.MAIN_SHOOTER_MOTOR);
-    mainMotor.configFactoryDefault();
-    // mainMotor.configSelectedFeedbackCoefficient(coefficient);//TODO: set to an RPM based on the gear ratio
-    mainMotor.setNeutralMode(NeutralMode.Brake);
-    mainMotor.setInverted(false);//TODO: check if, on robot, forward is out.
-    mainMotor.enableVoltageCompensation(true);
-    mainMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
-    mainMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
-    mainMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
+    shooterMotor = new TalonFX(Constants.SHOOTER_SHOOTING_MOTOR);
+    shooterMotor.configFactoryDefault();
+    // mainMotor.configSelectedFeedbackCoefficient(coefficient);//do not set, best to let motor be in ticks
+    shooterMotor.setNeutralMode(NeutralMode.Coast);//TODO: find if the was suposed to be in brake
+    shooterMotor.setInverted(false);//on robot no inversion needed
+    shooterMotor.enableVoltageCompensation(true);
+    shooterMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
+    shooterMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 10);
+    shooterMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10);
 
-    mainMotor.config_kP(0, Constants.SHOOTER_MAIN_MOTOR_P);
-    mainMotor.config_kI(0, Constants.SHOOTER_MAIN_MOTOR_I);
-    mainMotor.config_kD(0, Constants.SHOOTER_MAIN_MOTOR_D);
-    mainMotor.config_kF(0, Constants.SHOOTER_MAIN_MOTOR_F);
-    mainMotor.configAllowableClosedloopError(0, Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR);
-    //TODO: uncomment, this was done because they needed to test an incomplete shooter
+    shooterMotor.config_kP(0, Constants.SHOOTER_MAIN_MOTOR_P);
+    shooterMotor.config_kI(0, Constants.SHOOTER_MAIN_MOTOR_I);
+    shooterMotor.config_kD(0, Constants.SHOOTER_MAIN_MOTOR_D);
+    shooterMotor.config_kF(0, Constants.SHOOTER_MAIN_MOTOR_F);
+    shooterMotor.configAllowableClosedloopError(0, Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR);
+    
     hoodMotor = new CANSparkMax(Constants.SHOOTER_HOOD_MOTOR, MotorType.kBrushless);
     hoodMotor.restoreFactoryDefaults();
     hoodMotor.setIdleMode(IdleMode.kBrake);
     hoodMotor.enableVoltageCompensation(10.5);
-    hoodMotor.setInverted(false); //TODO: check if this is right
+    hoodMotor.setInverted(false); //this is the right direction
 
     hoodEncoder = hoodMotor.getEncoder();
-    hoodEncoder.setPositionConversionFactor(Constants.SHOOTER_HOOD_DEGREE_CONVERSION);
+    hoodEncoder.setPositionConversionFactor(Constants.HOOD_DEGREE_CONVERSION);
 
     pidController = hoodMotor.getPIDController();
-    pidController.setP(Constants.SHOOTER_HOOD_MOTOR_P);
-    pidController.setI(Constants.SHOOTER_HOOD_MOTOR_I);
-    pidController.setD(Constants.SHOOTER_HOOD_MOTOR_D);
-    pidController.setFF(Constants.SHOOTER_HOOD_MOTOR_FF);//TODO: May need arbitrary ff
+    pidController.setP(Constants.HOOD_MOTOR_P);
+    pidController.setI(Constants.HOOD_MOTOR_I);
+    pidController.setD(Constants.HOOD_MOTOR_D);
+    pidController.setFF(Constants.HOOD_MOTOR_FF);//changed gearbox, no FF needed
 
     hoodMotor.burnFlash();
 
@@ -87,62 +86,75 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter Speed", getSpeed());
   }
 
+  /**
+   * Gets the RPM of the shooter
+   * @return in revolutions per minute
+   */
   public double getSpeed(){
-    return mainMotor.getSelectedSensorVelocity();
+    return shooterMotor.getSelectedSensorVelocity() / Constants.SHOOTER_MOTOR_PUSLES_PER_REV ;
   }
 
+  /**
+   * sets the setpoint on the shooter motor,
+   * @param speed speed in RPM
+   */
   public void setSpeed(double speed){
-    mainMotor.set(TalonFXControlMode.Velocity, speed);
+    shooterMotor.set(TalonFXControlMode.Velocity, speed * Constants.SHOOTER_MOTOR_PUSLES_PER_REV);
   }
 
   public void setOutput(double percentOutput){
-    mainMotor.set(TalonFXControlMode.PercentOutput, percentOutput);
+    shooterMotor.set(TalonFXControlMode.PercentOutput, percentOutput);
   }
   
   /**
-   * @return if it is at speed within tolerance
+   * @return if shooter is at speed, within tolerance
    */
-  public boolean isAtSpeed(double goalSpeed) {
-    //TalonFX has an isAtSpeed() with tolerance already
-    return ((goalSpeed * (1.00 - speedError) <= getSpeed()) && 
-            (goalSpeed * (1.00 + speedError) >= getSpeed()));
-  }
-
-  public void stopShooterMotor(){
-    mainMotor.set(TalonFXControlMode.PercentOutput, 0.0);
-  }
-
-  public void stopHoodMotor(){
-    hoodMotor.set(0.0);
+  public boolean isAtSpeed() {
+    return Math.abs(shooterMotor.getClosedLoopError()) < Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR;
   }
 
   /**
-   * create a setHoodPosition for the hoodMotor. use the pidController object to set in method
+   * stops the shooter motor
+   */
+  public void stopShooterMotor(){
+    shooterMotor.set(TalonFXControlMode.PercentOutput, 0.0);
+  }
+
+
+  /**
+   * A method to use the pidController to set the hood to an angle
    */
   public void setHoodPosition(double hoodPos) {
     pidController.setReference(hoodPos, ControlType.kPosition);
   }
 
   /**
-   * create accessor method for the position of the hood. use the sparkmax encoderObject as source
+   * Accessor method for the position of the hood. 
    */
   public double getHoodPosition() {
     return hoodEncoder.getPosition();
   }
 
   /**
-   * create reset position modifier method that will set the position of the encoder object. this will act as our reset device, use setPosion of encoder object
+   * Create reset position modifier method that will set the position of the encoder object. this will act as our reset device, use setPosion of encoder object
    */
   public void resetHoodEncoderPosition(){
     resetHoodEncoderPosition(0);
   }
   
+  /**
+   * Set the current position of the hood to the 
+   * @param position
+   */
   public void resetHoodEncoderPosition(double position) {
     hoodEncoder.setPosition(position);
   }
 
   /**
-   * create a homeMethod that returns a true when limit switch is pressed, and drives motor backwards with percentVoltage.(this would be using hoodMotor.set) use the previous resetPosition
+   * A homeMethod that returns a true when limit switch is 
+   * pressed, and drives motor backwards with percentVoltage.
+   * It resets the hood encoder with resetHoodEncoderPosition
+   * when the switch is pressed.
    */
   public boolean homeHoodPosition() {
     
@@ -151,8 +163,15 @@ public class Shooter extends SubsystemBase {
       hoodMotor.set(0.0);
       return true;
     }else{
-      hoodMotor.set(-.10);
+      hoodMotor.set(Constants.HOOD_HOMING_SPEED);
       return false;
     }
+  }
+
+  /**
+   * Stops the hood motor
+   */
+  public void stopHoodMotor(){
+    hoodMotor.set(0.0);
   }
 }

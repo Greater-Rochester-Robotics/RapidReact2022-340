@@ -19,6 +19,6 @@ public class BallHandlerIntakeIn extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.ballHandler.tiltIn();
+    RobotContainer.ballHandler.harvesterIn();
   }
 }

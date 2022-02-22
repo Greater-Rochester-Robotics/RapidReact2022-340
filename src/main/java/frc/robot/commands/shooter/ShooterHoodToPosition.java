@@ -4,22 +4,39 @@
 
 package frc.robot.commands.shooter;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class ShooterHoodToPosition extends CommandBase {
-  public double position;
+  private double position;
+  private DoubleSupplier positionSupplier;
+  private boolean positionSupplierMode;
+
   /** Creates a new ShooterHoodToPosition. */
   public ShooterHoodToPosition(double position) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooter);
+    positionSupplierMode = false;
     this.position = position;
+  }
+
+  /** Creates a new ShooterHoodToPosition. */
+  public ShooterHoodToPosition(DoubleSupplier positionSupplier) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(RobotContainer.shooter);
+    positionSupplierMode = true;
+    this.positionSupplier = positionSupplier;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if(positionSupplierMode){
+      position = positionSupplier.getAsDouble();
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

@@ -46,6 +46,7 @@ import frc.robot.commands.shooter.ShooterPercentOutput;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Compressor;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.BallHandler;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Shooter;
@@ -114,6 +115,7 @@ public class RobotContainer {
   public static BallHandler ballHandler;
   public static LimeLight limeLight;
   public static Shooter shooter;
+  public static Hood hood;
 
   //The sendable chooser for autonomous is constructed here
   public static SendableChooser<Command> autoChooser = new SendableChooser<Command>();
@@ -130,6 +132,7 @@ public class RobotContainer {
     ballHandler = new BallHandler();
     // limeLight = new LimeLight();
     // shooter = new Shooter();
+    // hood = new Hood();
 
     //Add all autos to the auto selector
     // configureAutoModes();
