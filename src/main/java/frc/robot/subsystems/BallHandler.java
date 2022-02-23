@@ -160,6 +160,18 @@ public class BallHandler extends SubsystemBase {
       }
     }
 
+       //If the wrong ball color is detected, reset spitout timer
+    if(!shouldIntakeBall() && (state == State.kFillTo1 || state == State.kFillTo0)){//TODO:rob reverse this again-rob
+      // System.out.println("Reset selector timer");
+      selectorTimer.reset();
+    }
+
+    // System.out.println("should ball "+ shouldIntakeBall());
+    //if timer reset, run spit out timer for half second
+    if(!selectorTimer.hasElapsed(0.5)){
+      speeds[0] *= -1;  
+    }
+
     //If speed have changed, update the motor output speeds
     if(!DriverStation.isDisabled() && 
       !Arrays.equals(speeds,currentSpeeds)){
@@ -171,20 +183,6 @@ public class BallHandler extends SubsystemBase {
       currentSpeeds = speeds;
     }
 
-    //If the wrong ball color is detected, reset spitout timer
-    if(!shouldIntakeBall() && (state == State.kFillTo1 || state == State.kFillTo0)){//TODO:rob reverse this again-rob
-      selectorTimer.reset();
-    }
-
-    // System.out.println("should ball "+ shouldIntakeBall());
-    //if timer reset, run spit out timer for half second
-    if(!selectorTimer.hasElapsed(0.5) && !isSelectorReversed){
-      handlerMotors[0].setInverted(true);
-      isSelectorReversed = true;
-    }else if(selectorTimer.hasElapsed(0.5) && isSelectorReversed){
-      handlerMotors[0].setInverted(false);
-      isSelectorReversed = false;
-    }
 
     SmartDashboard.putBoolean("ball0", isBall0());
     SmartDashboard.putBoolean("ball1", isBall1());
@@ -227,7 +225,7 @@ public class BallHandler extends SubsystemBase {
     int blue = colorSensor.getBlue();
     int red = colorSensor.getRed();
 
-    System.out.println("prox"+proximity+"blue diff red "+(blue - red));
+    // System.out.println("prox"+proximity+"blue diff red "+(blue - red));
 
     if(!colorSensor.isConnected() || (proximity == 0 && blue == 0 && red == 0)) {
       return true;
@@ -235,15 +233,20 @@ public class BallHandler extends SubsystemBase {
     //Checking proximity to intake balls
     if(proximity > Constants.INTAKE_PROXIMITY){
       if(DriverStation.getAlliance() == Alliance.Blue){
+        // System.out.println(blue - red);
+        // System.out.println(blue - red >= Constants.BLUE_LEVEL);
         return blue - red >= Constants.BLUE_LEVEL;
       }
       else if(DriverStation.getAlliance() == Alliance.Red){
+        // System.out.println(red - blue);
+        // System.out.println(red - blue >= Constants.RED_LEVEL);
         return red - blue >= Constants.RED_LEVEL;
       }
       else{
         return true;
       }
     }else{
+      // System.out.println("No ball");
       return true;
     }
   }

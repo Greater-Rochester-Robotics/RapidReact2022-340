@@ -26,4 +26,8 @@ public class BallHandlerSetState extends InstantCommand {
   public void initialize() {
     RobotContainer.ballHandler.setState(state);
   }
+
+  public boolean runsWhenDisabled(){
+    return true;
+  }
 }

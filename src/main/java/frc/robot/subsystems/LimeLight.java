@@ -13,12 +13,9 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import java.util.TreeMap;
 
 public class LimeLight extends SubsystemBase {
-  Solenoid light;
+  // Solenoid light;
   /** Creates a new LimeLight. */
   public LimeLight() {
     setLightState(1);
@@ -47,7 +44,7 @@ public class LimeLight extends SubsystemBase {
    */
   public void setLightState(int LightState){
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(LightState);  //controls if limelight is on or not // 3 is on, 1 is off
-    light.set(3 == LightState);
+    // light.set(3 == LightState);
   }
 
   /**
@@ -69,6 +66,14 @@ public class LimeLight extends SubsystemBase {
 
   public double verticalAngleToTarget(){
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0); //returns the vertical angle offset
+  }
+
+  public double distanceToTarget(){
+    return Constants.LL_TARGET_TO_ROBOT_HEIGHT / Math.tan(Math.toRadians(verticalAngleToTarget() + Constants.LL_MOUNT_ANGLE));
+  }
+
+  public double distanceToCenter(){
+    return distanceToTarget() + Constants.LL_DISTANCE_TO_CENTER + Constants.LL_TARGET_RADIUS;
   }
 
   public double getShooterHighSpeed(){

@@ -85,6 +85,13 @@ public final class Constants {
 
     /* Limelight Values*/
     public static final double LL_ANGLE_TOLERANCE = 1.0;
+    public static final double LL_TARGET_HEIGHT = 104.0;
+    public static final double LL_ROBOT_HEIGHT = 32.0;
+    public static final double LL_TARGET_TO_ROBOT_HEIGHT = LL_TARGET_HEIGHT - LL_ROBOT_HEIGHT;
+    public static final double LL_TARGET_RADIUS = 0.0;
+    public static final double LL_ROBOT_DISTANCE_TO_FRONT = 10.0;
+    public static final double LL_MOUNT_ANGLE = 52.0;
+    public static final double LL_DISTANCE_TO_CENTER = 0.0;
 
     /* Harvester Constants */
     public static final double HARVESTER_INTAKE_SPEED = 0.6;
@@ -106,20 +113,26 @@ public final class Constants {
     public static final int INTAKE_PROXIMITY = 500;
 
     /* Shooter Constants */
-    public static final int SHOOTER_MOTOR_PUSLES_PER_REV = 5000; //TODO: get actual counts per revolution
+    public static final int SHOOTER_MOTOR_PUSLES_PER_REV = 1;//5000; //TODO: get actual counts per revolution
 
-    public static final double SHOOTER_MAIN_MOTOR_P = 2.5;
+    public static final double SHOOTER_MAIN_MOTOR_P = 1.75;
     public static final double SHOOTER_MAIN_MOTOR_I = 0.0;
-    public static final double SHOOTER_MAIN_MOTOR_D = 0.0;
-    public static final double SHOOTER_MAIN_MOTOR_F = 0.0;
+    public static final double SHOOTER_MAIN_MOTOR_D = 4.0;
+    public static final double SHOOTER_MAIN_MOTOR_F = .055;
 
-    public static final double SHOOTER_MOTOR_ALLOWABLE_ERROR = 0.0;//TODO: get a real number here, and this is in pulses, so rescale maybe
+    public static final double SHOOTER_MOTOR_ALLOWABLE_ERROR = 200.0;//TODO: get a real number here, and this is in pulses, so rescale maybe
     
     public static final double SHOOOTER_PREP_SPEED = 100;
-    public static final LookUpTable SHOOTER_SPEEDS_TABLE = new LookUpTable();
+    public static final LookUpTable SHOOTER_HIGH_SPEEDS_TABLE = new LookUpTable();
     static {
         //use put(distance, speed)
-        SHOOTER_SPEEDS_TABLE.put(5, 8000);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(5, 10000);
+       
+    }
+    public static final LookUpTable SHOOTER_LOW_SPEEDS_TABLE = new LookUpTable();
+    static {
+        //use put(distance, speed)
+        SHOOTER_LOW_SPEEDS_TABLE.put(5, 10000);
        
     }
 
@@ -128,14 +141,20 @@ public final class Constants {
     
     public static final double HOOD_MOTOR_P = 0.5;//This seems to work
     public static final double HOOD_MOTOR_I = 0.0;
-    public static final double HOOD_MOTOR_D = 0.0;;
+    public static final double HOOD_MOTOR_D = 0.0;
     public static final double HOOD_MOTOR_FF = 0.0;
 
     public static final double HOOD_HOMING_SPEED = -.10;
-    public static final LookUpTable HOOD_POSITION_TABLE = new LookUpTable();
+    public static final LookUpTable HOOD_HIGH_POSITION_TABLE = new LookUpTable();
     static {
         //use put(distance, angle)
-        HOOD_POSITION_TABLE.put(5, 8);
+        HOOD_HIGH_POSITION_TABLE.put(5, 8);
+       
+    }
+    public static final LookUpTable HOOD_LOW_POSITION_TABLE = new LookUpTable();
+    static {
+        //use put(distance, angle)
+        HOOD_LOW_POSITION_TABLE.put(5, 8);
        
     }
 

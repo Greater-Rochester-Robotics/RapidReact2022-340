@@ -18,7 +18,7 @@ public class SpitBalls extends ParallelCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ShooterPercentOutput( -.3),
+      new ShooterPercentOutput( -.2),
       new BallHandlerSetState(State.kSpitMid)
     );
   }

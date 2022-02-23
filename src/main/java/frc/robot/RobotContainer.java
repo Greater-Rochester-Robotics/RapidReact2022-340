@@ -15,7 +15,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
+import frc.robot.commands.SpitBalls;
+import frc.robot.commands.StopShooterHandler;
 import frc.robot.commands.autonomous.TestPath;
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
@@ -40,10 +41,11 @@ import frc.robot.commands.drive.util.DriveResetAllModulePositionsToZero;
 import frc.robot.commands.drive.util.DriveResetGyroToZero;
 import frc.robot.commands.drive.util.DriveTuneDriveMotorFeedForward;
 import frc.robot.commands.drive.util.DriveTurnToAngle;
-import frc.robot.commands.shooter.ShooterHoodHome;
-import frc.robot.commands.shooter.ShooterHoodToPosition;
+import frc.robot.commands.hood.HoodHome;
+import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterPercentOutput;
 import frc.robot.commands.shooter.ShooterSetSpeed;
+import frc.robot.commands.shooter.ShooterStop;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.Hood;
@@ -62,27 +64,27 @@ import frc.robot.subsystems.BallHandler.State;
 public class RobotContainer {
   // The robot's gamepads are defined here...
   
-  final XboxController driver = new XboxController(0);
-  final XboxController coDriver = new XboxController(1);
+  static final XboxController driver = new XboxController(0);
+  static final XboxController coDriver = new XboxController(1);
 
   ////////////////////
   // DRIVER BUTTONS //
   ////////////////////
 
-  final Button driverA = new JoystickButton(driver, 1);
-  public final Button driverB = new JoystickButton(driver, 2);
-  final Button driverX = new JoystickButton(driver, 3);
-  final Button driverY = new JoystickButton(driver, 4);
-  final Button driverLB = new JoystickButton(driver, 5);
-  final Button driverRB = new JoystickButton(driver, 6);
-  final Button driverBack = new JoystickButton(driver, 7);
-  final Button driverStart = new JoystickButton(driver, 8);
-  final Button driverLS = new JoystickButton(driver, 9);
-  final Button driverRS = new JoystickButton(driver, 10);
-  final Button driverDUp = new POVButton(driver, 0);
-  final Button driverDDown = new POVButton(driver, 180);
-  final Button driverDLeft = new POVButton(driver, 270);
-  final Button driverDRight = new POVButton(driver, 90);
+  static final Button driverA = new JoystickButton(driver, 1);
+  static final Button driverB = new JoystickButton(driver, 2);
+  static final Button driverX = new JoystickButton(driver, 3);
+  static final Button driverY = new JoystickButton(driver, 4);
+  static final Button driverLB = new JoystickButton(driver, 5);
+  static final Button driverRB = new JoystickButton(driver, 6);
+  static final Button driverBack = new JoystickButton(driver, 7);
+  static final Button driverStart = new JoystickButton(driver, 8);
+  static final Button driverLS = new JoystickButton(driver, 9);
+  static final Button driverRS = new JoystickButton(driver, 10);
+  static final Button driverDUp = new POVButton(driver, 0);
+  static final Button driverDDown = new POVButton(driver, 180);
+  static final Button driverDLeft = new POVButton(driver, 270);
+  static final Button driverDRight = new POVButton(driver, 90);
   // final Button driverLTButton = new JoyTriggerButton(driver, .3, Axis.LEFT_TRIGGER);
   // final Button driverRTButton = new JoyTriggerButton(driver, .3, Axis.RIGHT_TRIGGER);
 
@@ -90,23 +92,24 @@ public class RobotContainer {
   // CO-DRIVER BUTTONS //
   ///////////////////////
 
-  final Button coDriverA = new JoystickButton(coDriver, 1);
-  final Button coDriverB = new JoystickButton(coDriver, 2);
-  final Button coDriverX = new JoystickButton(coDriver, 3);
-  final Button coDriverY = new JoystickButton(coDriver, 4);
-  final Button coDriverLB = new JoystickButton(coDriver, 5);
-  final Button coDriverRB = new JoystickButton(coDriver, 6);
-  final Button coDriverBack = new JoystickButton(coDriver, 7);
-  final Button coDriverStart = new JoystickButton(coDriver, 8);
-  final Button coDriverLS = new JoystickButton(coDriver, 9);
-  final Button coDriverRS = new JoystickButton(coDriver, 10);
-  final Button coDriverDUp = new POVButton(coDriver, 0);
-  final Button coDriverDDown = new POVButton(coDriver, 180);
-  final Button coDriverDLeft = new POVButton(coDriver, 270);
-  final Button coDriverDRight = new POVButton(coDriver, 90);
+  static final Button coDriverA = new JoystickButton(coDriver, 1);
+  static final Button coDriverB = new JoystickButton(coDriver, 2);
+  static final Button coDriverX = new JoystickButton(coDriver, 3);
+  static final Button coDriverY = new JoystickButton(coDriver, 4);
+  static final Button coDriverLB = new JoystickButton(coDriver, 5);
+  static final Button coDriverRB = new JoystickButton(coDriver, 6);
+  static final Button coDriverBack = new JoystickButton(coDriver, 7);
+  static final Button coDriverStart = new JoystickButton(coDriver, 8);
+  static final Button coDriverLS = new JoystickButton(coDriver, 9);
+  static final Button coDriverRS = new JoystickButton(coDriver, 10);
+  static final Button coDriverDUp = new POVButton(coDriver, 0);
+  static final Button coDriverDDown = new POVButton(coDriver, 180);
+  static final Button coDriverDLeft = new POVButton(coDriver, 270);
+  static final Button coDriverDRight = new POVButton(coDriver, 90);
   // final Button coDriverLTButton = new JoyTriggerButton(coDriver, .7, Axis.LEFT_TRIGGER);
   // final Button coDriverRTButton = new JoyTriggerButton(coDriver, .7, Axis.RIGHT_TRIGGER);
 
+  public static final Button climberButton = driverStart;
 
   //The robot's subsystems are instantiated here
   public static Compressor compressor;
@@ -126,12 +129,12 @@ public class RobotContainer {
 
     //create(construct) subsystems
     // compressor = new Compressor();//Let's keep compressor first
-    // swerveDrive = new SwerveDrive();
+    swerveDrive = new SwerveDrive();
     // swerveDrive.setDefaultCommand(new DriveFieldRelativeAdvanced());
-    // climber = new Climber();
+    climber = new Climber();
     ballHandler = new BallHandler();
     // limeLight = new LimeLight();
-    // shooter = new Shooter();
+    shooter = new Shooter();
     // hood = new Hood();
 
     //Add all autos to the auto selector
@@ -141,18 +144,18 @@ public class RobotContainer {
     configureButtonBindings();
 
     //add some commands to dashboard for testing/configuring
-    // SmartDashboard.putData(new DriveResetAllModulePositionsToZero());
-    // SmartDashboard.putData(new DriveAdjustModuleZeroPoint());
-    // SmartDashboard.putData("Drive Module 0", new DriveOneModule(0));
-    // SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));
-    // SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));
-    // SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));
-    // SmartDashboard.putData(new DriveFindMaxAccel());//This is for PathPlanning Parameters
-    // SmartDashboard.putData(new DriveStopAllModules());
-    // SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));//this is for Velocity PID parameters, Path Planning by Extention
-    // SmartDashboard.putData(new DriveAllModulesPositionOnly());
-    // SmartDashboard.putData(new BallHandlerIntakeIn());
-    // SmartDashboard.putData(new BallHandlerIntakeOut()); 
+    SmartDashboard.putData(new DriveResetAllModulePositionsToZero());
+    SmartDashboard.putData(new DriveAdjustModuleZeroPoint());
+    SmartDashboard.putData("Drive Module 0", new DriveOneModule(0));
+    SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));
+    SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));
+    SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));
+    SmartDashboard.putData(new DriveFindMaxAccel());//This is for PathPlanning Parameters
+    SmartDashboard.putData(new DriveStopAllModules());
+    SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));//this is for Velocity PID parameters, Path Planning by Extention
+    SmartDashboard.putData(new DriveAllModulesPositionOnly());
+    SmartDashboard.putData(new BallHandlerIntakeIn());
+    SmartDashboard.putData(new BallHandlerIntakeOut()); 
   }
 
   /**
@@ -162,12 +165,14 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // driverA.whileHeld(new ShooterSetSpeed(15000));//ShooterPercentOutput(.8));//new ClimberExtendoToPosition(Constants.CLIMBER_MIDDLE_POSITION));
-    driverB.whenPressed(new BallHandlerSetState(State.kFillTo1));//ClimberExtendIn());//ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION));
-    driverB.whenReleased(new BallHandlerSetState(State.kOff));
+    // driverA.whenPressed(new BallHandlerSetState(State.kFillTo1));
+    // driverA.whenReleased(new BallHandlerSetState(State.kOff));
+  
+    // driverB.whenPressed(new SpitBalls());//(new BallHandlerSetState(State.kFillTo1));//ClimberExtendIn());//ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION));
+    // driverB.whenReleased(new StopShooterHandler());
     // driverX.whenPressed(new ClimberTiltOut());
     // driverX.whenReleased(new ClimberTiltIn());
-    // driverX.whileHeld(new ShooterHoodHome());
+    // driverX.whileHeld(new ClimberExtendOut());
     // driverY.whileHeld(new ClimberExtendIn());//new BallHandlerSetState(State.kSpitMid));
     // driverY.whenReleased(new BallHandlerSetState(State.kOff));
     // driverLB.whenPressed(new DriveResetGyroToZero());
@@ -175,8 +180,10 @@ public class RobotContainer {
     // driverStart.whileHeld(new ClimberExtendoToPosition(Constants.CLIMBER_MIDDLE_POSITION));
     // driverBack.whileHeld(new ClimberExtendoHome());
 
-    // driverBack.whenPressed(new DriveRobotCentric());
-    // driverStart.whenPressed(new DriveFieldRelativeAdvanced());
+    // driverBack.whenPressed(new ClimberClimb());
+    // driverStart.whenPressed(new DriveFieldRelative());
+
+    // driverA.whenPressed(new DriveResetAllModulePositionsToZero());
   }
 
   /**
@@ -262,7 +269,4 @@ public class RobotContainer {
     return coDriver.getRawButton(buttonNum);
   }
 
-  public Button getClimberButton(){
-    return driverB;
-  }
 }
