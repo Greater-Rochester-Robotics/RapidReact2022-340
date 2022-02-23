@@ -51,24 +51,24 @@ public class HoodToPosition extends CommandBase {
       }
       if(hasHadTarget){
         //if we have ever seen the target set the setpoint to the position
-        RobotContainer.hood.setHoodPosition(position);
+        RobotContainer.hood.setPosition(position);
       } 
     }else{
       //if position input hardcoded, just set the position setpoint
-      RobotContainer.hood.setHoodPosition(position);
+      RobotContainer.hood.setPosition(position);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.hood.stopHoodMotor();
+    RobotContainer.hood.stopMotor();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return (!positionSupplierMode || hasHadTarget) 
-      && (Math.abs(RobotContainer.hood.getHoodPosition() - position) < 0.5);
+      && (Math.abs(RobotContainer.hood.getPosition() - position) < 0.5);
   }
 }

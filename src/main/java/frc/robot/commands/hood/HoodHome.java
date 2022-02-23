@@ -16,11 +16,11 @@ public class HoodHome extends CommandBase {
 
   @Override
   public void end(boolean interrupted){
-    RobotContainer.hood.stopHoodMotor();
+    RobotContainer.hood.stopMotor();
   }
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.hood.homeHoodPosition();
+    return RobotContainer.hood.homePosition();
   }
 }
