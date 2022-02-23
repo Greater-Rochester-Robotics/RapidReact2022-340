@@ -77,18 +77,18 @@ public class LimeLight extends SubsystemBase {
   }
 
   public double getShooterHighSpeed(){
-    return 0.0;//TODO:link to look up table
+    return Constants.SHOOTER_HIGH_SPEEDS_TABLE.lookup(distanceToCenter());
   }
 
   public double getShooterLowSpeed(){
-    return 0.0;//TODO:link to look up table
+    return Constants.SHOOTER_LOW_SPEEDS_TABLE.lookup(distanceToCenter());
   }
 
   public double getHoodHighAngle(){
-    return 0.0;//TODO:link to look up table
+    return Constants.HOOD_HIGH_POSITION_TABLE.lookup(distanceToCenter());
   }
 
   public double getHoodLowAngle(){
-    return 0.0;//TODO:link to look up table
+    return Constants.HOOD_LOW_POSITION_TABLE.lookup(distanceToCenter());
   }
 }

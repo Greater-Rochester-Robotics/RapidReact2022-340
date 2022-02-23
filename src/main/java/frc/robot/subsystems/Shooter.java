@@ -22,25 +22,25 @@ import frc.robot.Constants;
  */
 public class Shooter extends SubsystemBase { 
   private static final double speedError = 0.01;
-  TalonFX shooterMotor;
+  TalonFX motor;
 
   /** Creates a new Shooter. */
   public Shooter() {
-    shooterMotor = new TalonFX(Constants.SHOOTER_SHOOTING_MOTOR);
-    shooterMotor.configFactoryDefault();
+    motor = new TalonFX(Constants.SHOOTER_SHOOTING_MOTOR);
+    motor.configFactoryDefault();
     // mainMotor.configSelectedFeedbackCoefficient(coefficient);//do not set, best to let motor be in ticks
-    shooterMotor.setNeutralMode(NeutralMode.Coast);//TODO: find if the was suposed to be in brake
-    shooterMotor.setInverted(false);//on robot no inversion needed
-    shooterMotor.enableVoltageCompensation(true);
-    shooterMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
-    shooterMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);
-    shooterMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
+    motor.setNeutralMode(NeutralMode.Coast);//TODO: find if the was suposed to be in brake
+    motor.setInverted(false);//on robot no inversion needed
+    motor.enableVoltageCompensation(true);
+    motor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
 
-    shooterMotor.config_kP(0, Constants.SHOOTER_MAIN_MOTOR_P);
-    shooterMotor.config_kI(0, Constants.SHOOTER_MAIN_MOTOR_I);
-    shooterMotor.config_kD(0, Constants.SHOOTER_MAIN_MOTOR_D);
-    shooterMotor.config_kF(0, Constants.SHOOTER_MAIN_MOTOR_F);
-    shooterMotor.configAllowableClosedloopError(0, Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR);
+    motor.config_kP(0, Constants.SHOOTER_MAIN_MOTOR_P);
+    motor.config_kI(0, Constants.SHOOTER_MAIN_MOTOR_I);
+    motor.config_kD(0, Constants.SHOOTER_MAIN_MOTOR_D);
+    motor.config_kF(0, Constants.SHOOTER_MAIN_MOTOR_F);
+    motor.configAllowableClosedloopError(0, Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR);
   }
 
   @Override
@@ -54,7 +54,7 @@ public class Shooter extends SubsystemBase {
    * @return in revolutions per minute
    */
   public double getSpeed(){
-    return shooterMotor.getSelectedSensorVelocity() / Constants.SHOOTER_MOTOR_PUSLES_PER_REV ;
+    return motor.getSelectedSensorVelocity() / Constants.SHOOTER_MOTOR_PUSLES_PER_REV ;
   }
 
   /**
@@ -62,24 +62,24 @@ public class Shooter extends SubsystemBase {
    * @param speed speed in RPM
    */
   public void setSpeed(double speed){
-    shooterMotor.set(TalonFXControlMode.Velocity, speed * Constants.SHOOTER_MOTOR_PUSLES_PER_REV);
+    motor.set(TalonFXControlMode.Velocity, speed * Constants.SHOOTER_MOTOR_PUSLES_PER_REV);
   }
 
   public void setOutput(double percentOutput){
-    shooterMotor.set(TalonFXControlMode.PercentOutput, percentOutput);
+    motor.set(TalonFXControlMode.PercentOutput, percentOutput);
   }
   
   /**
    * @return if shooter is at speed, within tolerance
    */
   public boolean isAtSpeed() {
-    return Math.abs(shooterMotor.getClosedLoopError()) < Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR;
+    return Math.abs(motor.getClosedLoopError()) < Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR;
   }
 
   /**
    * stops the shooter motor
    */
-  public void stopShooterMotor(){
-    shooterMotor.set(TalonFXControlMode.PercentOutput, 0.0);
+  public void stopMotor(){
+    motor.set(TalonFXControlMode.PercentOutput, 0.0);
   }
 }

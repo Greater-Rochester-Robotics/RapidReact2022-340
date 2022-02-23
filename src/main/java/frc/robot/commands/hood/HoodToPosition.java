@@ -41,18 +41,18 @@ public class HoodToPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    RobotContainer.hood.setHoodPosition(position);
+    RobotContainer.hood.setPosition(position);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.hood.stopHoodMotor();
+    RobotContainer.hood.stopMotor();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(RobotContainer.hood.getHoodPosition() - position) < 0.5;
+    return Math.abs(RobotContainer.hood.getPosition() - position) < 0.5;
   }
 }
