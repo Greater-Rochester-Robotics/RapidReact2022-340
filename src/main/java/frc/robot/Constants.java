@@ -46,7 +46,7 @@ public final class Constants {
 
     /* Swerve Module Rotation constants */
     public static final double RAD_TO_ENC_CONV_FACTOR = 5029.08073;//swerveX 8T to 24T / 14T to 72T //the radian to enc factor
-    public static final double SWERVE_ROT_P_VALUE = 0.1;// TODO:find this value for real, .4 was from 2021
+    public static final double SWERVE_ROT_P_VALUE = 0.1;
     public static final double SWERVE_ROT_I_VALUE = 0.0;
     public static final double SWERVE_ROT_D_VALUE = 0.05; 
     public static final double SWERVE_ROT_I_ZONE_VALUE = 0;
@@ -113,14 +113,14 @@ public final class Constants {
     public static final int INTAKE_PROXIMITY = 500;
 
     /* Shooter Constants */
-    public static final int SHOOTER_MOTOR_PUSLES_PER_REV = 1;//5000; //TODO: get actual counts per revolution
+    public static final int SHOOTER_MOTOR_PUSLES_PER_REV = 1;//5000; //TODO: get actual counts per revolution, or maybe not
 
     public static final double SHOOTER_MAIN_MOTOR_P = 1.75;
     public static final double SHOOTER_MAIN_MOTOR_I = 0.0;
     public static final double SHOOTER_MAIN_MOTOR_D = 4.0;
     public static final double SHOOTER_MAIN_MOTOR_F = .055;
 
-    public static final double SHOOTER_MOTOR_ALLOWABLE_ERROR = 200.0;//TODO: get a real number here, and this is in pulses, so rescale maybe
+    public static final double SHOOTER_MOTOR_ALLOWABLE_ERROR = 200.0;//TODO: get a better number here, and this is in pulses
     
     public static final double SHOOOTER_PREP_SPEED = 100;
     public static final LookUpTable SHOOTER_HIGH_SPEEDS_TABLE = new LookUpTable();

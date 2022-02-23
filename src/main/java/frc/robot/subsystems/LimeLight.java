@@ -5,13 +5,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.Solenoid;
 
 import frc.robot.Constants;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLight extends SubsystemBase {
@@ -44,14 +39,14 @@ public class LimeLight extends SubsystemBase {
    */
   public void setLightState(int LightState){
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(LightState);  //controls if limelight is on or not // 3 is on, 1 is off
-    // light.set(3 == LightState);
+    // light.set(3 == LightState);//this is for a secondary light powered by PCM
   }
 
   /**
    * True if the limelight sees a target
    * @return
    */
-  public boolean haveTarget(){
+  public boolean hasTarget(){
     return (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1); //returns true if it detects a target
   }
 
@@ -72,11 +67,16 @@ public class LimeLight extends SubsystemBase {
     return Constants.LL_TARGET_TO_ROBOT_HEIGHT / Math.tan(Math.toRadians(verticalAngleToTarget() + Constants.LL_MOUNT_ANGLE));
   }
 
-  public double distanceToCenter(){
+  public double distanceFrontToTarget(){
+    return distanceToTarget() + Constants.LL_ROBOT_DISTANCE_TO_FRONT;
+  }
+
+  public double distanceCenterToCenter(){
     return distanceToTarget() + Constants.LL_DISTANCE_TO_CENTER + Constants.LL_TARGET_RADIUS;
   }
 
   public double getShooterHighSpeed(){
+    //hint: Constants.SHOOTER_HIGH_SPEEDS_TABLE.lookup( this. )
     return 0.0;//TODO:link to look up table
   }
 

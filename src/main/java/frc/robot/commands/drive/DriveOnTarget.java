@@ -43,32 +43,20 @@ public class DriveOnTarget extends CommandBase {
   
   @Override
   public void execute() {
-    boolean isOnTarget = RobotContainer.limeLight.haveTarget();
-    hasHadTarget |= isOnTarget;
+    boolean hasTarget = RobotContainer.limeLight.hasTarget();
+    hasHadTarget |= hasTarget;
 
     
-    // Point robot in the general direction of the target if the limelight doesn't see the target
-    if(isOnTarget) {
+    // Set the rotate to angle to the target if limelight sees it
+    if(hasTarget) {
       setPointAngle = RobotContainer.swerveDrive.getGyroInRad() - Math.toRadians(RobotContainer.limeLight.angleToTarget());
     }else if(RobotContainer.swerveDrive.hasPoseBeenSet() && !hasHadTarget && timer.hasElapsed(.2)){
-      // Finds where we are relative to the center of the field
-      Translation2d target = RobotContainer.swerveDrive.driveOdometry.getPoseMeters().getTranslation().minus(Constants.FIELD_CENTER);
-      double desiredAngle = Math.atan2(target.getY(), target.getX());
-
-      // Calculating current angle between -pi and pi
-      double currentAngle = RobotContainer.swerveDrive.getGyroInRad();
-      double absoluteCurrentAngle = currentAngle%Constants.TWO_PI;
-      if(absoluteCurrentAngle > Math.PI){
-        absoluteCurrentAngle -= 2*(Math.PI);
-      }
-      else if(absoluteCurrentAngle < -Math.PI){
-        absoluteCurrentAngle += 2 * Math.PI;
-      }
-
-      // Calculate the robot's target angle given the continuous angle of the gyroscope
-      setPointAngle = currentAngle - absoluteCurrentAngle + desiredAngle;
+      // Point robot in the general direction of the target if the limelight doesn't see the target
+      // Finds where we are relative to the center of the field, set as setPoint
+      setPointAngle = RobotContainer.swerveDrive.getAngleOfTarget();
+      hasHadTarget = true;
     }
-    // Set the rotate to angle to the target if limelight sees it
+    
     
 
     // Sets away and lateral speeds using driver axis

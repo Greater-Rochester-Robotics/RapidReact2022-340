@@ -109,6 +109,7 @@ public class RobotContainer {
   // final Button coDriverLTButton = new JoyTriggerButton(coDriver, .7, Axis.LEFT_TRIGGER);
   // final Button coDriverRTButton = new JoyTriggerButton(coDriver, .7, Axis.RIGHT_TRIGGER);
 
+  //Climber next step button is aliased here.
   public static final Button climberButton = driverStart;
 
   //The robot's subsystems are instantiated here
@@ -168,7 +169,7 @@ public class RobotContainer {
     // driverA.whenPressed(new BallHandlerSetState(State.kFillTo1));
     // driverA.whenReleased(new BallHandlerSetState(State.kOff));
   
-    // driverB.whenPressed(new SpitBalls());//(new BallHandlerSetState(State.kFillTo1));//ClimberExtendIn());//ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION));
+    // driverB.whenPressed(new SpitBalls());/
     // driverB.whenReleased(new StopShooterHandler());
     // driverX.whenPressed(new ClimberTiltOut());
     // driverX.whenReleased(new ClimberTiltIn());
@@ -183,7 +184,6 @@ public class RobotContainer {
     // driverBack.whenPressed(new ClimberClimb());
     // driverStart.whenPressed(new DriveFieldRelative());
 
-    // driverA.whenPressed(new DriveResetAllModulePositionsToZero());
   }
 
   /**

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -202,7 +203,6 @@ public class SwerveDrive extends SubsystemBase {
     return driveOdometry.getPoseMeters();
   }
 
-  
   /**
    * Sets current position in the odometry class
    * 
@@ -223,6 +223,38 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   /**
+   * Estimates the closest angle to the target, 
+   * given that the odometry is working
+   * @return anngle in radians (not restricted to PI to -PI)
+   */
+  public double getAngleOfTarget(){
+    //get the current angle    
+    double currentAngle = getGyroInRad();
+
+    //if the pose hasn't been set return current angle.
+    if(!hasPoseBeenSet){
+      return currentAngle;
+    }
+
+    // Calculating current angle between -pi and pi
+    double absoluteCurrentAngle = currentAngle%Constants.TWO_PI;
+    if(absoluteCurrentAngle > Math.PI){
+      absoluteCurrentAngle -= 2*(Math.PI);
+    }
+    else if(absoluteCurrentAngle < -Math.PI){
+      absoluteCurrentAngle += 2 * Math.PI;
+    }
+
+    // Finds where the center of the field is with respect to the robot
+    Translation2d target = driveOdometry.getPoseMeters().getTranslation().minus(Constants.FIELD_CENTER);
+    //based on that, find the angle of the above Tanslation2d object
+    double desiredAngle = Math.atan2(target.getY(), target.getX());
+
+    // Calculate the robot's target angle given the continuous angle of the gyroscope
+    return currentAngle - absoluteCurrentAngle + desiredAngle;
+  }
+
+  /**
    * A function that allows the user to reset the gyro, this 
    * makes the current orientation of the robot 0 degrees on 
    * the gyro.
@@ -232,6 +264,19 @@ public class SwerveDrive extends SubsystemBase {
     imu.reset();
   }
 
+  /**
+   * A function that allows the user to set the gyro to a 
+   * specific angle. This will make the current orientation 
+   * of the robot the input value. This must be in degrees 
+   * for gyro.
+   * @param newCurrentAngle value the gyro should now read in degrees.
+   */
+  public void setGyro(double newCurrentAngle){
+    //TODO: rewrite the IMU class to make it work
+    // imu.set(newCurrentAngle)
+  }
+
+  
   /**
    * This calls the drive Gyro and returns the Rotation2d object.
    * This object contains angle in radians, as well as the sin 
@@ -268,7 +313,8 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   /**
-   * 
+   * Returns the speed of rotation of the robot, 
+   * counterclockwise is positive.
    * @return degrees per second
    */
   public double getRotationalVelocity(){

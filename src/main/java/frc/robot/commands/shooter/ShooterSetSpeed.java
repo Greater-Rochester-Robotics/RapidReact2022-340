@@ -10,12 +10,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class ShooterSetSpeed extends CommandBase {
-  public double speed;
+  private double speed;
   private DoubleSupplier speedSupplier;
   private boolean speedSupplierMode;
+  private boolean hasHadTarget;
 
   /** 
-   * Sets speed of the shooter 
+   * Sets speed of the shooter to a speed given 
+   * the double. this command ends when the shooter 
+   * is at speed. This command does not stop the motor.
    */
   public ShooterSetSpeed(double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -24,6 +27,12 @@ public class ShooterSetSpeed extends CommandBase {
     this.speed = speed;
   }
 
+  /** 
+   * Sets speed of the shooter to a speed given by the DoubleSupplier.
+   * This will only work when the limelight has target.
+   * This command does not stop the motor.
+   * 
+   */
   public ShooterSetSpeed(DoubleSupplier speedSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooter);
@@ -34,15 +43,29 @@ public class ShooterSetSpeed extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(speedSupplierMode){
-      speed = speedSupplier.getAsDouble();
-    }
+    hasHadTarget = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.shooter.setSpeed(speed);
+    if(speedSupplierMode){
+      //If speed is coming from the limeLight, check we have a target
+      boolean hasTarget = RobotContainer.limeLight.hasTarget();
+      //keep track if we have seen the target
+      hasHadTarget |= hasTarget;
+      if(hasTarget){ 
+        //if there is a target, get the speed
+        speed = speedSupplier.getAsDouble();
+      }
+      if(hasHadTarget){
+        //if we have ever seen the target set the setpoint to the speed
+        RobotContainer.shooter.setSpeed(speed); 
+      } 
+    }else{
+      //if speed input hardcoded, just set the speed setpoint 
+      RobotContainer.shooter.setSpeed(speed);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -52,6 +75,6 @@ public class ShooterSetSpeed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return RobotContainer.shooter.isAtSpeed();
+    return (!speedSupplierMode || hasHadTarget) && RobotContainer.shooter.isAtSpeed();
   }
 }

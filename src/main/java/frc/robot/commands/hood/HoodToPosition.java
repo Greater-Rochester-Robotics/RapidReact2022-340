@@ -13,6 +13,7 @@ public class HoodToPosition extends CommandBase {
   private double position;
   private DoubleSupplier positionSupplier;
   private boolean positionSupplierMode;
+  private boolean hasHadTarget;
 
   /** Creates a new HoodToPosition. */
   public HoodToPosition(double position) {
@@ -33,15 +34,29 @@ public class HoodToPosition extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(positionSupplierMode){
-      position = positionSupplier.getAsDouble();
-    }
+    hasHadTarget = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    RobotContainer.hood.setHoodPosition(position);
+    if(positionSupplierMode){
+      //If speed is coming from the limeLight, check we have a target
+      boolean hasTarget = RobotContainer.limeLight.hasTarget();
+      //keep track if we have seen the target
+      hasHadTarget |= hasTarget;
+      if(hasTarget){ 
+        //if there is a target, get the position
+        position = positionSupplier.getAsDouble();
+      }
+      if(hasHadTarget){
+        //if we have ever seen the target set the setpoint to the position
+        RobotContainer.hood.setHoodPosition(position);
+      } 
+    }else{
+      //if position input hardcoded, just set the position setpoint
+      RobotContainer.hood.setHoodPosition(position);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -53,6 +68,7 @@ public class HoodToPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(RobotContainer.hood.getHoodPosition() - position) < 0.5;
+    return (!positionSupplierMode || hasHadTarget) 
+      && (Math.abs(RobotContainer.hood.getHoodPosition() - position) < 0.5);
   }
 }
