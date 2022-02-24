@@ -15,7 +15,7 @@ public class DriveTurnToTarget extends CommandBase {
   Timer timer = new Timer();
   boolean hasHadTarget;
   double setPointAngle;
-  double offsetDistance;//TODO: impliment so we can shoot off to the side of the goal
+  double offsetDistance;
 
   public DriveTurnToTarget(){
     this(0.0);
@@ -46,7 +46,7 @@ public class DriveTurnToTarget extends CommandBase {
 
     // Set the rotate to angle to the target if limelight sees it
     if(hasTarget) {
-      setPointAngle = RobotContainer.swerveDrive.getGyroInRad() - Math.toRadians(RobotContainer.limeLight.angleToTarget());
+      setPointAngle = RobotContainer.swerveDrive.getGyroInRad() - Math.toRadians(RobotContainer.limeLight.angleToTarget(offsetDistance));
     }else if(RobotContainer.swerveDrive.hasPoseBeenSet() && !hasHadTarget && timer.hasElapsed(.2)){
       // Point robot in the general direction of the target if the limelight doesn't see the target
       // Finds where we are relative to the center of the field, set as setPoint

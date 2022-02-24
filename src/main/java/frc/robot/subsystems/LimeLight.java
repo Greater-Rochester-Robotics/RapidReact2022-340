@@ -59,14 +59,22 @@ public class LimeLight extends SubsystemBase {
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0); //returns the angle offset (+ is left of target, - is right of target)<- think that is backwards
   }
 
+  /**
+   * Uses the distance to target to compute an angle
+   * that will result in the desired offset
+   * @param offsetDistance distance to offset by
+   * @return
+   */
   public double angleToTarget(double offsetDistance){
-    //TODO: using the distance to target compute an angle that will result in the desired offset
-    //if offset is 0 then return angleToTarget
-    //start by pulling the distance using distance to target and adding Target radius(one side of triangle)
-    //take the arctangent(use atan not atan2) of the offsetDistance divided by the prior distance
-    //convert the resulting angle from Radians to degrees.
-    //make the output the angleToTarget minus (the converted angle times the sign of the angle)
-    return 0.0;
+    double angleToTarget = angleToTarget();
+    if(offsetDistance != 0.0) {
+      double distanceToTarget = distanceToTarget();
+      distanceToTarget += Constants.LL_TARGET_RADIUS;
+      double angle = Math.toDegrees(Math.atan(offsetDistance / distanceToTarget));
+      return angleToTarget - (angle * Math.signum(angleToTarget));
+    } else {
+      return angleToTarget;
+    }
   }
 
   public double verticalAngleToTarget(){
