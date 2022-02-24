@@ -31,7 +31,7 @@ public class SwerveDrive extends SubsystemBase {
   public ADIS16470_IMU imu;
   private SwerveDriveKinematics driveKinematics;
   public SwerveDriveOdometry driveOdometry;
-  public PIDController robotSpinController;
+  private PIDController robotSpinController;
   private boolean hasPoseBeenSet = false;
 
   /**
@@ -82,6 +82,7 @@ public class SwerveDrive extends SubsystemBase {
 
     //construct the wpilib PIDcontroller for rotation.
     robotSpinController = new PIDController(Constants.ROBOT_SPIN_P, Constants.ROBOT_SPIN_I, Constants.ROBOT_SPIN_D);
+    robotSpinController.setTolerance(Constants.ROBOT_SPIN_PID_TOLERANCE);
 
     hasPoseBeenSet = false;
   }
@@ -117,9 +118,16 @@ public class SwerveDrive extends SubsystemBase {
     SwerveModuleState[] targetStates = driveKinematics.toSwerveModuleStates(chassisSpeeds);
     //use SwerveDriveKinematic.desaturateWheelSpeeds(), max speed is 1 if percentOutput, MaxVelovcity if velocity mode
     SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, isVeloMode? Constants.MAXIMUM_VELOCITY : 1.0);
-    //pass along SwerveModuleStates to SwerveModules and pass along boolean isVeloMode
-    for (int i = 0; i < targetStates.length; i++) {
-       swerveModules[i].setModuleState(targetStates[i], isVeloMode);
+    if(Math.abs(chassisSpeeds.vxMetersPerSecond) < 0.05 && Math.abs(chassisSpeeds.vyMetersPerSecond) < 0.05 && Math.abs(chassisSpeeds.omegaRadiansPerSecond) > .01){
+      //pass along SwerveModuleStates to SwerveModules and pass along boolean isVeloMode
+      for (int i = 0; i < targetStates.length; i++) {
+        swerveModules[i].setModuleStateRot(targetStates[i], isVeloMode);
+      } 
+    }else{
+      //pass along SwerveModuleStates to SwerveModules and pass along boolean isVeloMode
+      for (int i = 0; i < targetStates.length; i++) {
+          swerveModules[i].setModuleState(targetStates[i], isVeloMode);
+      }
     }
   }
 
@@ -423,17 +431,17 @@ public class SwerveDrive extends SubsystemBase {
    */
   public double getRobotRotationPIDOut(double target){
     double currentGyroPos = getGyroInRad();
-    //Why is this here? well if we end up switching to a NavX, we'll need it
-    // double posDiff =  currentGyroPos - target;
-    // if ( posDiff > Math.PI) {
-    //   // the distance the other way around the circle
-    //   target = currentGyroPos + (Constants.TWO_PI - (posDiff));
-    // }
-    // else if (posDiff < -Math.PI){
-    //   //if the distance to the goal is small enough, stop rotation and return
-    //   target = currentGyroPos - (Constants.TWO_PI + (posDiff));
-    // }
-    return robotSpinController.calculate(currentGyroPos, target);
+    double output = robotSpinController.calculate(currentGyroPos, target);
+    // System.out.println("targetAngle:"+Math.toDegrees(target)+"   angle:"+Math.toDegrees(currentGyroPos)+"atSP:"+robotSpinController.atSetpoint()+"  pid output"+output);
+    if(robotSpinController.atSetpoint()){
+      return 0.0;
+    } else {
+      if (Math.abs(output) < Constants.MINIMUM_ROTATIONAL_OUTPUT){
+        return Constants.MINIMUM_ROTATIONAL_OUTPUT*Math.signum(output);
+      }else {
+        return output;
+      }
+    }
   }
 
 }

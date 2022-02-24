@@ -21,4 +21,8 @@ public class HoodStop extends InstantCommand {
   public void initialize() {
     RobotContainer.hood.stopMotor();
   }
+
+  public boolean runsWhenDisabled(){
+    return true;
+  }
 }

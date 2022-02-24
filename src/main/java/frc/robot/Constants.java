@@ -57,11 +57,12 @@ public final class Constants {
     public static final double SWERVE_MODULE_TOLERANCE = 0.1;//TODO: this is scaled from the NEO550, needs adjust for Falcon500
     public static final double ROTATIONAL_VELOCITY_TOLERANCE = 1.0;
 
-    /* Robot Motion PID controller constants */
-    public static final double ROBOT_SPIN_P = 1.1;//tuned for drive/climber bot
-    public static final double ROBOT_SPIN_I = 0;
-    public static final double ROBOT_SPIN_D = 0.001;
-
+    /* Robot Rotation PID controller constants */
+    public static final double ROBOT_SPIN_P = 1.55;//tuned for drive/climber bot
+    public static final double ROBOT_SPIN_I = 0.0;//0.05;
+    public static final double ROBOT_SPIN_D = 0.01;
+    public static final double ROBOT_SPIN_PID_TOLERANCE = Math.toRadians(0.5);
+    public static final double MINIMUM_ROTATIONAL_OUTPUT = 0.07;
     
     /* We stole 3015's constants for DriveFollowTrajectory */
     public static final double DRIVE_POS_ERROR_CONTROLLER_P = 12; // 10
@@ -115,10 +116,10 @@ public final class Constants {
     /* Shooter Constants */
     public static final int SHOOTER_MOTOR_PUSLES_PER_REV = 1;//5000; //TODO: get actual counts per revolution, or maybe not
 
-    public static final double SHOOTER_MAIN_MOTOR_P = 1.75;
+    public static final double SHOOTER_MAIN_MOTOR_P = 1.75;//1.8;
     public static final double SHOOTER_MAIN_MOTOR_I = 0.0;
-    public static final double SHOOTER_MAIN_MOTOR_D = 4.0;
-    public static final double SHOOTER_MAIN_MOTOR_F = .055;
+    public static final double SHOOTER_MAIN_MOTOR_D = 2.0;//4.0;
+    public static final double SHOOTER_MAIN_MOTOR_F = 0.0;
 
     public static final double SHOOTER_MOTOR_ALLOWABLE_ERROR = 200.0;//TODO: get a better number here, and this is in pulses
     
@@ -138,6 +139,7 @@ public final class Constants {
 
     /* Hood Constants */
     public static final double HOOD_DEGREE_CONVERSION = 30.0 * 32.0 / 35.0 / 51.0;// gear ratio on the versa, 5:1+7:1 ratio w/ 30T gear, 51T rack, 32 degrees
+    public static final double HOOD_FORWARD_LIMIT_DEGREES = 22;
     
     public static final double HOOD_MOTOR_P = 0.5;//This seems to work
     public static final double HOOD_MOTOR_I = 0.0;

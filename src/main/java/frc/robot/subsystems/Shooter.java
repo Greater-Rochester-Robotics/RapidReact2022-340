@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
@@ -29,7 +30,7 @@ public class Shooter extends SubsystemBase {
     motor = new TalonFX(Constants.SHOOTER_SHOOTING_MOTOR);
     motor.configFactoryDefault();
     // mainMotor.configSelectedFeedbackCoefficient(coefficient);//do not set, best to let motor be in ticks
-    motor.setNeutralMode(NeutralMode.Coast);//TODO: find if the was suposed to be in brake
+    motor.setNeutralMode(NeutralMode.Coast);//This should Never be brake
     motor.setInverted(false);//on robot no inversion needed
     motor.enableVoltageCompensation(true);
     motor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
@@ -62,7 +63,7 @@ public class Shooter extends SubsystemBase {
    * @param speed speed in RPM
    */
   public void setSpeed(double speed){
-    motor.set(TalonFXControlMode.Velocity, speed * Constants.SHOOTER_MOTOR_PUSLES_PER_REV);
+    motor.set(TalonFXControlMode.Velocity, speed * Constants.SHOOTER_MOTOR_PUSLES_PER_REV);//, DemandType.ArbitraryFeedForward, (speed / 15000));
   }
 
   public void setOutput(double percentOutput){

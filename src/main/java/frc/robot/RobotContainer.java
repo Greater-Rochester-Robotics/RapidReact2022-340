@@ -30,6 +30,7 @@ import frc.robot.commands.climber.ClimberTiltIn;
 import frc.robot.commands.climber.ClimberTiltOut;
 import frc.robot.commands.drive.DriveFieldRelative;
 import frc.robot.commands.drive.DriveFieldRelativeAdvanced;
+import frc.robot.commands.drive.DriveOnTarget;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveStopAllModules;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
@@ -129,14 +130,14 @@ public class RobotContainer {
   public RobotContainer() {
 
     //create(construct) subsystems
-    // compressor = new Compressor();//Let's keep compressor first
+    compressor = new Compressor();//Let's keep compressor first
     swerveDrive = new SwerveDrive();
-    // swerveDrive.setDefaultCommand(new DriveFieldRelativeAdvanced());
+    swerveDrive.setDefaultCommand(new DriveFieldRelativeAdvanced());
     climber = new Climber();
     ballHandler = new BallHandler();
-    // limeLight = new LimeLight();
+    limeLight = new LimeLight();
     shooter = new Shooter();
-    // hood = new Hood();
+    hood = new Hood();
 
     //Add all autos to the auto selector
     // configureAutoModes();
@@ -157,6 +158,13 @@ public class RobotContainer {
     SmartDashboard.putData(new DriveAllModulesPositionOnly());
     SmartDashboard.putData(new BallHandlerIntakeIn());
     SmartDashboard.putData(new BallHandlerIntakeOut()); 
+    SmartDashboard.putData(new ShooterSetSpeed(this::speedIShoot));
+    SmartDashboard.putData(new HoodToPosition(this::angleIShoot));
+    SmartDashboard.putData(new ShooterStop());
+    SmartDashboard.putData(new HoodHome());
+
+    SmartDashboard.putNumber("SpeedIShoot",0.0);
+    SmartDashboard.putNumber("angleIShoot",0.0);
   }
 
   /**
@@ -166,24 +174,37 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // driverA.whenPressed(new BallHandlerSetState(State.kFillTo1));
-    // driverA.whenReleased(new BallHandlerSetState(State.kOff));
+    driverA.whenPressed(new BallHandlerSetState(State.kFillTo1));
+    driverA.whenReleased(new BallHandlerSetState(State.kOff));
   
-    // driverB.whenPressed(new SpitBalls());/
-    // driverB.whenReleased(new StopShooterHandler());
-    // driverX.whenPressed(new ClimberTiltOut());
-    // driverX.whenReleased(new ClimberTiltIn());
-    // driverX.whileHeld(new ClimberExtendOut());
-    // driverY.whileHeld(new ClimberExtendIn());//new BallHandlerSetState(State.kSpitMid));
+    driverB.whenPressed(new SpitBalls());
+    driverB.whenReleased(new StopShooterHandler());
+    driverX.whenPressed(new BallHandlerSetState(State.kShoot0));//ClimberTiltOut());
+    driverX.whenReleased(new BallHandlerSetState(State.kOff));//ClimberTiltIn());
+    // driverX.whileHeld(new DriveTurnToAngle(Constants.PI_OVER_TWO));
+    // driverY.whileHeld(new DriveTurnToAngle(0));//ClimberExtendIn());//new BallHandlerSetState(State.kSpitMid));
     // driverY.whenReleased(new BallHandlerSetState(State.kOff));
-    // driverLB.whenPressed(new DriveResetGyroToZero());
-    // driverRB.whileHeld(new ShooterHoodToPosition(8));
+    driverLB.whenPressed(new DriveResetGyroToZero());
+    driverRB.whileHeld(new DriveOnTarget());
     // driverStart.whileHeld(new ClimberExtendoToPosition(Constants.CLIMBER_MIDDLE_POSITION));
     // driverBack.whileHeld(new ClimberExtendoHome());
 
-    // driverBack.whenPressed(new ClimberClimb());
+    driverBack.toggleWhenActive(new DriveRobotCentric());
     // driverStart.whenPressed(new DriveFieldRelative());
 
+  }
+
+  /**
+   * testing double supplier
+   */
+  public double speedIShoot(){
+    return SmartDashboard.getNumber("SpeedIShoot",0.0);
+  }
+  /**
+   * testing double supplier
+   */
+  public double angleIShoot(){
+    return SmartDashboard.getNumber("angleIShoot",0.0);
   }
 
   /**
@@ -213,6 +234,17 @@ public class RobotContainer {
     return (driver.getRawAxis(axis.value) < -.1 || driver.getRawAxis(axis.value) > .1)
         ? driver.getRawAxis(axis.value)
         : 0.0;
+  }
+
+  /**
+   * Accessor method to set codriver rumble function
+   * 
+   * @param leftRumble
+   * @param rightRumble
+   */
+  public static void setDriverRumble(double leftRumble, double rightRumble) {
+    driver.setRumble(RumbleType.kLeftRumble, leftRumble);
+    driver.setRumble(RumbleType.kRightRumble, rightRumble);
   }
 
   /**

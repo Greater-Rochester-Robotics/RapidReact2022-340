@@ -14,6 +14,7 @@ public class ShooterSetSpeed extends CommandBase {
   private DoubleSupplier speedSupplier;
   private boolean speedSupplierMode;
   private boolean hasHadTarget;
+  private boolean withLimelight;
 
   /** 
    * Sets speed of the shooter to a speed given 
@@ -25,6 +26,15 @@ public class ShooterSetSpeed extends CommandBase {
     addRequirements(RobotContainer.shooter);
     this.speedSupplierMode = false;
     this.speed = speed;
+    withLimelight = false;
+  }
+
+  public ShooterSetSpeed(DoubleSupplier speedSupplier) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(RobotContainer.shooter);
+    speedSupplierMode = true;
+    this.speedSupplier = speedSupplier;
+    this.withLimelight = false;
   }
 
   /** 
@@ -33,11 +43,12 @@ public class ShooterSetSpeed extends CommandBase {
    * This command does not stop the motor.
    * 
    */
-  public ShooterSetSpeed(DoubleSupplier speedSupplier) {
+  public ShooterSetSpeed(DoubleSupplier speedSupplier, boolean withLimelight) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooter);
     speedSupplierMode = true;
     this.speedSupplier = speedSupplier;
+    this.withLimelight = withLimelight;
   }
 
   // Called when the command is initially scheduled.
@@ -54,11 +65,11 @@ public class ShooterSetSpeed extends CommandBase {
       boolean hasTarget = RobotContainer.limeLight.hasTarget();
       //keep track if we have seen the target
       hasHadTarget |= hasTarget;
-      if(hasTarget){ 
+      if(!withLimelight || hasTarget){ 
         //if there is a target, get the speed
         speed = speedSupplier.getAsDouble();
       }
-      if(hasHadTarget){
+      if(!withLimelight || hasHadTarget){
         //if we have ever seen the target set the setpoint to the speed
         RobotContainer.shooter.setSpeed(speed); 
       } 

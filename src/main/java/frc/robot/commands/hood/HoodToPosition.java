@@ -14,6 +14,7 @@ public class HoodToPosition extends CommandBase {
   private DoubleSupplier positionSupplier;
   private boolean positionSupplierMode;
   private boolean hasHadTarget;
+  private boolean withLimelight;
 
   /** Creates a new HoodToPosition. */
   public HoodToPosition(double position) {
@@ -21,6 +22,7 @@ public class HoodToPosition extends CommandBase {
     addRequirements(RobotContainer.hood);
     positionSupplierMode = false;
     this.position = position;
+    withLimelight = false;
   }
 
   /** Creates a new HoodToPosition. */
@@ -29,6 +31,16 @@ public class HoodToPosition extends CommandBase {
     addRequirements(RobotContainer.hood);
     positionSupplierMode = true;
     this.positionSupplier = positionSupplier;
+    this.withLimelight = false;
+  }
+
+  /** Creates a new HoodToPosition. */
+  public HoodToPosition(DoubleSupplier positionSupplier, boolean withLimelight) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(RobotContainer.hood);
+    positionSupplierMode = true;
+    this.positionSupplier = positionSupplier;
+    this.withLimelight = withLimelight;
   }
 
   // Called when the command is initially scheduled.
@@ -45,11 +57,11 @@ public class HoodToPosition extends CommandBase {
       boolean hasTarget = RobotContainer.limeLight.hasTarget();
       //keep track if we have seen the target
       hasHadTarget |= hasTarget;
-      if(hasTarget){ 
+      if(!withLimelight || hasTarget){ 
         //if there is a target, get the position
         position = positionSupplier.getAsDouble();
       }
-      if(hasHadTarget){
+      if(!withLimelight || hasHadTarget){
         //if we have ever seen the target set the setpoint to the position
         RobotContainer.hood.setPosition(position);
       } 

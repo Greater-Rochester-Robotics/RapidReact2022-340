@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -40,6 +41,9 @@ public class Hood extends SubsystemBase {
     pidController.setD(Constants.HOOD_MOTOR_D);
     pidController.setFF(Constants.HOOD_MOTOR_FF);//changed gearbox, no FF needed
 
+    motor.setSoftLimit(SoftLimitDirection.kForward, (float) (Constants.HOOD_FORWARD_LIMIT_DEGREES/Constants.HOOD_DEGREE_CONVERSION));
+    motor.enableSoftLimit(SoftLimitDirection.kForward, true);//This doesn't work, right, added code in set position
+
     motor.burnFlash();
 
     limitSwitch = new DigitalInput(Constants.SHOOTER_HOOD_SWITCH);
@@ -55,8 +59,11 @@ public class Hood extends SubsystemBase {
   /**
    * A method to use the pidController to set the hood to an angle
    */
-  public void setPosition(double pos) {
-    pidController.setReference(pos, ControlType.kPosition);
+  public void setPosition(double position) {
+    if(position > Constants.HOOD_FORWARD_LIMIT_DEGREES){
+      position = Constants.HOOD_FORWARD_LIMIT_DEGREES;
+    }
+    pidController.setReference(position, ControlType.kPosition);
   }
 
   /**

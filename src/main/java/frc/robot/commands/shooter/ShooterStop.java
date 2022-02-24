@@ -22,4 +22,8 @@ public class ShooterStop extends InstantCommand {
   public void initialize() {
     RobotContainer.shooter.stopMotor();
   }
+
+  public boolean runsWhenDisabled(){
+    return true;
+  }
 }

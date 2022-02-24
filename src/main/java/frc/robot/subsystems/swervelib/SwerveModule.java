@@ -337,7 +337,53 @@ public class SwerveModule {
             }
         }
     }  
-    
+
+    /**
+     * The method to set the module to a position and speed. 
+     * This method does the opitimization internally. The 
+     * speed should be from -1.0 to 1.0 if isVeloMode is false, 
+     * and should be between -MAX_VELOCITY and MAX_VELOCITY if 
+     * isVeloMode is true.
+     * 
+     * @param targetState SwerveModuleState
+     * @param isVeloMode true if velocity mode, false if percent output mode
+     */
+    public void setModuleStateRot(SwerveModuleState targetState, boolean isVeloMode){
+        
+        // Instatiate Rotation2d object and fill with call from getCurRot2d()
+        Rotation2d curPosition = getCurRot2d();
+        
+        // Optimize targetState with Rotation2d object pulled from above
+        targetState = optimize(targetState, curPosition);
+        
+        // System.out.println("curAngle: "+curPosition.getDegrees()+"\t\t\t tarAngle: "+targetState.angle.getDegrees());
+
+        // Find the difference between the target and current position
+        double posDiff = targetState.angle.getRadians() - curPosition.getRadians(); 
+        double absDiff = Math.abs(posDiff);
+        
+        // if the distance is more than a half circle, we are going the wrong way
+        if (absDiff > Math.PI) {
+            // the distance the other way around the circle
+            posDiff = posDiff - (Constants.TWO_PI * Math.signum(posDiff));
+        }
+        
+        // Convert the shortest distance of rotation to relative encoder value(use convertion factor)
+        double targetAngle = posDiff * Constants.RAD_TO_ENC_CONV_FACTOR;
+        // add the encoder distance to the current encoder count
+        double outputEncValue = targetAngle + getRelEncCount();
+        
+        // Set the setpoint using setReference on the TalonFX
+        rotationMotor.set(TalonFXControlMode.Position, outputEncValue);
+
+        // Output to drive motor based on velomode or not
+        if (isVeloMode) {
+            setDriveSpeed(targetState.speedMetersPerSecond);
+        } else {
+            setDriveMotor(targetState.speedMetersPerSecond);
+        }
+
+    }  
 
     /**
      * This is a testing method, used to drive the module's rotation.

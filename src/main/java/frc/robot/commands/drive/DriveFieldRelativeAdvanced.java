@@ -29,6 +29,7 @@ import frc.robot.RobotContainer;
 
 public class DriveFieldRelativeAdvanced extends CommandBase {
   private double currentAngle = 0;
+  private boolean wasDriverControl;
 
   /** Creates a new DriveFieldCentricAdvanced. */
   public DriveFieldRelativeAdvanced() {
@@ -39,6 +40,7 @@ public class DriveFieldRelativeAdvanced extends CommandBase {
   @Override
   public void initialize() {
     currentAngle = RobotContainer.swerveDrive.getGyroInRad();
+    wasDriverControl = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -58,9 +60,10 @@ public class DriveFieldRelativeAdvanced extends CommandBase {
     double rotSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightTrigger) - Robot.robotContainer.getDriverAxis(Axis.kLeftTrigger);
 
     //use DPad to turn to specific angles.
-    // if(Robot.robotContainer.getDriverDPad() == 0){
-    //   currentAngle = Math.round(RobotContainer.swerveDrive.getGyroInRad()/Constants.TWO_PI) * Constants.TWO_PI;
-    // }else if(Robot.robotContainer.getDriverDPad() == 90){
+    if(Robot.robotContainer.getDriverDPad() == 0){
+      currentAngle = Math.round(RobotContainer.swerveDrive.getGyroInRad()/Constants.TWO_PI) * Constants.TWO_PI;
+    }
+    // else if(Robot.robotContainer.getDriverDPad() == 90){
     //   currentAngle = Math.round(RobotContainer.swerveDrive.getGyroInRad()/Constants.TWO_PI) * Constants.TWO_PI - 1.178;
     // }
 
@@ -75,10 +78,11 @@ public class DriveFieldRelativeAdvanced extends CommandBase {
       );
       //for when rotation speed is zero, update the current angle
       currentAngle = RobotContainer.swerveDrive.getGyroInRad();
+      wasDriverControl = true;
 
     }
     else {
-      if(Math.abs(RobotContainer.swerveDrive.getRotationalVelocity()) > 90.0){
+      if(wasDriverControl && Math.abs(RobotContainer.swerveDrive.getRotationalVelocity()) > 90.0){
         RobotContainer.swerveDrive.driveFieldRelative(
           awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
           lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
@@ -94,6 +98,7 @@ public class DriveFieldRelativeAdvanced extends CommandBase {
           RobotContainer.swerveDrive.getRobotRotationPIDOut(currentAngle),
           false
         );
+        wasDriverControl = false;
       }
     }
   }

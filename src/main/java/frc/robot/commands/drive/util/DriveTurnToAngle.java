@@ -35,7 +35,9 @@ public class DriveTurnToAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.swerveDrive.driveRobotCentric(0, 0, RobotContainer.swerveDrive.getRobotRotationPIDOut(angle), false);
+    double output = RobotContainer.swerveDrive.getRobotRotationPIDOut(angle);
+    System.out.println("pid output"+output);
+    RobotContainer.swerveDrive.driveRobotCentric(0, 0, output, false);
     if(Math.abs(angle - RobotContainer.swerveDrive.getGyroInRad()) < .03){
       onTargetCount++;
     }else{
