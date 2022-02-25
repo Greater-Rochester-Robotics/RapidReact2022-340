@@ -95,6 +95,9 @@ public final class Constants {
     public static final double LL_MOUNT_ANGLE = 42.0;
     public static final double LL_DISTANCE_TO_ROBOT_CENTER = 0.0;
 
+    /* Aiming Values*/
+    public static final Translation2d FIELD_CENTER = new Translation2d();
+    
     /* Harvester Constants */
     public static final double HARVESTER_INTAKE_SPEED = 0.5;
     public static final double HARVESTER_EXTAKE_SPEED = -0.6;
@@ -146,7 +149,7 @@ public final class Constants {
     /* Hood Constants */
     public static final double HOOD_DEGREE_CONVERSION = 30.0 * 32.0 / 35.0 / 51.0;// gear ratio on the versa, 5:1+7:1 ratio w/ 30T gear, 51T rack, 32 degrees
     public static final double HOOD_FORWARD_LIMIT_DEGREES = 22;
-    public static final double HOOD_POS_ALLOWABLE_ERROR = 1.5;
+    public static final double HOOD_POS_ALLOWABLE_ERROR = 0.5;
     
     public static final double HOOD_MOTOR_P = 0.5;//This seems to work
     public static final double HOOD_MOTOR_I = 0.0;
@@ -238,8 +241,5 @@ public final class Constants {
     public static final int BALL_SENSOR_0 = 0;
     public static final int BALL_SENSOR_1 = 1;
     public static final int SHOOTER_HOOD_SWITCH = 2;
-
-    /* Aiming Values*/
-    public static final Translation2d FIELD_CENTER = new Translation2d();
 
 }

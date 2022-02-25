@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ballhandler.BallHandlerShootProgT;
+import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.commands.shooter.ShooterStop;
@@ -22,6 +23,7 @@ public class ShootLowGoalFender extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new HoodHome(),
       parallel(
         new ShooterSetSpeed(Constants.SHOOTER_LOW_SPEEDS_TABLE.lookup(0)).withTimeout(2),
         new HoodToPosition(0.0)

@@ -10,11 +10,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class ShooterSetSpeed extends CommandBase {
-  private double speed;
-  private DoubleSupplier speedSupplier;
-  private boolean speedSupplierMode;
-  private boolean hasHadTarget;
-  private boolean withLimelight;
+  private double speed;//a set speed to drive the shooter
+  private DoubleSupplier speedSupplier;//a supplier that give a speed to the shooter
+  private boolean speedSupplierMode;//whether we use set speed or the supplier
+  private boolean withLimelight;//Are we using the limelight as a supplier
+  private boolean hasHadTarget;//if we have had a target with the limelight
+  private int atSpeedCount;//a count of how many times we are at speed
 
   /** 
    * Sets speed of the shooter to a speed given 
@@ -55,6 +56,7 @@ public class ShooterSetSpeed extends CommandBase {
   @Override
   public void initialize() {
     hasHadTarget = false;
+    atSpeedCount = 0;
     if(withLimelight){
       RobotContainer.limeLight.setLightState(true, RobotContainer.shooter);
     }
@@ -80,6 +82,14 @@ public class ShooterSetSpeed extends CommandBase {
       //if speed input hardcoded, just set the speed setpoint 
       RobotContainer.shooter.setSpeed(speed);
     }
+
+    if(RobotContainer.shooter.isAtSpeed()){
+      //if we're at speed add one to the count
+      atSpeedCount++;
+    }else{
+      //if not at speed discard all previous counts.
+      atSpeedCount = 0;
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -93,6 +103,6 @@ public class ShooterSetSpeed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (!speedSupplierMode || hasHadTarget) && RobotContainer.shooter.isAtSpeed();
+    return (!speedSupplierMode || hasHadTarget) && (atSpeedCount >= 10);
   }
 }

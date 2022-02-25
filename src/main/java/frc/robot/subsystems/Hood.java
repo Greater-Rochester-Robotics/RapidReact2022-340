@@ -23,6 +23,7 @@ public class Hood extends SubsystemBase {
   RelativeEncoder encoder;
   SparkMaxPIDController pidController;
   DigitalInput limitSwitch;
+  boolean hasBeenHomed;
 
   /** Creates a new Hood. */
   public Hood() {
@@ -47,6 +48,8 @@ public class Hood extends SubsystemBase {
     motor.burnFlash();
 
     limitSwitch = new DigitalInput(Constants.SHOOTER_HOOD_SWITCH);
+
+    hasBeenHomed = false;
   }
 
   @Override
@@ -54,6 +57,14 @@ public class Hood extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("HoodLimit", !limitSwitch.get());
     SmartDashboard.putNumber("Hood Position", getPosition());
+  }
+
+  public boolean hasBeenHomed(){
+    return hasBeenHomed;
+  }
+
+  public void setBeenHomed(boolean hasBeenHomed){
+    this.hasBeenHomed = hasBeenHomed;
   }
 
   /**
@@ -98,6 +109,7 @@ public class Hood extends SubsystemBase {
     
     if(!limitSwitch.get()) {
       resetEncoderPosition();
+      setBeenHomed(true);
       motor.set(0.0);
       return true;
     }else{
