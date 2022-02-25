@@ -98,8 +98,13 @@ public class SwervePathController {
             heading = heading.plus(new Rotation2d(headingErrorController.calculate(this.currentHeading.getRadians(), goalState.getHeading().getRadians())));
         }
 
+        System.out.println("vel: "+vel);
+        System.out.println("heading cos: "+heading.getCos());
+        System.out.println("heading sin: "+heading.getSin());
         double xVel = vel * heading.getCos();
         double yVel = vel * heading.getSin();
+        System.out.println("xVel: "+xVel);
+        System.out.println("yVel: "+yVel);
 
         this.lastPosition = currentPos;
 

@@ -7,6 +7,8 @@ package frc.robot.commands.hood;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class HoodToPosition extends CommandBase {
@@ -27,11 +29,7 @@ public class HoodToPosition extends CommandBase {
 
   /** Creates a new HoodToPosition. */
   public HoodToPosition(DoubleSupplier positionSupplier) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.hood);
-    positionSupplierMode = true;
-    this.positionSupplier = positionSupplier;
-    this.withLimelight = false;
+    this(positionSupplier,false);
   }
 
   /** Creates a new HoodToPosition. */
@@ -47,6 +45,9 @@ public class HoodToPosition extends CommandBase {
   @Override
   public void initialize() {
     hasHadTarget = false;
+    if(withLimelight){
+      RobotContainer.limeLight.setLightState(true, RobotContainer.hood);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -74,13 +75,16 @@ public class HoodToPosition extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.hood.stopMotor();
+    // RobotContainer.hood.stopMotor();
+    if(withLimelight){
+      RobotContainer.limeLight.setLightState(false, RobotContainer.hood);
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return (!positionSupplierMode || hasHadTarget) 
-      && (Math.abs(RobotContainer.hood.getPosition() - position) < 0.5);
+      && (Math.abs(RobotContainer.hood.getPosition() - position) < Constants.HOOD_POS_ALLOWABLE_ERROR);
   }
 }

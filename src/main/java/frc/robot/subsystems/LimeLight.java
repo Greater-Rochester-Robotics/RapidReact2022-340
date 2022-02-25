@@ -7,13 +7,20 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLight extends SubsystemBase {
+  static Map<String,Boolean> subsystemsUsingLight = new HashMap<String,Boolean>();
+  
   // Solenoid light;
   /** Creates a new LimeLight. */
   public LimeLight() {
-    setLightState(1);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
   }
 
   @Override
@@ -37,8 +44,15 @@ public class LimeLight extends SubsystemBase {
    * includes the LED from the PCM
    * @param LightState 1 for off, 3 for On
    */
-  public void setLightState(int LightState){
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(LightState);  //controls if limelight is on or not // 3 is on, 1 is off
+  public void setLightState(boolean lightOn, SubsystemBase subsystem){
+    subsystemsUsingLight.put(subsystem.getName(), lightOn);
+    Collection<Boolean> values = subsystemsUsingLight.values();
+    boolean sumOfBooleans = false;
+    for (Boolean v : values) {
+      sumOfBooleans |=  v;
+    }
+    System.out.println("sumBool"+sumOfBooleans);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(sumOfBooleans? 3 : 1);  //controls if limelight is on or not // 3 is on, 1 is off
     // light.set(3 == LightState);//this is for a secondary light powered by PCM
   }
 
@@ -81,31 +95,35 @@ public class LimeLight extends SubsystemBase {
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0); //returns the vertical angle offset
   }
 
+  public double distanceFrontToFender(){
+    return distanceToTarget() - Constants.LL_DISTANCE_TO_FRONT - Constants.LL_TARGET_TO_FENDER;
+  }
+  
   public double distanceToTarget(){
-    return Constants.LL_TARGET_TO_ROBOT_HEIGHT / Math.tan(Math.toRadians(verticalAngleToTarget() + Constants.LL_MOUNT_ANGLE));
+    return Constants.LL_TARGET_TO_LL_HEIGHT / Math.tan(Math.toRadians(verticalAngleToTarget() + Constants.LL_MOUNT_ANGLE));
   }
 
   public double distanceFrontToTarget(){
-    return distanceToTarget() + Constants.LL_ROBOT_DISTANCE_TO_FRONT;
+    return distanceToTarget() + Constants.LL_DISTANCE_TO_FRONT;
   }
 
   public double distanceCenterToCenter(){
-    return distanceToTarget() + Constants.LL_DISTANCE_TO_CENTER + Constants.LL_TARGET_RADIUS;
+    return distanceToTarget() + Constants.LL_DISTANCE_TO_ROBOT_CENTER + Constants.LL_TARGET_RADIUS;
   }
 
   public double getShooterHighSpeed(){
-    return Constants.SHOOTER_HIGH_SPEEDS_TABLE.lookup(distanceCenterToCenter());
+    return Constants.SHOOTER_HIGH_SPEEDS_TABLE.lookup(distanceFrontToFender());
   }
 
   public double getShooterLowSpeed(){
-    return Constants.SHOOTER_LOW_SPEEDS_TABLE.lookup(distanceCenterToCenter());
+    return Constants.SHOOTER_LOW_SPEEDS_TABLE.lookup(distanceFrontToFender());
   }
 
   public double getHoodHighAngle(){
-    return Constants.HOOD_HIGH_POSITION_TABLE.lookup(distanceCenterToCenter());
+    return Constants.HOOD_HIGH_POSITION_TABLE.lookup(distanceFrontToFender());
   }
 
   public double getHoodLowAngle(){
-    return Constants.HOOD_LOW_POSITION_TABLE.lookup(distanceCenterToCenter());
+    return Constants.HOOD_LOW_POSITION_TABLE.lookup(distanceFrontToFender());
   }
 }

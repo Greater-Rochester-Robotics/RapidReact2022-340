@@ -22,10 +22,10 @@ public class ShootHighGoal extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       parallel(
-        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed),
-        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle)
+        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(2),
+        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true)
       ),
-      new WaitUntilCommand(RobotContainer.shooter::isAtSpeed),//this should fall through, left for options
+      // new WaitUntilCommand(RobotContainer.shooter::isAtSpeed),//this should fall through, left for options
       new BallHandlerShootProgT(timeBewtweenBalls),
       new ShooterStop()
     );

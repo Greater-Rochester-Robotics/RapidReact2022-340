@@ -134,7 +134,8 @@ public class BallHandler extends SubsystemBase {
           break;
         }
       case kFillTo0:
-        speeds = new double[] { HARV_IN, BALL0_IN, 0, 0 };
+        speeds = new double[] { HARV_IN, BALL0_IN, 0, 0 
+        };
 
         if(isBall0()){
           state = State.kOff;
@@ -161,16 +162,16 @@ public class BallHandler extends SubsystemBase {
     }
 
        //If the wrong ball color is detected, reset spitout timer
-    if(!shouldIntakeBall() && (state == State.kFillTo1 || state == State.kFillTo0)){//TODO:rob reverse this again-rob
+    if((state == State.kFillTo1 || state == State.kFillTo0)){//TODO:rob reverse this again-rob !shouldIntakeBall() && 
       // System.out.println("Reset selector timer");
       selectorTimer.reset();
     }
 
     // System.out.println("should ball "+ shouldIntakeBall());
     //if timer reset, run spit out timer for half second
-    if(!selectorTimer.hasElapsed(0.5)){
-      speeds[0] *= -1;  
-    }
+    // if(!selectorTimer.hasElapsed(0.5)){
+    //   speeds[1] *= -1;  
+    // }
 
     //If speed have changed, update the motor output speeds
     if(!DriverStation.isDisabled() && 

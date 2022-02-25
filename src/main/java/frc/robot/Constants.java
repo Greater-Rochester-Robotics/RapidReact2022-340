@@ -58,9 +58,9 @@ public final class Constants {
     public static final double ROTATIONAL_VELOCITY_TOLERANCE = 1.0;
 
     /* Robot Rotation PID controller constants */
-    public static final double ROBOT_SPIN_P = 1.55;//tuned for drive/climber bot
-    public static final double ROBOT_SPIN_I = 0.0;//0.05;
-    public static final double ROBOT_SPIN_D = 0.01;
+    public static final double ROBOT_SPIN_P = 1.1;//1.55;//tuned for drive/climber bot
+    public static final double ROBOT_SPIN_I = 0.0;
+    public static final double ROBOT_SPIN_D = 0.001;//0.01
     public static final double ROBOT_SPIN_PID_TOLERANCE = Math.toRadians(0.5);
     public static final double MINIMUM_ROTATIONAL_OUTPUT = 0.07;
     
@@ -81,24 +81,25 @@ public final class Constants {
     public static final double DRIVE_TARGETING_I_ZONE = 2;
 
     /* Driver Scaling Constants */
-    public static final double DRIVER_SPEED_SCALE_LINEAR = 0.4;
+    public static final double DRIVER_SPEED_SCALE_LINEAR = 0.6;
     public static final double DRIVER_SPEED_SCALE_ROTATIONAL = 1.5;
 
     /* Limelight Values*/
     public static final double LL_ANGLE_TOLERANCE = 1.0;
     public static final double LL_TARGET_HEIGHT = 104.0;
-    public static final double LL_ROBOT_HEIGHT = 32.0;
-    public static final double LL_TARGET_TO_ROBOT_HEIGHT = LL_TARGET_HEIGHT - LL_ROBOT_HEIGHT;
-    public static final double LL_TARGET_RADIUS = 0.0;
-    public static final double LL_ROBOT_DISTANCE_TO_FRONT = 10.0;
-    public static final double LL_MOUNT_ANGLE = 52.0;
-    public static final double LL_DISTANCE_TO_CENTER = 0.0;
+    public static final double LL_MOUNT_HEIGHT = 33.0;
+    public static final double LL_TARGET_TO_LL_HEIGHT = LL_TARGET_HEIGHT - LL_MOUNT_HEIGHT;
+    public static final double LL_TARGET_RADIUS = 26.69;
+    public static final double LL_TARGET_TO_FENDER = 7.2;
+    public static final double LL_DISTANCE_TO_FRONT = 4.5;
+    public static final double LL_MOUNT_ANGLE = 42.0;
+    public static final double LL_DISTANCE_TO_ROBOT_CENTER = 0.0;
 
     /* Harvester Constants */
-    public static final double HARVESTER_INTAKE_SPEED = 0.6;
+    public static final double HARVESTER_INTAKE_SPEED = 0.5;
     public static final double HARVESTER_EXTAKE_SPEED = -0.6;
 
-    public static final double BALL_HANDLER_0_INTAKE_SPEED = 0.6;
+    public static final double BALL_HANDLER_0_INTAKE_SPEED = 0.55;
     public static final double BALL_HANDLER_0_EXTAKE_SPEED = -0.6;
     public static final double BALL_HANDLER_1_INTAKE_SPEED = 0.6;
     public static final double BALL_HANDLER_1_EXTAKE_SPEED = -0.6;
@@ -127,8 +128,13 @@ public final class Constants {
     public static final LookUpTable SHOOTER_HIGH_SPEEDS_TABLE = new LookUpTable();
     static {
         //use put(distance, speed)
-        SHOOTER_HIGH_SPEEDS_TABLE.put(5, 10000);
-       
+        SHOOTER_HIGH_SPEEDS_TABLE.put(153.25, 9800);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(115, 9400);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(92, 8600);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(75.25, 8250);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(65.75, 8200);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(43.75, 7600);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(23.5, 7300);
     }
     public static final LookUpTable SHOOTER_LOW_SPEEDS_TABLE = new LookUpTable();
     static {
@@ -140,6 +146,7 @@ public final class Constants {
     /* Hood Constants */
     public static final double HOOD_DEGREE_CONVERSION = 30.0 * 32.0 / 35.0 / 51.0;// gear ratio on the versa, 5:1+7:1 ratio w/ 30T gear, 51T rack, 32 degrees
     public static final double HOOD_FORWARD_LIMIT_DEGREES = 22;
+    public static final double HOOD_POS_ALLOWABLE_ERROR = 1.5;
     
     public static final double HOOD_MOTOR_P = 0.5;//This seems to work
     public static final double HOOD_MOTOR_I = 0.0;
@@ -187,7 +194,7 @@ public final class Constants {
 
     /* Compressor Pressure Constants */
     public static final double MIN_PRESSURE = 95.0;
-    public static final double MAX_PRESSURE = 100.0;//TODO: change this on comp bot, the sensor on prac is broken
+    public static final double MAX_PRESSURE = 120.0;//TODO: change this on comp bot, the sensor on prac is broken
 
     /* IDENTIFICATION NUMBERS FOR DEVICES */
 

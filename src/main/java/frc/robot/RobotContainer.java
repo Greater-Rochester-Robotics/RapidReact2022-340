@@ -15,8 +15,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.ShootHighGoal;
+import frc.robot.commands.ShootHighGoalFender;
 import frc.robot.commands.SpitBalls;
-import frc.robot.commands.StopShooterHandler;
+import frc.robot.commands.StopShooterHandlerHood;
 import frc.robot.commands.autonomous.TestPath;
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
@@ -40,6 +42,7 @@ import frc.robot.commands.drive.util.DriveFindMaxAccel;
 import frc.robot.commands.drive.util.DriveOneModule;
 import frc.robot.commands.drive.util.DriveResetAllModulePositionsToZero;
 import frc.robot.commands.drive.util.DriveResetGyroToZero;
+import frc.robot.commands.drive.util.DriveSetGyro;
 import frc.robot.commands.drive.util.DriveTuneDriveMotorFeedForward;
 import frc.robot.commands.drive.util.DriveTurnToAngle;
 import frc.robot.commands.hood.HoodHome;
@@ -176,22 +179,16 @@ public class RobotContainer {
   private void configureButtonBindings() {
     driverA.whenPressed(new BallHandlerSetState(State.kFillTo1));
     driverA.whenReleased(new BallHandlerSetState(State.kOff));
-  
     driverB.whenPressed(new SpitBalls());
-    driverB.whenReleased(new StopShooterHandler());
-    driverX.whenPressed(new BallHandlerSetState(State.kShoot0));//ClimberTiltOut());
-    driverX.whenReleased(new BallHandlerSetState(State.kOff));//ClimberTiltIn());
-    // driverX.whileHeld(new DriveTurnToAngle(Constants.PI_OVER_TWO));
-    // driverY.whileHeld(new DriveTurnToAngle(0));//ClimberExtendIn());//new BallHandlerSetState(State.kSpitMid));
-    // driverY.whenReleased(new BallHandlerSetState(State.kOff));
+    driverB.whenReleased(new StopShooterHandlerHood());
+    driverX.whenPressed(new ShootHighGoalFender(1));
+    driverX.whenReleased(new StopShooterHandlerHood());
+    driverY.whenPressed(new ShootHighGoal(1));
+    driverY.whenReleased(new StopShooterHandlerHood());
     driverLB.whenPressed(new DriveResetGyroToZero());
     driverRB.whileHeld(new DriveOnTarget());
-    // driverStart.whileHeld(new ClimberExtendoToPosition(Constants.CLIMBER_MIDDLE_POSITION));
-    // driverBack.whileHeld(new ClimberExtendoHome());
-
+    driverStart.whileHeld(new DriveFollowTrajectory("DriveStraight"));
     driverBack.toggleWhenActive(new DriveRobotCentric());
-    // driverStart.whenPressed(new DriveFieldRelative());
-
   }
 
   /**

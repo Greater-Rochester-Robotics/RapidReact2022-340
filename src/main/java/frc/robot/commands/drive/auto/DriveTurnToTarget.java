@@ -24,13 +24,13 @@ public class DriveTurnToTarget extends CommandBase {
   public DriveTurnToTarget(double offsetDistance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.offsetDistance = offsetDistance;
-    addRequirements(RobotContainer.swerveDrive, RobotContainer.limeLight);
+    addRequirements(RobotContainer.swerveDrive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.limeLight.setLightState(3);
+    RobotContainer.limeLight.setLightState(true, RobotContainer.swerveDrive);
     timer.start();
     hasHadTarget = false;
     // Default to the current angle of the robot
@@ -66,6 +66,7 @@ public class DriveTurnToTarget extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     RobotContainer.swerveDrive.stopAllModules();
+    RobotContainer.limeLight.setLightState(false, RobotContainer.swerveDrive);
   }
 
   // Returns true when the command should end.

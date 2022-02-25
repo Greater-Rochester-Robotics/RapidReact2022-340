@@ -15,20 +15,22 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
+// import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+// import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.ADIS16470_IMU.CalibrationTime;
+// import edu.wpi.first.wpilibj.ADIS16470_IMU.CalibrationTime;
 
 import frc.robot.Constants;
+import frc.robot.subsystems.ADIS.CalibrationTime;
+import frc.robot.subsystems.ADIS.IMUAxis;
 import frc.robot.subsystems.swervelib.SwerveModule;
 
 public class SwerveDrive extends SubsystemBase {
 
   private static SwerveModule swerveModules[];
   private static SwerveModule frontLeft, rearLeft, rearRight, frontRight;
-  public ADIS16470_IMU imu;
+  public ADIS imu;
   private SwerveDriveKinematics driveKinematics;
   public SwerveDriveOdometry driveOdometry;
   private PIDController robotSpinController;
@@ -75,7 +77,7 @@ public class SwerveDrive extends SubsystemBase {
       Constants.REAR_RIGHT_POSITION, Constants.FRONT_RIGHT_POSITION);
 
     // Constructs IMU object
-    imu = new ADIS16470_IMU(IMUAxis.kY, SPI.Port.kOnboardCS0, CalibrationTime._4s);//Must use params, won't work without
+    imu = new ADIS(IMUAxis.kY, SPI.Port.kOnboardCS0, CalibrationTime._4s);//Must use params, won't work without
     
     //construct the odometry class.
     driveOdometry = new SwerveDriveOdometry(driveKinematics, getGyroRotation2d());
@@ -118,17 +120,17 @@ public class SwerveDrive extends SubsystemBase {
     SwerveModuleState[] targetStates = driveKinematics.toSwerveModuleStates(chassisSpeeds);
     //use SwerveDriveKinematic.desaturateWheelSpeeds(), max speed is 1 if percentOutput, MaxVelovcity if velocity mode
     SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, isVeloMode? Constants.MAXIMUM_VELOCITY : 1.0);
-    if(Math.abs(chassisSpeeds.vxMetersPerSecond) < 0.05 && Math.abs(chassisSpeeds.vyMetersPerSecond) < 0.05 && Math.abs(chassisSpeeds.omegaRadiansPerSecond) > .01){
-      //pass along SwerveModuleStates to SwerveModules and pass along boolean isVeloMode
-      for (int i = 0; i < targetStates.length; i++) {
-        swerveModules[i].setModuleStateRot(targetStates[i], isVeloMode);
-      } 
-    }else{
+    // if(Math.abs(chassisSpeeds.vxMetersPerSecond) < 0.05 && Math.abs(chassisSpeeds.vyMetersPerSecond) < 0.05 && Math.abs(chassisSpeeds.omegaRadiansPerSecond) > .01){
+    //   //pass along SwerveModuleStates to SwerveModules and pass along boolean isVeloMode
+    //   for (int i = 0; i < targetStates.length; i++) {
+    //     swerveModules[i].setModuleStateRot(targetStates[i], isVeloMode);
+    //   } 
+    // }else{
       //pass along SwerveModuleStates to SwerveModules and pass along boolean isVeloMode
       for (int i = 0; i < targetStates.length; i++) {
           swerveModules[i].setModuleState(targetStates[i], isVeloMode);
       }
-    }
+    // }
   }
 
   /**
@@ -280,8 +282,7 @@ public class SwerveDrive extends SubsystemBase {
    * @param newCurrentAngle value the gyro should now read in degrees.
    */
   public void setGyro(double newCurrentAngle){
-    //TODO: rewrite the IMU class to make it work
-    // imu.set(newCurrentAngle)
+    imu.setGyroAngle(newCurrentAngle);
   }
 
   
@@ -431,17 +432,22 @@ public class SwerveDrive extends SubsystemBase {
    */
   public double getRobotRotationPIDOut(double target){
     double currentGyroPos = getGyroInRad();
-    double output = robotSpinController.calculate(currentGyroPos, target);
+    return robotSpinController.calculate(currentGyroPos, target);
     // System.out.println("targetAngle:"+Math.toDegrees(target)+"   angle:"+Math.toDegrees(currentGyroPos)+"atSP:"+robotSpinController.atSetpoint()+"  pid output"+output);
-    if(robotSpinController.atSetpoint()){
-      return 0.0;
-    } else {
-      if (Math.abs(output) < Constants.MINIMUM_ROTATIONAL_OUTPUT){
-        return Constants.MINIMUM_ROTATIONAL_OUTPUT*Math.signum(output);
-      }else {
-        return output;
-      }
-    }
+    // if(robotSpinController.atSetpoint()){
+    //   return 0.0;
+    // } else {
+    //   if (Math.abs(output) < Constants.MINIMUM_ROTATIONAL_OUTPUT){
+    //     return Constants.MINIMUM_ROTATIONAL_OUTPUT*Math.signum(output);
+    //   }else {
+    //     return output;
+    //   }
+    // }
+  }
+
+  public double getCounterRotationPIDOut(double target){
+    double currentGyroPos = getGyroInRad();
+    return robotSpinController.calculate(currentGyroPos, target);
   }
 
 }

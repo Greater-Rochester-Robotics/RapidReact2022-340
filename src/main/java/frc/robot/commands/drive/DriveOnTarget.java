@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.SwerveDrive;
 
 public class DriveOnTarget extends CommandBase {
   Timer timer = new Timer();
@@ -26,13 +27,13 @@ public class DriveOnTarget extends CommandBase {
   public DriveOnTarget(double offsetDistance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.offsetDistance = offsetDistance;
-    addRequirements(RobotContainer.swerveDrive, RobotContainer.limeLight);
+    addRequirements(RobotContainer.swerveDrive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.limeLight.setLightState(3);
+    RobotContainer.limeLight.setLightState(true, RobotContainer.swerveDrive);
     timer.start();
     hasHadTarget = false;
     // Default to the current angle of the robot
@@ -80,7 +81,7 @@ public class DriveOnTarget extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.limeLight.setLightState(1);
+    RobotContainer.limeLight.setLightState(false, RobotContainer.swerveDrive);
   }
 
   // Returns true when the command should end.
