@@ -28,6 +28,7 @@ import edu.wpi.first.math.util.Units;
  * 
  * originally written by Michael Jansen
  */
+@Deprecated
 public class SwerveTrajectory {
     public static double TIME_STEP = 0.01;
     private ArrayList<State> states;

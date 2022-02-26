@@ -17,16 +17,22 @@ public class HoodToPosition extends CommandBase {
   private boolean hasHadTarget;
   private boolean withLimelight;
 
-  /** Creates a new HoodToPosition. */
+  /**
+   * Sets the hood to input position in degrees.
+   * @param position should be between 0 and 22 degrees
+   */
   public HoodToPosition(double position) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.hood);
-    positionSupplierMode = false;
+    positionSupplierMode = false;//not supplierMode as set to position
     this.position = position;
-    withLimelight = false;
+    withLimelight = false;//no using the limelight
   }
 
-  /** Creates a new HoodToPosition. */
+  /**
+   * Sets the hood to the supplied position, assumed that no limelight used.
+   * @param positionSupplier
+   */
   public HoodToPosition(DoubleSupplier positionSupplier) {
     this(positionSupplier,false);
   }
@@ -43,8 +49,10 @@ public class HoodToPosition extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    //we haven't seen the target yet
     hasHadTarget = false;
     if(withLimelight){
+      //turn on the limelight if we are using it
       RobotContainer.limeLight.setLightState(true, RobotContainer.hood);
     }
   }
@@ -74,8 +82,9 @@ public class HoodToPosition extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // RobotContainer.hood.stopMotor();
+    // RobotContainer.hood.stopMotor();//we aren't stopping the motor so thatthe PID will hold the position
     if(withLimelight){
+      //turn off the limelight if we used it
       RobotContainer.limeLight.setLightState(false, RobotContainer.hood);
     }
   }
@@ -83,6 +92,7 @@ public class HoodToPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //end when we are at the target position (only if we have seen target, when using target though)
     return (!positionSupplierMode || hasHadTarget) 
       && (Math.abs(RobotContainer.hood.getPosition() - position) < Constants.HOOD_POS_ALLOWABLE_ERROR);
   }

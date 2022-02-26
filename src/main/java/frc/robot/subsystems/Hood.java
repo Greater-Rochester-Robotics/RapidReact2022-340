@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.FaultID;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -28,13 +29,13 @@ public class Hood extends SubsystemBase {
   /** Creates a new Hood. */
   public Hood() {
     motor = new CANSparkMax(Constants.SHOOTER_HOOD_MOTOR, MotorType.kBrushless);
-    motor.restoreFactoryDefaults();
-    motor.setIdleMode(IdleMode.kBrake);
-    motor.enableVoltageCompensation(10.5);
-    motor.setInverted(false); //this is the right direction
+    motor.restoreFactoryDefaults();//begin by reseting the controller to default
+    motor.setIdleMode(IdleMode.kBrake);//need brake to keep hood in place
+    motor.enableVoltageCompensation(10.5);//scale power with voltage drop
+    motor.setInverted(false); //this is the right direction 2022
 
     encoder = motor.getEncoder();
-    encoder.setPositionConversionFactor(Constants.HOOD_DEGREE_CONVERSION);
+    encoder.setPositionConversionFactor(Constants.HOOD_DEGREE_CONVERSION);//convert to degrees
 
     pidController = motor.getPIDController();
     pidController.setP(Constants.HOOD_MOTOR_P);
@@ -43,10 +44,12 @@ public class Hood extends SubsystemBase {
     pidController.setFF(Constants.HOOD_MOTOR_FF);//changed gearbox, no FF needed
 
     motor.setSoftLimit(SoftLimitDirection.kForward, (float) (Constants.HOOD_FORWARD_LIMIT_DEGREES/Constants.HOOD_DEGREE_CONVERSION));
-    motor.enableSoftLimit(SoftLimitDirection.kForward, true);//This doesn't work, right, added code in set position
+    motor.enableSoftLimit(SoftLimitDirection.kForward, true);//This doesn't work right, added code in set position
 
-    motor.burnFlash();
+    motor.clearFaults();//clear motor fault so we can check when rebooted
 
+    motor.burnFlash();//make the previous settings hold after power cycle, must be last
+    
     limitSwitch = new DigitalInput(Constants.SHOOTER_HOOD_SWITCH);
 
     hasBeenHomed = false;
@@ -59,12 +62,34 @@ public class Hood extends SubsystemBase {
     // SmartDashboard.putNumber("Hood Position", getPosition());
   }
 
+  /**
+   * accessor for whether to determine if the hood 
+   * has been homed.
+   * 
+   * @return true if hood is homed
+   */
   public boolean hasBeenHomed(){
     return hasBeenHomed;
   }
 
+  /**
+   * sets the hasBeenHomed variable to the input. 
+   * @param hasBeenHomed boolean
+   */
   public void setBeenHomed(boolean hasBeenHomed){
     this.hasBeenHomed = hasBeenHomed;
+  }
+
+  /**
+   * A method to check if the motor controller has 
+   * power cycled, if so the hasBeenHomed is reset.
+   */
+  public void checkForPowerCycle(){
+    if(motor.getFault(FaultID.kHasReset)){
+      setBeenHomed(false);
+      motor.clearFaults();
+    }
+
   }
 
   /**
@@ -72,13 +97,17 @@ public class Hood extends SubsystemBase {
    */
   public void setPosition(double position) {
     if(position > Constants.HOOD_FORWARD_LIMIT_DEGREES){
+      //if we set beyond the forward limit, change position to forward limit
       position = Constants.HOOD_FORWARD_LIMIT_DEGREES;
     }
+    //set pidController
     pidController.setReference(position, ControlType.kPosition);
   }
 
   /**
    * Accessor method for the position of the hood. 
+   * 
+   * @return in degrees from llimit switch
    */
   public double getPosition() {
     return encoder.getPosition();
@@ -93,6 +122,7 @@ public class Hood extends SubsystemBase {
   
   /**
    * Set the current position of the hood to the 
+   * input position.
    * @param position
    */
   public void resetEncoderPosition(double position) {
@@ -104,6 +134,8 @@ public class Hood extends SubsystemBase {
    * pressed, and drives motor backwards with percentVoltage.
    * It resets the hood encoder with resetHoodEncoderPosition
    * when the switch is pressed.
+   * 
+   * @return true when done, false when not done
    */
   public boolean homePosition() {
     

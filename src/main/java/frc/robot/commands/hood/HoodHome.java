@@ -18,11 +18,16 @@ public class HoodHome extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.hood);
     this.overrideBeenHomed = overrideBeenHomed;
-    
+  }
+
+  public void initialize(){
+    //double check that the hood motor hasn't been power cycled
+    RobotContainer.hood.checkForPowerCycle();
   }
 
   @Override
   public void end(boolean interrupted){
+    //stop the motor when we finish
     RobotContainer.hood.stopMotor();
   }
   // Returns true when the command should end.

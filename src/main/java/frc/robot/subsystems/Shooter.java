@@ -66,12 +66,16 @@ public class Shooter extends SubsystemBase {
     motor.set(TalonFXControlMode.Velocity, speed * Constants.SHOOTER_MOTOR_PUSLES_PER_REV);//, DemandType.ArbitraryFeedForward, (speed / 15000));
   }
 
+  /**
+   * set the motor to a percent output, for use in testing and spitting balls out.
+   * @param percentOutput
+   */
   public void setOutput(double percentOutput){
     motor.set(TalonFXControlMode.PercentOutput, percentOutput);
   }
   
   /**
-   * @return if shooter is at speed, within tolerance
+   * @return true if shooter is at speed, within tolerance
    */
   public boolean isAtSpeed() {
     return Math.abs(motor.getClosedLoopError()) < Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR;

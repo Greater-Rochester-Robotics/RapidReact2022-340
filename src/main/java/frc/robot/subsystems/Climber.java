@@ -106,18 +106,19 @@ public class Climber extends SubsystemBase {
   /* ==================== Functions for the fixed arms ==================== */
 
   /**
-   * 
+   * swing fixed arms out
    */
   public void climberTiltOut(){
     tiltRobot.set(Value.kReverse);
   }
 
   /**
-   * 
+   * swing fixed arms in
    */
   public void climberTiltIn(){
     tiltRobot.set(Value.kForward);
   }
+
 /* ======================Functions for the pair of arms=====================*/
   public void assignRemoteSensor(){
     TalonFXConfiguration rightConfig = new TalonFXConfiguration();
@@ -158,10 +159,19 @@ public class Climber extends SubsystemBase {
 		extendoMotorRight.setStatusFramePeriod(StatusFrame.Status_14_Turn_PIDF1, 1000);
 		extendoMotorLeft.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 1000);
   }
+
+  /**
+   * set both motor positions using dual pids
+   * @param position
+   */
   public void setBothMotors(double position){
     extendoMotorRight.set(TalonFXControlMode.Position, position / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR, DemandType.AuxPID, 0.0);
 		extendoMotorLeft.follow(extendoMotorRight, FollowerType.AuxOutput1);
   }
+
+  /**
+   * stop both motors
+   */
   public void stopBothMotors(){
     extendoMotorRight.set(ControlMode.PercentOutput, 0.0);
     extendoMotorLeft.set(ControlMode.PercentOutput, 0.0);
@@ -174,7 +184,7 @@ public class Climber extends SubsystemBase {
   }
 
   /**
-   * Intendend for testing, drives arm in at low power
+   * Intendend for testing and homing, drives arm in at low power
    */
   public void extendoArmRightIn(){
     extendoMotorRight.set(TalonFXControlMode.PercentOutput, 
@@ -228,7 +238,7 @@ public class Climber extends SubsystemBase {
   }
 
   /**
-   * Intendend for testing, drives arm in at low power
+   * Intendend for testing and homing, drives arm in at low power
    */
   public void extendoArmLeftIn(){
     extendoMotorLeft.set(TalonFXControlMode.PercentOutput, 

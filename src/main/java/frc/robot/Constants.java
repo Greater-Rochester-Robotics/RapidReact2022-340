@@ -203,7 +203,7 @@ public final class Constants {
 
     /* Compressor Pressure Constants */
     public static final double MIN_PRESSURE = 95.0;
-    public static final double MAX_PRESSURE = 120.0;//TODO: change this on comp bot, the sensor on prac is broken
+    public static final double MAX_PRESSURE = 120.0;//TODO: change this on between comp bot and prac , 100 foir prac
 
     /* IDENTIFICATION NUMBERS FOR DEVICES */
 

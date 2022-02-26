@@ -45,8 +45,12 @@ public class LimeLight extends SubsystemBase {
 
   /**
    * Set the LED light on or off, this 
-   * includes the LED from the PCM
-   * @param LightState 1 for off, 3 for On
+   * includes the LED from the PH
+   * This method lets all subsystems say whether they use the light, 
+   * or not, when all subsystems chose not to use the light it turns off.
+   * 
+   * @param boolean true for on, false for off
+   * @param SubsystemBase name of the subsystem(command) using limelight LED
    */
   public void setLightState(boolean lightOn, SubsystemBase subsystem){
     subsystemsUsingLight.put(subsystem.getName(), lightOn);
@@ -95,38 +99,80 @@ public class LimeLight extends SubsystemBase {
     }
   }
 
+  /**
+   * the vertical angle of the target, in inches, as measured 
+   * from the center of the camera. used to findt he distance 
+   * to the target.
+   * 
+   * @return angle in degrees
+   */
   public double verticalAngleToTarget(){
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0); //returns the vertical angle offset
   }
 
+  /**
+   * distance from the front of the robot to the fender, if the front of the 
+   * robot is parallel with the fender. This is used as all shooter and hood 
+   * data use this as the standard of distance.
+   * 
+   * @return distance in inches
+   */
   public double distanceFrontToFender(){
     return distanceToTarget() - Constants.LL_DISTANCE_TO_FRONT - Constants.LL_TARGET_TO_FENDER;
   }
   
+  /**
+   * distance from the limelight to the target
+   * @return distance in inches
+   */
   public double distanceToTarget(){
     return Constants.LL_TARGET_TO_LL_HEIGHT / Math.tan(Math.toRadians(verticalAngleToTarget() + Constants.LL_MOUNT_ANGLE));
   }
 
+  /**
+   * distance from the front of the robot to the target
+   * @return distance in inches
+   */
   public double distanceFrontToTarget(){
     return distanceToTarget() + Constants.LL_DISTANCE_TO_FRONT;
   }
 
+  /**
+   * distance between the center of the robot and the center of the goal
+   * @return distance in inches
+   */
   public double distanceCenterToCenter(){
     return distanceToTarget() + Constants.LL_DISTANCE_TO_ROBOT_CENTER + Constants.LL_TARGET_RADIUS;
   }
 
+  /**
+   * returns the speed the shooter should be for the high goal, based on the limelight
+   * @return speed in native units
+   */
   public double getShooterHighSpeed(){
     return Constants.SHOOTER_HIGH_SPEEDS_TABLE.lookup(distanceFrontToFender());
   }
 
+  /**
+   * returns the speed the shooter should be for the low goal, based on the limelight
+   * @return speed in native units
+   */
   public double getShooterLowSpeed(){
     return Constants.SHOOTER_LOW_SPEEDS_TABLE.lookup(distanceFrontToFender());
   }
 
+  /**
+   * returns the angle the hood should be for the high goal, based on the limelight
+   * @return angle in degrees
+   */
   public double getHoodHighAngle(){
     return Constants.HOOD_HIGH_POSITION_TABLE.lookup(distanceFrontToFender());
   }
 
+  /**
+   * returns the angle the hood should be for the low goal, based on the limelight
+   * @return angle in degrees
+   */
   public double getHoodLowAngle(){
     return Constants.HOOD_LOW_POSITION_TABLE.lookup(distanceFrontToFender());
   }
