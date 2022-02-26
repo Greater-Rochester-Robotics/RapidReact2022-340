@@ -56,7 +56,7 @@ public class Hood extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("HoodLimit", !limitSwitch.get());
-    SmartDashboard.putNumber("Hood Position", getPosition());
+    // SmartDashboard.putNumber("Hood Position", getPosition());
   }
 
   public boolean hasBeenHomed(){

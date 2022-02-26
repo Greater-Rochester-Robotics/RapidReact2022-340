@@ -149,22 +149,23 @@ public class RobotContainer {
     configureButtonBindings();
 
     //add some commands to dashboard for testing/configuring
-    SmartDashboard.putData(new DriveResetAllModulePositionsToZero());
-    SmartDashboard.putData(new DriveAdjustModuleZeroPoint());
-    SmartDashboard.putData("Drive Module 0", new DriveOneModule(0));
-    SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));
-    SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));
-    SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));
+    SmartDashboard.putData(new DriveResetAllModulePositionsToZero());//For setup of swerve
+    SmartDashboard.putData(new DriveAdjustModuleZeroPoint());//For setup of swerve
+    SmartDashboard.putData("Drive Module 0", new DriveOneModule(0));//For setup of swerve
+    SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));//For setup of swerve
+    SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));//For setup of swerve
+    SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));//For setup of swerve
     SmartDashboard.putData(new DriveFindMaxAccel());//This is for PathPlanning Parameters
-    SmartDashboard.putData(new DriveStopAllModules());
+    SmartDashboard.putData(new DriveStopAllModules());//For setup of swerve
     SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));//this is for Velocity PID parameters, Path Planning by Extention
     SmartDashboard.putData(new DriveAllModulesPositionOnly());
-    SmartDashboard.putData(new BallHandlerIntakeIn());
-    SmartDashboard.putData(new BallHandlerIntakeOut()); 
-    SmartDashboard.putData(new ShooterSetSpeed(this::speedIShoot));
-    SmartDashboard.putData(new HoodToPosition(this::angleIShoot));
-    SmartDashboard.putData(new ShooterStop());
-    SmartDashboard.putData(new HoodHome());
+    // SmartDashboard.putData(new BallHandlerIntakeIn());
+    // SmartDashboard.putData(new BallHandlerIntakeOut()); 
+    SmartDashboard.putData(new ShooterSetSpeed(this::speedIShoot));//Testing Shooter
+    SmartDashboard.putData(new HoodToPosition(this::angleIShoot));//Testing Shooter
+    SmartDashboard.putData(new ShooterStop());//Testing Shooter
+    SmartDashboard.putData(new HoodHome());//For setup
+    SmartDashboard.putData(new DriveTurnToAngle(Constants.PI_OVER_TWO));
 
     SmartDashboard.putNumber("SpeedIShoot",0.0);
     SmartDashboard.putNumber("angleIShoot",0.0);
@@ -187,7 +188,7 @@ public class RobotContainer {
     driverY.whenReleased(new StopShooterHandlerHood());
     driverLB.whenPressed(new DriveResetGyroToZero());
     driverRB.whileHeld(new DriveOnTarget());
-    driverStart.whileHeld(new DriveFollowTrajectory("DriveStraight"));
+    // driverStart.whenPressed(new DriveFollowTrajectory("DriveStraight"));
     driverBack.toggleWhenActive(new DriveRobotCentric());
   }
 

@@ -32,17 +32,18 @@ public final class Constants {
     public static final double DRIVE_ENC_TO_METERS_FACTOR = 0.00002153;//7.13:1//the ratio from mechanical specs
     public static final double MINIMUM_DRIVE_SPEED = 0.01;// the slowest the wheels can turn, in m/s
     public static final double MINIMUM_DRIVE_DUTY_CYCLE = 0.05;// the slowest the wheels can turn, in duty cycle
-    public static final double MAXIMUM_VELOCITY = 4.5;
-    public static final double MAX_ROBOT_ROT_VELOCITY = 2;
+    public static final double MOTOR_MAXIMUM_VELOCITY = 4.62;//4.33 5.19
+    public static final double PATH_MAXIMUM_VELOCITY = 1.0;
     public static final double MAXIMUM_ACCELERATION = 1.0;
-    public static final double DRIVE_MAX_ANGULAR_VELOCITY = 600; //stolen from 3015
-    public static final double DRIVE_MAX_ANGULAR_ACCEL = 6000; //stolen from 3015
+    public static final double MAX_ROBOT_ROT_VELOCITY = 2;
+    public static final double DRIVE_MAX_ANGULAR_VELOCITY = 0.5;//10.8;//600; //stolen from 3015
+    public static final double DRIVE_MAX_ANGULAR_ACCEL = 0.5;//7.03;//6000; //stolen from 3015
     // public static final double MAX_ROBOT_ROT_VELOCITY = MAXIMUM_VELOCITY / DISTANCE_TO_MODULE_0;
     public static final double MAXIMUM_VOLTAGE = 12.0;
     public static final double SWERVE_DRIVE_P_VALUE = 1000; // 0.035;
     public static final double SWERVE_DRIVE_I_VALUE = 0.0;
     public static final double SWERVE_DRIVE_D_VALUE = 25;
-    public static final double SWERVE_DRIVE_FF_VALUE = 1023 / (MAXIMUM_VELOCITY / DRIVE_ENC_TO_METERS_FACTOR);
+    public static final double SWERVE_DRIVE_FF_VALUE = 1023 / (MOTOR_MAXIMUM_VELOCITY / DRIVE_ENC_TO_METERS_FACTOR);
 
     /* Swerve Module Rotation constants */
     public static final double RAD_TO_ENC_CONV_FACTOR = 5029.08073;//swerveX 8T to 24T / 14T to 72T //the radian to enc factor
@@ -58,22 +59,27 @@ public final class Constants {
     public static final double ROTATIONAL_VELOCITY_TOLERANCE = 1.0;
 
     /* Robot Rotation PID controller constants */
-    public static final double ROBOT_SPIN_P = 1.1;//1.55;//tuned for drive/climber bot
-    public static final double ROBOT_SPIN_I = 0.0;
-    public static final double ROBOT_SPIN_D = 0.001;//0.01
     public static final double ROBOT_SPIN_PID_TOLERANCE = Math.toRadians(0.5);
-    public static final double MINIMUM_ROTATIONAL_OUTPUT = 0.07;
+    public static final double MINIMUM_ROTATIONAL_OUTPUT = 0.11;
+
+    public static final double ROBOT_SPIN_P = 1.55;//tuned for drive/climber bot
+    public static final double ROBOT_SPIN_I = 0.0;
+    public static final double ROBOT_SPIN_D = 0.01;
     
+    public static final double ROBOT_COUNTER_SPIN_P = 1.1;
+    public static final double ROBOT_COUNTER_SPIN_I = 0.0;
+    public static final double ROBOT_COUNTER_SPIN_D = 0.001;
+
     /* We stole 3015's constants for DriveFollowTrajectory */
-    public static final double DRIVE_POS_ERROR_CONTROLLER_P = 12; // 10
-    public static final double DRIVE_POS_ERROR_CONTROLLER_I = 0;
-    public static final double DRIVE_POS_ERROR_CONTROLLER_D = 0.05;
+    public static final double DRIVE_POS_ERROR_CONTROLLER_P = .03; // 10
+    public static final double DRIVE_POS_ERROR_CONTROLLER_I = 0.1;
+    public static final double DRIVE_POS_ERROR_CONTROLLER_D = 0.0;//0.05;
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_P = 0; // 1.05
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_I = 0;
     public static final double DRIVE_HEADING_ERROR_CONTROLLER_D = 0; // 0.02
-    public static final double DRIVE_ROTATION_CONTROLLER_P = 10;// 9
-    public static final double DRIVE_ROTATION_CONTROLLER_I = 0;
-    public static final double DRIVE_ROTATION_CONTROLLER_D = 0;
+    public static final double DRIVE_ROTATION_CONTROLLER_P = .1396;// 9
+    public static final double DRIVE_ROTATION_CONTROLLER_I = 0.0;
+    public static final double DRIVE_ROTATION_CONTROLLER_D = 0.0;
     public static final double DRIVE_TARGETING_CONTROLLER_P = 13;// 9
     public static final double DRIVE_TARGETING_CONTROLLER_I = 0;
     public static final double DRIVE_TARGETING_CONTROLLER_D = 0.5;
@@ -118,16 +124,16 @@ public final class Constants {
     public static final int INTAKE_PROXIMITY = 500;
 
     /* Shooter Constants */
-    public static final int SHOOTER_MOTOR_PUSLES_PER_REV = 1;//5000; //TODO: get actual counts per revolution, or maybe not
+    public static final int SHOOTER_MOTOR_PUSLES_PER_REV = 1;//5000; //No counts per revolution, keep native
 
     public static final double SHOOTER_MAIN_MOTOR_P = 1.75;//1.8;
     public static final double SHOOTER_MAIN_MOTOR_I = 0.0;
     public static final double SHOOTER_MAIN_MOTOR_D = 2.0;//4.0;
     public static final double SHOOTER_MAIN_MOTOR_F = 0.0;
 
-    public static final double SHOOTER_MOTOR_ALLOWABLE_ERROR = 200.0;//TODO: get a better number here, and this is in pulses
+    public static final double SHOOTER_MOTOR_ALLOWABLE_ERROR = 200.0;//TODO: get a better number here, and this is in pulses, but need to fix PID before changing
     
-    public static final double SHOOOTER_PREP_SPEED = 100;
+    public static final double SHOOOTER_PREP_SPEED = 6000;
     public static final LookUpTable SHOOTER_HIGH_SPEEDS_TABLE = new LookUpTable();
     static {
         //use put(distance, speed)
@@ -236,6 +242,7 @@ public final class Constants {
     public static final int HARVESTER_TILT_OUT = 9;//Intake
     public static final int CLIMBER_TILT_IN = 13;//Climber
     public static final int CLIMBER_TILT_OUT = 12;//Climber
+    public static final int LL_LIGHT = 0;//Limelight
 
     /* Digital Input */
     public static final int BALL_SENSOR_0 = 0;

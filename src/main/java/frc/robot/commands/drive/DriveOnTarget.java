@@ -19,6 +19,7 @@ public class DriveOnTarget extends CommandBase {
   boolean hasHadTarget;
   double setPointAngle;
   double offsetDistance;
+  boolean rotationOnlyMode;
 
   public DriveOnTarget(){
     this(0.0);
@@ -36,6 +37,7 @@ public class DriveOnTarget extends CommandBase {
     RobotContainer.limeLight.setLightState(true, RobotContainer.swerveDrive);
     timer.start();
     hasHadTarget = false;
+    rotationOnlyMode = false;
     // Default to the current angle of the robot
     setPointAngle = RobotContainer.swerveDrive.getGyroInRad();
   }
@@ -70,12 +72,22 @@ public class DriveOnTarget extends CommandBase {
     }
 
     // Drive robot using driver axis and rotateToAngle
-    RobotContainer.swerveDrive.driveFieldRelative(
+    if(Math.abs(awaySpeed) < 0.05 && Math.abs(lateralSpeed) < 0.05) {
+      RobotContainer.swerveDrive.driveRobotCentric(
+      0.0,
+      0.0,
+      RobotContainer.swerveDrive.getRobotRotationPIDOut(setPointAngle), 
+      false,
+      true
+      );
+    }else {
+      RobotContainer.swerveDrive.driveFieldRelative(
       awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
       lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
       RobotContainer.swerveDrive.getRobotRotationPIDOut(setPointAngle), 
       false
-    );
+      );
+    }
   }
 
   // Called once the command ends or is interrupted.

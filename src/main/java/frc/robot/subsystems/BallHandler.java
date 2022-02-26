@@ -161,13 +161,13 @@ public class BallHandler extends SubsystemBase {
       }
     }
 
-       //If the wrong ball color is detected, reset spitout timer
-    if((state == State.kFillTo1 || state == State.kFillTo0)){//TODO:rob reverse this again-rob !shouldIntakeBall() && 
+    //If the wrong ball color is detected, reset spitout timer
+    if((state == State.kFillTo1 || state == State.kFillTo0)){//TODO:SBM ON HOLD !shouldIntakeBall() && 
       // System.out.println("Reset selector timer");
       selectorTimer.reset();
     }
 
-    // System.out.println("should ball "+ shouldIntakeBall());
+    //TODO: ALL SBM ON HOLD DO NOT UNCOMMENT 
     //if timer reset, run spit out timer for half second
     // if(!selectorTimer.hasElapsed(0.5)){
     //   speeds[1] *= -1;  

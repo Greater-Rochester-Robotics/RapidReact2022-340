@@ -13,14 +13,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 
 public class LimeLight extends SubsystemBase {
   static Map<String,Boolean> subsystemsUsingLight = new HashMap<String,Boolean>();
-  
-  // Solenoid light;
+  Solenoid light;
+
   /** Creates a new LimeLight. */
   public LimeLight() {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+    light = new Solenoid(PneumaticsModuleType.REVPH, Constants.LL_LIGHT);
+    light.set(false);
   }
 
   @Override
@@ -53,7 +57,7 @@ public class LimeLight extends SubsystemBase {
     }
     System.out.println("sumBool"+sumOfBooleans);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(sumOfBooleans? 3 : 1);  //controls if limelight is on or not // 3 is on, 1 is off
-    // light.set(3 == LightState);//this is for a secondary light powered by PCM
+    light.set(sumOfBooleans);//this is for a secondary light powered by PCM
   }
 
   /**

@@ -16,13 +16,7 @@ public class ShooterPrepShot extends InstantCommand {
   public ShooterPrepShot() {
     this(Constants.SHOOOTER_PREP_SPEED);
   }
-  // public ShooterPrepShot(boolean isHigh){
-  //   if(isHigh){
-  //     this(Constants.SHOOOTER_PREP_SPEED);
-  //   }else{
-  //     this(Constants.SHOOOTER_PREP_SPEED);
-  //   }
-  // }
+
   public ShooterPrepShot(double speed) {
     addRequirements(RobotContainer.shooter);
     this.speed = speed;

@@ -95,7 +95,7 @@ public class DriveFieldRelativeAdvanced extends CommandBase {
         RobotContainer.swerveDrive.driveFieldRelative(
           awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
           lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
-          RobotContainer.swerveDrive.getRobotRotationPIDOut(currentAngle),
+          RobotContainer.swerveDrive.getCounterRotationPIDOut(currentAngle),
           false
         );
         wasDriverControl = false;

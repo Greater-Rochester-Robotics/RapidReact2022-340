@@ -58,6 +58,7 @@ public class DriveRobotCentric extends CommandBase {
       forwardSpeed *-Constants.DRIVER_SPEED_SCALE_LINEAR ,
       strafeSpeed *-Constants.DRIVER_SPEED_SCALE_LINEAR ,
       rotSpeed*-Constants.DRIVER_SPEED_SCALE_ROTATIONAL,
+      false,
       false
       );
   }

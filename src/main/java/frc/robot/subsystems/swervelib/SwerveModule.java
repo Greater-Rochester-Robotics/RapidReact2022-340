@@ -139,7 +139,8 @@ public class SwerveModule {
      * @param speed a speed in meters per second
      */
     public void setDriveSpeed(double speed) {
-        driveMotor.set(TalonFXControlMode.Velocity, speed );
+        // driveMotor.set(TalonFXControlMode.Velocity, speed );
+        driveMotor.set(TalonFXControlMode.PercentOutput, speed / Constants.MOTOR_MAXIMUM_VELOCITY);
     }
 
    /**

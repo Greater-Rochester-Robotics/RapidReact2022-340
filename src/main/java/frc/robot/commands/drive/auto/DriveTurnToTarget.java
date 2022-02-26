@@ -55,10 +55,12 @@ public class DriveTurnToTarget extends CommandBase {
     }
 
     // Drive robot using driver axis and rotateToAngle
-    RobotContainer.swerveDrive.driveFieldRelative(
-      0.0, 0.0,
+    RobotContainer.swerveDrive.driveRobotCentric(
+      0.0,
+      0.0,
       RobotContainer.swerveDrive.getRobotRotationPIDOut(setPointAngle), 
-      false
+      false,
+      true
     );
   }
 
