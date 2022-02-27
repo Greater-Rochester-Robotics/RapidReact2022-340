@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class BallHandler extends SubsystemBase {
 
@@ -49,6 +50,7 @@ public class BallHandler extends SubsystemBase {
 
   private State state = State.kOff;
   private State prevState = State.kOff;
+  private boolean rejectOppColor = true;
 
   private static final double HARV_IN = Constants.HARVESTER_INTAKE_SPEED;
   private static final double HARV_OUT = Constants.HARVESTER_EXTAKE_SPEED;
@@ -134,8 +136,7 @@ public class BallHandler extends SubsystemBase {
           break;
         }
       case kFillTo0:
-        speeds = new double[] { HARV_IN, BALL0_IN, 0, 0 
-        };
+        speeds = new double[] { HARV_IN, BALL0_IN, 0, 0 };
 
         if(isBall0()){
           state = State.kOff;
@@ -228,9 +229,10 @@ public class BallHandler extends SubsystemBase {
 
     // System.out.println("prox"+proximity+"blue diff red "+(blue - red));
 
-    if(!colorSensor.isConnected() || (proximity == 0 && blue == 0 && red == 0)) {
+    if(!rejectOppColor || !colorSensor.isConnected() || (proximity == 0 && blue == 0 && red == 0)) {
       return true;
     }
+    
     //Checking proximity to intake balls
     if(proximity > Constants.INTAKE_PROXIMITY){
       if(DriverStation.getAlliance() == Alliance.Blue){
@@ -258,5 +260,9 @@ public class BallHandler extends SubsystemBase {
 
   public State getState(){
     return state;
+  }
+  
+  public void rejectOppColor(boolean reject){
+    this.rejectOppColor = reject;
   }
 }
