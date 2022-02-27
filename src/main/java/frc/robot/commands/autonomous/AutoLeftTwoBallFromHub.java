@@ -5,18 +5,16 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.Robot;
+
 import frc.robot.RobotContainer;
+
 import frc.robot.commands.ShootHighGoal;
-import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
-import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.auto.DriveTurnToTarget;
 import frc.robot.commands.shooter.ShooterPrepShot;
-import frc.robot.subsystems.BallHandler;
+
 import frc.robot.subsystems.BallHandler.State;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -26,9 +24,9 @@ import frc.robot.subsystems.BallHandler.State;
  * Starting at hub, corner at leftmost hub corner.
  * Pick up left ball and shoot both balls.
  */
-public class AutoLeftSideTwoBallFromHub extends SequentialCommandGroup {
+public class AutoLeftTwoBallFromHub extends SequentialCommandGroup {
   /** Creates a new AutoTwoBall. */
-  public AutoLeftSideTwoBallFromHub() {
+  public AutoLeftTwoBallFromHub() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -36,8 +34,8 @@ public class AutoLeftSideTwoBallFromHub extends SequentialCommandGroup {
       new DriveFollowTrajectory("DriveToLeftBall"),
       new ShooterPrepShot(),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
-      new BallHandlerSetState(State.kOff),
       new DriveTurnToTarget(),
+      new BallHandlerSetState(State.kOff),
       new ShootHighGoal(1.0)
     );
   }

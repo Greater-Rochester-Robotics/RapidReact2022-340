@@ -18,7 +18,6 @@ import frc.robot.Constants;
 /**
  * This is the class that controls the shooter.
  * Currently, it controls a single main motor.
- * TODO: Revisit mechanical knows what this looks like now
  * 
  */
 public class Shooter extends SubsystemBase { 

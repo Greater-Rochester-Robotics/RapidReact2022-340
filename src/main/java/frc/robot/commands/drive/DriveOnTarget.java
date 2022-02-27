@@ -75,7 +75,8 @@ public class DriveOnTarget extends CommandBase {
     }
 
     double output = RobotContainer.swerveDrive.getRobotRotationPIDOut(setPointAngle);
-    if(!(Math.abs(output) < Constants.MINIMUM_ROTATIONAL_OUTPUT)){
+
+    if(!(Math.abs(output) < (Constants.MINIMUM_ROTATIONAL_OUTPUT * 2.0) )){
       onTargetTimer.reset();
     }
 

@@ -29,6 +29,6 @@ public class AutoLeftBackOutOfWay extends SequentialCommandGroup {
       new ShooterPrepShot(),
       new DriveTurnToTarget(),
       new ShootHighGoal(1.0) 
-      );
+    );
   }
 }

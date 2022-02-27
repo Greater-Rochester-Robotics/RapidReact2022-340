@@ -98,6 +98,7 @@ public class BallHandler extends SubsystemBase {
     selectorTimer.start();
 
     isSelectorReversed = false;
+    rejectOppColor = true;
   }
 
   @Override
