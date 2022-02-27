@@ -27,8 +27,7 @@ public class ShootLowGoalFender extends SequentialCommandGroup {
       new HoodHome(),
       parallel(
         new ShooterSetSpeed(Constants.SHOOTER_LOW_GOAL_FENDER_SPEED).withTimeout(2),
-        new HoodToPosition(22.0),
-        new WaitCommand(1.5)
+        new HoodToPosition(22.0)
       ),
       // new WaitUntilCommand(RobotContainer.shooter::isAtSpeed),//this should fall through, left for options
       new BallHandlerShootProgT(timeBewtweenBalls),

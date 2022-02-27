@@ -35,10 +35,8 @@ public class AutoRightThreeBall extends SequentialCommandGroup {
       new BallHandlerSetState(State.kOff),
       new ShooterPrepShot(),
       new DriveTurnToTarget(),
-      parallel(
-        new ShootHighGoal(1.0),
-        new BallHandlerSetState(State.kFillTo1)
-      ),
+      new ShootHighGoal(1.0),
+      new BallHandlerSetState(State.kFillTo1),
       new DriveFollowTrajectory("DriveFromRightBallToMidBall"),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
       new BallHandlerSetState(State.kOff),

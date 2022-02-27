@@ -17,6 +17,7 @@ public class BallHandlerShootProgT extends CommandBase {
   private int shootingBall = 1;
   private int ballsToShoot = 2;
   private boolean wasBall1Pressed = false;
+  private boolean timeBypass = false;
 
   /** 
     * This command shoots all the balls, but 
@@ -54,6 +55,9 @@ public class BallHandlerShootProgT extends CommandBase {
     ballsToShoot = (RobotContainer.ballHandler.isBall0()?1:0) 
       + (RobotContainer.ballHandler.isBall1()?1:0); 
 
+    timeBypass = ballsToShoot == 0;
+    
+
     //check the state of the first sensor
     wasBall1Pressed = RobotContainer.ballHandler.isBall1();
 
@@ -90,10 +94,11 @@ public class BallHandlerShootProgT extends CommandBase {
     }
 
     //for as long as there aare balls in the shooter, keep resetting the timer
-    if(ballsToShoot > 0 || !(RobotContainer.ballHandler.isBall1() && wasBall1Pressed) ){
+    if(ballsToShoot > 0 || (!RobotContainer.ballHandler.isBall1() && wasBall1Pressed) ){
       isFinishedTimer.reset();
     }
     wasBall1Pressed = RobotContainer.ballHandler.isBall1();
+    // System.out.println("BallShoot Timer:"+isFinishedTimer.get());
   }
 
   // Called once the command ends or is interrupted.
@@ -105,6 +110,6 @@ public class BallHandlerShootProgT extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isFinishedTimer.hasElapsed(.5);//TODO: find out how long it takes a ball to leave the shooter from the top position 
+    return isFinishedTimer.hasElapsed(timeBypass?5:.5);//TODO: find out how long it takes a ball to leave the shooter from the top position 
   }
 }

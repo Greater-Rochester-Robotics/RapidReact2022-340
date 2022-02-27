@@ -34,9 +34,9 @@ public class AutoLeftSideTwoBallFromHub extends SequentialCommandGroup {
     addCommands(
       new BallHandlerSetState(State.kFillTo1),
       new DriveFollowTrajectory("DriveToLeftBall"),
+      new ShooterPrepShot(),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new BallHandlerSetState(State.kOff),
-      new ShooterPrepShot(),
       new DriveTurnToTarget(),
       new ShootHighGoal(1.0)
     );

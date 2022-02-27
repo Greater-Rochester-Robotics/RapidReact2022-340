@@ -12,14 +12,13 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.SwerveDrive;
 
 public class DriveOnTarget extends CommandBase {
-  Timer timer = new Timer();
+  Timer startTimer = new Timer();
+  Timer onTargetTimer = new Timer();
   boolean hasHadTarget;
   double setPointAngle;
   double offsetDistance;
-  boolean rotationOnlyMode;
 
   public DriveOnTarget(){
     this(0.0);
@@ -35,11 +34,15 @@ public class DriveOnTarget extends CommandBase {
   @Override
   public void initialize() {
     RobotContainer.limeLight.setLightState(true, RobotContainer.swerveDrive);
-    timer.start();
+    //reset start timer for the Pose2d guess where robot angle is
+    startTimer.start();
+    startTimer.reset();
+    //reset onTargetTimer
+    onTargetTimer.start();
+    onTargetTimer.reset();
     hasHadTarget = false;
-    rotationOnlyMode = false;
     // Default to the current angle of the robot
-    setPointAngle = RobotContainer.swerveDrive.getGyroInRad();
+    setPointAngle = RobotContainer.swerveDrive.getGyroInRad();    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -53,7 +56,7 @@ public class DriveOnTarget extends CommandBase {
     // Set the rotate to angle to the target if limelight sees it
     if(hasTarget) {
       setPointAngle = RobotContainer.swerveDrive.getGyroInRad() - Math.toRadians(RobotContainer.limeLight.angleToTarget(offsetDistance));
-    }else if(RobotContainer.swerveDrive.hasPoseBeenSet() && !hasHadTarget && timer.hasElapsed(.2)){
+    }else if(RobotContainer.swerveDrive.hasPoseBeenSet() && !hasHadTarget && startTimer.hasElapsed(.2)){
       // Point robot in the general direction of the target if the limelight doesn't see the target
       // Finds where we are relative to the center of the field, set as setPoint
       setPointAngle = RobotContainer.swerveDrive.getAngleOfTarget();
@@ -71,22 +74,37 @@ public class DriveOnTarget extends CommandBase {
       lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightX)*.5;
     }
 
-    // Drive robot using driver axis and rotateToAngle
+    double output = RobotContainer.swerveDrive.getRobotRotationPIDOut(setPointAngle);
+    if(!(Math.abs(output) < Constants.MINIMUM_ROTATIONAL_OUTPUT)){
+      onTargetTimer.reset();
+    }
+
     if(Math.abs(awaySpeed) < 0.05 && Math.abs(lateralSpeed) < 0.05) {
+      //
+      if(onTargetTimer.hasElapsed(.5)){
+        output = 0.0;  
+      }
       RobotContainer.swerveDrive.driveRobotCentric(
-      0.0,
-      0.0,
-      RobotContainer.swerveDrive.getRobotRotationPIDOut(setPointAngle), 
-      false,
-      true
+        0.0,
+        0.0,
+        output, 
+        false,
+        true
       );
     }else {
+      // Drive robot using driver axis and rotateToAngle
       RobotContainer.swerveDrive.driveFieldRelative(
-      awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
-      lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
-      RobotContainer.swerveDrive.getRobotRotationPIDOut(setPointAngle), 
-      false
+        awaySpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
+        lateralSpeed*-Constants.DRIVER_SPEED_SCALE_LINEAR,
+        output,
+        false
       );
+      onTargetTimer.reset();//reset timer used to stop jitters
+    }
+
+    //If we don't have target, don't worry about the timer
+    if(!hasTarget){
+      onTargetTimer.reset();//reset timer used to stop jitters
     }
   }
 

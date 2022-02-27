@@ -22,8 +22,9 @@ import frc.robot.Constants;
  * 
  */
 public class Shooter extends SubsystemBase { 
-  private static final double speedError = 0.01;
+  // private static final double speedError = 0.01;
   TalonFX motor;
+  
 
   /** Creates a new Shooter. */
   public Shooter() {
@@ -48,6 +49,7 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter Speed", getSpeed());
+    // SmartDashboard.putBoolean("AtSpeed",isAtSpeed());
   }
 
   /**
@@ -55,7 +57,7 @@ public class Shooter extends SubsystemBase {
    * @return in revolutions per minute
    */
   public double getSpeed(){
-    return motor.getSelectedSensorVelocity() / Constants.SHOOTER_MOTOR_PUSLES_PER_REV ;
+    return motor.getSelectedSensorVelocity() / Constants.SHOOTER_MOTOR_PULSES_PER_REV ;
   }
 
   /**
@@ -63,7 +65,7 @@ public class Shooter extends SubsystemBase {
    * @param speed speed in RPM
    */
   public void setSpeed(double speed){
-    motor.set(TalonFXControlMode.Velocity, speed * Constants.SHOOTER_MOTOR_PUSLES_PER_REV);//, DemandType.ArbitraryFeedForward, (speed / 15000));
+    motor.set(TalonFXControlMode.Velocity, speed * Constants.SHOOTER_MOTOR_PULSES_PER_REV);//, DemandType.ArbitraryFeedForward, (speed / 15000));
   }
 
   /**
@@ -75,8 +77,10 @@ public class Shooter extends SubsystemBase {
   }
   
   /**
+   * don't use till PID is on setpoint, which it runs clearly short of.
    * @return true if shooter is at speed, within tolerance
    */
+  @Deprecated
   public boolean isAtSpeed() {
     return Math.abs(motor.getClosedLoopError()) < Constants.SHOOTER_MOTOR_ALLOWABLE_ERROR;
   }

@@ -26,8 +26,7 @@ public class ShootLowGoal extends SequentialCommandGroup {
       new HoodHome(),
       parallel(
         new ShooterSetSpeed(RobotContainer.limeLight::getShooterLowSpeed,true).withTimeout(2),
-        new HoodToPosition(RobotContainer.limeLight::getHoodLowAngle,true),
-        new WaitCommand(2.0)
+        new HoodToPosition(RobotContainer.limeLight::getHoodLowAngle,true)
       ),
       // new WaitUntilCommand(RobotContainer.shooter::isAtSpeed),//this should fall through, left for options
       new BallHandlerShootProgT(timeBewtweenBalls),

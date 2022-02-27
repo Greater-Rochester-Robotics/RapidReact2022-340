@@ -83,7 +83,7 @@ public class ShooterSetSpeed extends CommandBase {
       RobotContainer.shooter.setSpeed(speed);
     }
 
-    if(RobotContainer.shooter.isAtSpeed()){
+    if(Math.abs(speed - 200 - RobotContainer.shooter.getSpeed()) < 150){
       //if we're at speed add one to the count
       atSpeedCount++;
     }else{
@@ -103,6 +103,6 @@ public class ShooterSetSpeed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (!speedSupplierMode || hasHadTarget) && (atSpeedCount >= 10);
+    return (!speedSupplierMode || hasHadTarget) && (atSpeedCount >= 15);
   }
 }

@@ -31,20 +31,18 @@ public class AutoMidFourBall extends SequentialCommandGroup {
     addCommands(
       new BallHandlerSetState(State.kFillTo0),
       new DriveFollowTrajectory("DriveToMidBall"),
+      new ShooterPrepShot(),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new BallHandlerSetState(State.kOff),
-      new ShooterPrepShot(),
       new DriveTurnToTarget(),
-      parallel(
-        new ShootHighGoal(1.0),
-        new BallHandlerSetState(State.kFillTo1)
-      ),
+      new ShootHighGoal(1.0),
+      new BallHandlerSetState(State.kFillTo1),
       new DriveFollowTrajectory("DriveMidBallToHuman"),
+      new ShooterPrepShot(),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new BallHandlerSetState(State.kOff),
       // May need to drive forward before shooting
-      new ShooterPrepShot(),
       new DriveTurnToTarget(),
       new ShootHighGoal(1.0)
     );

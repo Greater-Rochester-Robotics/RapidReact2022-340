@@ -20,7 +20,7 @@ import frc.robot.commands.ShootHighGoalFender;
 import frc.robot.commands.ShootLowGoalFender;
 import frc.robot.commands.SpitBalls;
 import frc.robot.commands.StopShooterHandlerHood;
-import frc.robot.commands.autonomous.TestPath;
+import frc.robot.commands.autonomous.AutoLeftBackOutOfWay;
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
@@ -165,7 +165,7 @@ public class RobotContainer {
     SmartDashboard.putData(new ShooterSetSpeed(this::speedIShoot));//Testing Shooter
     SmartDashboard.putData(new HoodToPosition(this::angleIShoot));//Testing Shooter
     SmartDashboard.putData(new ShooterStop());//Testing Shooter
-    SmartDashboard.putData(new HoodHome());//For setup
+    SmartDashboard.putData(new HoodHome(true));//For setup
     SmartDashboard.putData(new DriveTurnToAngle(Constants.PI_OVER_TWO));
 
     SmartDashboard.putNumber("SpeedIShoot",0.0);
@@ -189,7 +189,7 @@ public class RobotContainer {
     driverY.whenReleased(new StopShooterHandlerHood());
     driverLB.whenPressed(new DriveResetGyroToZero());
     driverRB.whileHeld(new DriveOnTarget());
-    driverStart.whenPressed(new DriveFollowTrajectory("DriveStraight"));
+    driverStart.whenPressed(new AutoLeftBackOutOfWay());
     driverBack.toggleWhenActive(new DriveRobotCentric());
     driverDDown.whenPressed(new ShootLowGoalFender(.5));
     driverDDown.whenReleased(new StopShooterHandlerHood());

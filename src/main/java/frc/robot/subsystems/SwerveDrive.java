@@ -241,7 +241,7 @@ public class SwerveDrive extends SubsystemBase {
   /**
    * Estimates the closest angle to the target, 
    * given that the odometry is working
-   * @return anngle in radians (not restricted to PI to -PI)
+   * @return angle in radians (not restricted to PI to -PI)
    */
   public double getAngleOfTarget(){
     //get the current angle    

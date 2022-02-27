@@ -122,7 +122,7 @@ public final class Constants {
     public static final int INTAKE_PROXIMITY = 500;
 
     /* Shooter Constants */
-    public static final int SHOOTER_MOTOR_PUSLES_PER_REV = 1;//5000; //No counts per revolution, keep native
+    public static final int SHOOTER_MOTOR_PULSES_PER_REV = 1;//5000; //No counts per revolution, keep native
 
     public static final double SHOOTER_MAIN_MOTOR_P = 1.75;//1.8;
     public static final double SHOOTER_MAIN_MOTOR_I = 0.0;
