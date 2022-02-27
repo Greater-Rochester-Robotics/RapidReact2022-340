@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ballhandler.BallHandlerShootProgT;
@@ -25,7 +26,8 @@ public class ShootHighGoal extends SequentialCommandGroup {
       new HoodHome(),
       parallel(
         new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(2),
-        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true)
+        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true),
+        new WaitCommand(2.0)
       ),
       // new WaitUntilCommand(RobotContainer.shooter::isAtSpeed),//this should fall through, left for options
       new BallHandlerShootProgT(timeBewtweenBalls),

@@ -183,6 +183,16 @@ public class Climber extends SubsystemBase {
     extendoMotorRight.set(TalonFXControlMode.Position, (pos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR));
   }
 
+
+  public void extendoArmRightForceIn(){
+    // if(getExtendoRightSwitch()){
+    //   extendoMotorRight.set(TalonFXControlMode.PercentOutput, 0.0);
+    // }else{
+      extendoMotorRight.set(TalonFXControlMode.PercentOutput, 
+      Constants.CLIMBER_EXTENDO_FORCE_IN);
+    // }
+  }
+
   /**
    * Intendend for testing and homing, drives arm in at low power
    */
@@ -235,6 +245,15 @@ public class Climber extends SubsystemBase {
   
   public void extendoLeftSetPos(double pos) {
     extendoMotorLeft.set(TalonFXControlMode.Position, pos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);
+  }
+
+  public void extendoArmLeftForceIn(){
+    // if(getExtendoLeftSwitch()){
+    //   extendoMotorLeft.set(TalonFXControlMode.PercentOutput, 0.0);
+    // }else{
+      extendoMotorLeft.set(TalonFXControlMode.PercentOutput, 
+      Constants.CLIMBER_EXTENDO_FORCE_IN);
+    // }
   }
 
   /**

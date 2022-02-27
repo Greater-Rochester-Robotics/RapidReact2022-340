@@ -33,11 +33,11 @@ public final class Constants {
     public static final double MINIMUM_DRIVE_SPEED = 0.01;// the slowest the wheels can turn, in m/s
     public static final double MINIMUM_DRIVE_DUTY_CYCLE = 0.05;// the slowest the wheels can turn, in duty cycle
     public static final double MOTOR_MAXIMUM_VELOCITY = 4.62;//4.33 5.19
-    public static final double PATH_MAXIMUM_VELOCITY = 1.0;
-    public static final double MAXIMUM_ACCELERATION = 1.0;
+    public static final double PATH_MAXIMUM_VELOCITY = 3.5;
+    public static final double MAXIMUM_ACCELERATION = 1.25;
+
     public static final double MAX_ROBOT_ROT_VELOCITY = 2;
-    public static final double DRIVE_MAX_ANGULAR_VELOCITY = 0.5;//10.8;//600; //stolen from 3015
-    public static final double DRIVE_MAX_ANGULAR_ACCEL = 0.5;//7.03;//6000; //stolen from 3015
+
     // public static final double MAX_ROBOT_ROT_VELOCITY = MAXIMUM_VELOCITY / DISTANCE_TO_MODULE_0;
     public static final double MAXIMUM_VOLTAGE = 12.0;
     public static final double SWERVE_DRIVE_P_VALUE = 1000; // 0.035;
@@ -71,20 +71,18 @@ public final class Constants {
     public static final double ROBOT_COUNTER_SPIN_D = 0.001;
 
     /* We stole 3015's constants for DriveFollowTrajectory */
-    public static final double DRIVE_POS_ERROR_CONTROLLER_P = .03; // 10
-    public static final double DRIVE_POS_ERROR_CONTROLLER_I = 0.1;
+    public static final double DRIVE_POS_ERROR_CONTROLLER_P = .33; // 10
+    public static final double DRIVE_POS_ERROR_CONTROLLER_I = 0.001;
     public static final double DRIVE_POS_ERROR_CONTROLLER_D = 0.0;//0.05;
-    public static final double DRIVE_HEADING_ERROR_CONTROLLER_P = 0; // 1.05
-    public static final double DRIVE_HEADING_ERROR_CONTROLLER_I = 0;
-    public static final double DRIVE_HEADING_ERROR_CONTROLLER_D = 0; // 0.02
-    public static final double DRIVE_ROTATION_CONTROLLER_P = .1396;// 9
+    // public static final double DRIVE_HEADING_ERROR_CONTROLLER_P = 0; // 1.05
+    // public static final double DRIVE_HEADING_ERROR_CONTROLLER_I = 0;
+    // public static final double DRIVE_HEADING_ERROR_CONTROLLER_D = 0; // 0.02
+    public static final double DRIVE_ROTATION_CONTROLLER_P = 1.6*MOTOR_MAXIMUM_VELOCITY;//.1396;// 9
     public static final double DRIVE_ROTATION_CONTROLLER_I = 0.0;
-    public static final double DRIVE_ROTATION_CONTROLLER_D = 0.0;
-    public static final double DRIVE_TARGETING_CONTROLLER_P = 13;// 9
-    public static final double DRIVE_TARGETING_CONTROLLER_I = 0;
-    public static final double DRIVE_TARGETING_CONTROLLER_D = 0.5;
-    public static final double DRIVE_ROTATION_MIN_VELOCITY = 25;
-    public static final double DRIVE_TARGETING_I_ZONE = 2;
+    public static final double DRIVE_ROTATION_CONTROLLER_D = 0.01;
+    public static final double DRIVE_MAX_ANGULAR_VELOCITY = 13.5;//10.8;//PathFollowing
+    public static final double DRIVE_MAX_ANGULAR_ACCEL = 8.5;//7.03;//PathFollowing
+    // public static final double DRIVE_ROTATION_MIN_VELOCITY = 25;
 
     /* Driver Scaling Constants */
     public static final double DRIVER_SPEED_SCALE_LINEAR = 0.6;
@@ -105,7 +103,7 @@ public final class Constants {
     public static final Translation2d FIELD_CENTER = new Translation2d();
     
     /* Harvester Constants */
-    public static final double HARVESTER_INTAKE_SPEED = 0.5;
+    public static final double HARVESTER_INTAKE_SPEED = 0.8;
     public static final double HARVESTER_EXTAKE_SPEED = -0.6;
 
     public static final double BALL_HANDLER_0_INTAKE_SPEED = 0.55;
@@ -151,6 +149,7 @@ public final class Constants {
         SHOOTER_LOW_SPEEDS_TABLE.put(5, 10000);
        
     }
+    public static final double SHOOTER_LOW_GOAL_FENDER_SPEED = 4000.0;
 
     /* Hood Constants */
     public static final double HOOD_DEGREE_CONVERSION = 30.0 * 32.0 / 35.0 / 51.0;// gear ratio on the versa, 5:1+7:1 ratio w/ 30T gear, 51T rack, 32 degrees
@@ -166,8 +165,13 @@ public final class Constants {
     public static final LookUpTable HOOD_HIGH_POSITION_TABLE = new LookUpTable();
     static {
         //use put(distance, angle)
-        HOOD_HIGH_POSITION_TABLE.put(5, 8);
-       
+        HOOD_HIGH_POSITION_TABLE.put(153.25, 15);
+        HOOD_HIGH_POSITION_TABLE.put(115,10);
+        HOOD_HIGH_POSITION_TABLE.put(92,9.5);
+        HOOD_HIGH_POSITION_TABLE.put(75.25,8.5);
+        HOOD_HIGH_POSITION_TABLE.put(65.75,8);
+        HOOD_HIGH_POSITION_TABLE.put(43.75,4);
+        HOOD_HIGH_POSITION_TABLE.put(23.5,0);
     }
     public static final LookUpTable HOOD_LOW_POSITION_TABLE = new LookUpTable();
     static {
@@ -179,6 +183,7 @@ public final class Constants {
     /* Climber Constants */
     public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.3;//This is for testing up 
     public static final double CLIMBER_EXTENDO_SPEED_IN = -0.3;//This is for testing down and homing
+    public static final double CLIMBER_EXTENDO_FORCE_IN = -0.6;
 
     public static final double EXTENDO_MOTOR_P = 1.0;
     public static final double EXTENDO_MOTOR_I = 0.0;
@@ -195,9 +200,10 @@ public final class Constants {
     public static final double EXTENDO_HOMING_CURRENT = 20.0;
     public static final double EXTENDO_ALLOWABLE_ERROR = 0.25;
 
-    public static final double CLIMBER_TOP_POSITION = 24;
+    public static final double CLIMBER_TOP_POSITION = 23;
+    public static final double CLIMBER_LIFT_POSITION = 17;
+    public static final double CLIMBER_RELEASE_POSITION = 4;
     public static final double CLIMBER_BOTTOM_POSITION = 0;
-    public static final double CLIMBER_MIDDLE_POSITION = 12;
 
     public static final int SELECTED_FEEDBACK_COEFFICIENT = 1;
 

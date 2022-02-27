@@ -14,6 +14,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -30,6 +31,9 @@ public class DriveFollowTrajectory extends CommandBase {
   PathPlannerTrajectory trajectory;
   HolonomicDriveController pathController;
   boolean resetOdometry;
+  static PIDController xController;
+  static PIDController yController;
+  static ProfiledPIDController rotationController;
 
   public DriveFollowTrajectory(String trajName) {
     this(trajName, Constants.PATH_MAXIMUM_VELOCITY, Constants.MAXIMUM_ACCELERATION);
@@ -44,11 +48,12 @@ public class DriveFollowTrajectory extends CommandBase {
     this.timer = new Timer();
     this.trajectory = PathPlanner.loadPath(trajName, maxVel, maxAccel);
 
-    PIDController xController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_P, Constants.DRIVE_POS_ERROR_CONTROLLER_I, Constants.DRIVE_POS_ERROR_CONTROLLER_D);
-    PIDController yController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_P, Constants.DRIVE_POS_ERROR_CONTROLLER_I, Constants.DRIVE_POS_ERROR_CONTROLLER_D);
-    ProfiledPIDController rotationController = new ProfiledPIDController(Constants.DRIVE_ROTATION_CONTROLLER_P, Constants.DRIVE_ROTATION_CONTROLLER_I, Constants.DRIVE_ROTATION_CONTROLLER_D,
+    xController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_P, Constants.DRIVE_POS_ERROR_CONTROLLER_I, Constants.DRIVE_POS_ERROR_CONTROLLER_D);
+    yController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_P, Constants.DRIVE_POS_ERROR_CONTROLLER_I, Constants.DRIVE_POS_ERROR_CONTROLLER_D);
+    rotationController = new ProfiledPIDController(Constants.DRIVE_ROTATION_CONTROLLER_P, Constants.DRIVE_ROTATION_CONTROLLER_I, Constants.DRIVE_ROTATION_CONTROLLER_D,
             new TrapezoidProfile.Constraints(Constants.DRIVE_MAX_ANGULAR_VELOCITY, Constants.DRIVE_MAX_ANGULAR_ACCEL));
-    rotationController.enableContinuousInput(-Math.PI, Math.PI);
+    // rotationController.enableContinuousInput(-Math.PI, Math.PI);
+    rotationController.disableContinuousInput();
     this.pathController = new HolonomicDriveController(xController, yController, rotationController);
     this.resetOdometry = resetOdometry;
   }
@@ -58,11 +63,13 @@ public class DriveFollowTrajectory extends CommandBase {
   public void initialize() {
     timer.reset();
     timer.start();
-    Pose2d initialState = trajectory.getInitialPose();
+    PathPlannerState initialState = (PathPlannerState) trajectory.sample(0.0);
+    xController.reset();
+    yController.reset();
+    rotationController.reset(initialState.holonomicRotation.getDegrees());
     if(resetOdometry) {
-      RobotContainer.swerveDrive.setCurPose2d(new Pose2d(initialState.getTranslation(),new Rotation2d(0)));
-      RobotContainer.swerveDrive.setGyro(initialState.getRotation().getDegrees());
-      
+      RobotContainer.swerveDrive.setCurPose2d(new Pose2d(initialState.poseMeters.getTranslation(),new Rotation2d(0)));
+      RobotContainer.swerveDrive.setGyro(initialState.holonomicRotation.getDegrees());
     }
   }
 
@@ -71,9 +78,9 @@ public class DriveFollowTrajectory extends CommandBase {
   public void execute() {
     double time = timer.get();
     PathPlannerState desiredState = (PathPlannerState) trajectory.sample(time);
-
-    ChassisSpeeds targetSpeeds = pathController.calculate(RobotContainer.swerveDrive.getCurPose2d(), desiredState, new Rotation2d(desiredState.holonomicRotation.getRadians()));
-    RobotContainer.swerveDrive.driveRobotCentric(targetSpeeds, true, false);
+    // System.out.println("HR:"+ desiredState.holonomicRotation.getDegrees());
+    ChassisSpeeds robotSpeed = pathController.calculate(RobotContainer.swerveDrive.getCurPose2d(), desiredState, desiredState.holonomicRotation);
+    RobotContainer.swerveDrive.driveRobotCentric(robotSpeed, true, false);
 
     // Position Graph
     // SmartDashboard.putNumber("PIDTarget", desiredState.getPos());

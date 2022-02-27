@@ -4,49 +4,44 @@
 
 package frc.robot.commands.climber;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
-public class ClimberExtendoToPosition extends CommandBase {
-  double position;
-  boolean hold;
-
-  public ClimberExtendoToPosition(double position) {
-    this(position,false);
-  }
-
-  public ClimberExtendoToPosition(double position,boolean hold) {
+public class ClimberExtendoForceToBottom extends CommandBase {
+  Timer timer;
+  double timeOut;
+  /** Creates a new ClimberExtendoForceToBottom. */
+  public ClimberExtendoForceToBottom(double timeOut) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.climber);
-    this.position = position;
-    this.hold = hold;
+    this.timeOut = timeOut;
+    timer = new Timer();
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    timer.reset();
+    timer.start();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.climber.extendoRightSetPos(position);
-    RobotContainer.climber.extendoLeftSetPos(position);
+    RobotContainer.climber.extendoArmLeftForceIn();
+    RobotContainer.climber.extendoArmRightForceIn();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if(!hold){
-      RobotContainer.climber.stopExtendoRightArm();
-      RobotContainer.climber.stopExtendoLeftArm();
-    }
+    RobotContainer.climber.stopBothMotors();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (Math.abs(RobotContainer.climber.getExtendoRightEncPos() - position) < Constants.EXTENDO_ALLOWABLE_ERROR) &&
-       (Math.abs(RobotContainer.climber.getExtendoLeftEncPos() - position) < Constants.EXTENDO_ALLOWABLE_ERROR);
+    return  timer.hasElapsed(timeOut);//(RobotContainer.climber.getExtendoLeftSwitch() && RobotContainer.climber.getExtendoRightSwitch())
   }
 }

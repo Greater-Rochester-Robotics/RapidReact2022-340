@@ -12,13 +12,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 public class LimeLight extends SubsystemBase {
   static Map<String,Boolean> subsystemsUsingLight = new HashMap<String,Boolean>();
   Solenoid light;
+  PowerDistribution pdh = new PowerDistribution(1, ModuleType.kRev);
 
   /** Creates a new LimeLight. */
   public LimeLight() {
@@ -41,6 +45,14 @@ public class LimeLight extends SubsystemBase {
   
   public void setCammode(int Cammode){
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(Cammode);
+  }
+
+  /**
+   * 
+   * @param isOn
+   */
+  public void setLimeLightPower(boolean isOn){
+    pdh.setSwitchableChannel(isOn);
   }
 
   /**

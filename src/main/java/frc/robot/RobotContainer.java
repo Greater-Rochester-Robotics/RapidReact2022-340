@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.ShootHighGoal;
 import frc.robot.commands.ShootHighGoalFender;
+import frc.robot.commands.ShootLowGoalFender;
 import frc.robot.commands.SpitBalls;
 import frc.robot.commands.StopShooterHandlerHood;
 import frc.robot.commands.autonomous.TestPath;
@@ -114,7 +115,7 @@ public class RobotContainer {
   // final Button coDriverRTButton = new JoyTriggerButton(coDriver, .7, Axis.RIGHT_TRIGGER);
 
   //Climber next step button is aliased here.
-  public static final Button climberButton = driverStart;
+  public static final Button climberButton = coDriverA;
 
   //The robot's subsystems are instantiated here
   public static Compressor compressor;
@@ -188,8 +189,12 @@ public class RobotContainer {
     driverY.whenReleased(new StopShooterHandlerHood());
     driverLB.whenPressed(new DriveResetGyroToZero());
     driverRB.whileHeld(new DriveOnTarget());
-    // driverStart.whenPressed(new DriveFollowTrajectory("DriveStraight"));
+    driverStart.whenPressed(new DriveFollowTrajectory("DriveStraight"));
     driverBack.toggleWhenActive(new DriveRobotCentric());
+    driverDDown.whenPressed(new ShootLowGoalFender(.5));
+    driverDDown.whenReleased(new StopShooterHandlerHood());
+
+    // coDriverBack.and(coDriverStart).whenActive(new ClimberClimb());
   }
 
   /**
