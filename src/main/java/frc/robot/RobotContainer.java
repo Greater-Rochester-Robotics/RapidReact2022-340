@@ -15,12 +15,15 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.PrepLowFender;
+import frc.robot.commands.ShootHighFenderWithDriveBack;
 import frc.robot.commands.ShootHighGoal;
 import frc.robot.commands.ShootHighGoalFender;
 import frc.robot.commands.ShootLowGoalFender;
 import frc.robot.commands.SpitBalls;
 import frc.robot.commands.StopShooterHandlerHood;
 import frc.robot.commands.autonomous.AutoLeftBackOutOfWay;
+import frc.robot.commands.autonomous.AutoLeftTwoBallFromHub;
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
@@ -44,11 +47,13 @@ import frc.robot.commands.drive.util.DriveOneModule;
 import frc.robot.commands.drive.util.DriveResetAllModulePositionsToZero;
 import frc.robot.commands.drive.util.DriveResetGyroToZero;
 import frc.robot.commands.drive.util.DriveSetGyro;
+import frc.robot.commands.drive.util.DriveStraightBack;
 import frc.robot.commands.drive.util.DriveTuneDriveMotorFeedForward;
 import frc.robot.commands.drive.util.DriveTurnToAngle;
 import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterPercentOutput;
+import frc.robot.commands.shooter.ShooterPrepShot;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.commands.shooter.ShooterStop;
 import frc.robot.subsystems.Climber;
@@ -167,9 +172,12 @@ public class RobotContainer {
     SmartDashboard.putData(new ShooterStop());//Testing Shooter
     SmartDashboard.putData(new HoodHome(true));//For setup
     SmartDashboard.putData(new DriveTurnToAngle(Constants.PI_OVER_TWO));
+    SmartDashboard.putData(new ClimberExtendoHome());
+
 
     SmartDashboard.putNumber("SpeedIShoot",0.0);
     SmartDashboard.putNumber("angleIShoot",0.0);
+
   }
 
   /**
@@ -183,18 +191,21 @@ public class RobotContainer {
     driverA.whenReleased(new BallHandlerSetState(State.kOff));
     driverB.whenPressed(new SpitBalls());
     driverB.whenReleased(new StopShooterHandlerHood());
-    driverX.whenPressed(new ShootHighGoalFender(1));
+    driverX.whileHeld(new ShootHighFenderWithDriveBack(0.0));
     driverX.whenReleased(new StopShooterHandlerHood());
-    driverY.whenPressed(new ShootHighGoal(1));
+    driverY.whenPressed(new ShootHighGoal(0.0));
     driverY.whenReleased(new StopShooterHandlerHood());
     driverLB.whenPressed(new DriveResetGyroToZero());
     driverRB.whileHeld(new DriveOnTarget());
-    driverStart.whenPressed(new AutoLeftBackOutOfWay());
+    // driverStart.whenPressed(new AutoLeftTwoBallFromHub());
     driverBack.toggleWhenActive(new DriveRobotCentric());
     driverDDown.whenPressed(new ShootLowGoalFender(.5));
     driverDDown.whenReleased(new StopShooterHandlerHood());
 
-    // coDriverBack.and(coDriverStart).whenActive(new ClimberClimb());
+    coDriverX.whenPressed(new ShooterPrepShot());
+    coDriverY.whenPressed(new ShooterPrepShot());
+    coDriverBack.and(coDriverStart).whenActive(new ClimberClimb());
+    coDriverDDown.whenPressed(new PrepLowFender());
   }
 
   /**

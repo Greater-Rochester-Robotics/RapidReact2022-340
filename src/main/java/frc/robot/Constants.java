@@ -60,7 +60,7 @@ public final class Constants {
 
     /* Robot Rotation PID controller constants */
     public static final double ROBOT_SPIN_PID_TOLERANCE = Math.toRadians(0.5);
-    public static final double MINIMUM_ROTATIONAL_OUTPUT = 0.11;
+    public static final double MINIMUM_ROTATIONAL_OUTPUT = 0.10;
 
     public static final double ROBOT_SPIN_P = 1.55;//tuned for drive/climber bot
     public static final double ROBOT_SPIN_I = 0.0;
@@ -131,7 +131,8 @@ public final class Constants {
 
     public static final double SHOOTER_MOTOR_ALLOWABLE_ERROR = 200.0;//TODO: get a better number here, and this is in pulses, but need to fix PID before changing
     
-    public static final double SHOOOTER_PREP_SPEED = 6000;
+    public static final double SHOOOTER_PREP_SPEED = 7300;
+    public static final double SHOOTER_FENDER_SHOT_SPEED = 7400;
     public static final LookUpTable SHOOTER_HIGH_SPEEDS_TABLE = new LookUpTable();
     static {
         //use put(distance, speed)
@@ -209,7 +210,7 @@ public final class Constants {
 
     /* Compressor Pressure Constants */
     public static final double MIN_PRESSURE = 95.0;
-    public static final double MAX_PRESSURE = 120.0;//TODO: change this on between comp bot and prac , 100 foir prac
+    public static final double MAX_PRESSURE = 120.0;//TODO: change this on between comp bot and prac , 100 for prac, 120 for comp
 
     /* IDENTIFICATION NUMBERS FOR DEVICES */
 

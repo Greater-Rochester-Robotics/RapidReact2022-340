@@ -11,6 +11,7 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.ballhandler.BallHandlerShootProgT;
 import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
+import frc.robot.commands.shooter.ShooterPrepShot;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.commands.shooter.ShooterStop;
 
@@ -24,9 +25,10 @@ public class ShootHighGoal extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new HoodHome(),
+      new ShooterPrepShot(),
       parallel(
-        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(2),
-        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true)//,
+        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(2.0),
+        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true).withTimeout(2.0)//,
         // new WaitCommand(2.0)
       ),
       // new WaitUntilCommand(RobotContainer.shooter::isAtSpeed),//this should fall through, left for options

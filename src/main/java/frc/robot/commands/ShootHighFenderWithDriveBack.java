@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ballhandler.BallHandlerShootProgT;
+import frc.robot.commands.drive.auto.DriveFollowTrajectory;
+import frc.robot.commands.drive.util.DriveStraightBack;
 import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterSetSpeed;
@@ -18,16 +20,17 @@ import frc.robot.commands.shooter.ShooterStop;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShootHighGoalFender extends SequentialCommandGroup {
+public class ShootHighFenderWithDriveBack extends SequentialCommandGroup {
   /** Creates a new ShootHighGoal. */
-  public ShootHighGoalFender(double timeBewtweenBalls) {
+  public ShootHighFenderWithDriveBack(double timeBewtweenBalls) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new HoodHome(),
       parallel(
         new ShooterSetSpeed(Constants.SHOOTER_FENDER_SHOT_SPEED).withTimeout(2),
-        new HoodToPosition(0.0)
+        new HoodToPosition(0.0),
+        new DriveStraightBack(0.305)
       ),
       // new WaitUntilCommand(RobotContainer.shooter::isAtSpeed),//this should fall through, left for options
       new BallHandlerShootProgT(timeBewtweenBalls),

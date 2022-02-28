@@ -172,7 +172,7 @@ public class BallHandler extends SubsystemBase {
     //TODO: ALL SBM ON HOLD DO NOT UNCOMMENT 
     //if timer reset, run spit out timer for half second
     // if(!selectorTimer.hasElapsed(0.5)){
-    //   speeds[1] *= -1;  
+      // speeds[1] *= -1;  
     // }
 
     //If speed have changed, update the motor output speeds
