@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.PrepLowFender;
 import frc.robot.commands.ShootHighFenderWithDriveBack;
 import frc.robot.commands.ShootHighGoal;
-import frc.robot.commands.ShootHighGoalFender;
+import frc.robot.commands.ShootHighFender;
 import frc.robot.commands.ShootLowGoalFender;
 import frc.robot.commands.SpitBalls;
 import frc.robot.commands.StopShooterHandlerHood;

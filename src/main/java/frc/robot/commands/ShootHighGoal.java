@@ -19,6 +19,12 @@ import frc.robot.commands.shooter.ShooterStop;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootHighGoal extends SequentialCommandGroup {
+  /**
+   * 
+   */
+  public ShootHighGoal(){
+    this(0.0);
+  }
   /** Creates a new ShootHighGoal. */
   public ShootHighGoal(double timeBewtweenBalls) {
     // Add your commands in the addCommands() call, e.g.

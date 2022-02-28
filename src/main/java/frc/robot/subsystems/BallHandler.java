@@ -28,7 +28,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class BallHandler extends SubsystemBase {
 
@@ -43,6 +42,7 @@ public class BallHandler extends SubsystemBase {
   DigitalInput ballSensor1;
   ColorSensorV3 colorSensor; 
   Timer selectorTimer = new Timer();
+  Timer harvesterOutTimer = new Timer();
 
   public enum State {
    kOff, kFillTo1, kFillTo0, kShoot1, kShoot0, kSpitLow, kSpitMid, kSpitHigh
@@ -89,6 +89,7 @@ public class BallHandler extends SubsystemBase {
 
       handlerMotors[i].burnFlash();//this saves settings, BUT MUST BE DONE LAST, SparkMAX won't accept commands for a moment after this call
     }
+
     ballSensor0 = new DigitalInput(Constants.BALL_SENSOR_0);
     ballSensor1 = new DigitalInput(Constants.BALL_SENSOR_1);
     
@@ -96,6 +97,9 @@ public class BallHandler extends SubsystemBase {
 
     selectorTimer.reset();
     selectorTimer.start();
+
+    harvesterOutTimer.reset();
+    harvesterOutTimer.start();
 
     isSelectorReversed = false;
     rejectOppColor = true;
@@ -155,8 +159,13 @@ public class BallHandler extends SubsystemBase {
 
     //if state has changed, check to move harvester in or out
     if(state != prevState){
-      if(state == State.kFillTo1 || state == State.kFillTo0 
-        || state == State.kSpitHigh || state == State.kSpitLow){
+      if(state == State.kFillTo1 || state == State.kFillTo0) {
+        if(isHarvesterNotOut()){
+          //if the harvester isn't out right now, reset the timer
+          harvesterOutTimer.reset();
+        }
+        harvesterOut();
+      }else if(state == State.kSpitHigh || state == State.kSpitLow){
         harvesterOut();
       }else{
         harvesterIn();
@@ -169,10 +178,13 @@ public class BallHandler extends SubsystemBase {
       selectorTimer.reset();
     }
 
+    if(!harvesterOutTimer.hasElapsed(.5)){
+      speeds[1] = 0.0;
+    }
     //TODO: ALL SBM ON HOLD DO NOT UNCOMMENT 
-    //if timer reset, run spit out timer for half second
-    // if(!selectorTimer.hasElapsed(0.5)){
-      // speeds[1] *= -1;  
+    // else if(!selectorTimer.hasElapsed(0.5)){
+    //   //if timer reset, run spit out timer for half second
+    //   speeds[1] *= -1;  
     // }
 
     //If speed have changed, update the motor output speeds
@@ -200,6 +212,10 @@ public class BallHandler extends SubsystemBase {
 
   public void harvesterOut(){
     harvesterTilt.set(Value.kReverse);
+  }
+
+  public boolean isHarvesterNotOut(){
+    return false;//TODO: swap for a test if harvesterTilt is equal to out(kReverse), then invert
   }
 
   // public void intake(){
