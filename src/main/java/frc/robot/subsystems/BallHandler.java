@@ -109,10 +109,7 @@ public class BallHandler extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    // //Smartdashboard pushes for testing
-    // SmartDashboard.putNumber("Red Color", colorSensor.getRed());
-    // SmartDashboard.putNumber("Blue Color", colorSensor.getBlue());
-    // SmartDashboard.putNumber("Proximity", colorSensor.getProximity());
+
     // SmartDashboard.putBoolean("connected",colorSensor.isConnected());
 
     //BallHandler State Machine
@@ -157,6 +154,15 @@ public class BallHandler extends SubsystemBase {
         System.out.println("default ball handler case reached");
     }
 
+    if((state == State.kFillTo1 || state == State.kFillTo0)){
+      //Smartdashboard pushes for testing
+      SmartDashboard.putNumber("Red Color", colorSensor.getRed());
+      SmartDashboard.putNumber("Blue Color", colorSensor.getBlue());
+      SmartDashboard.putNumber("Red - Blue", colorSensor.getRed() - colorSensor.getBlue());
+      SmartDashboard.putNumber("Blue - Red", colorSensor.getBlue() - colorSensor.getRed());
+      SmartDashboard.putNumber("Proximity", colorSensor.getProximity());
+    }
+
     //if state has changed, check to move harvester in or out
     if(state != prevState){
       if(state == State.kFillTo1 || state == State.kFillTo0) {
@@ -178,7 +184,7 @@ public class BallHandler extends SubsystemBase {
       selectorTimer.reset();
     }
 
-    if(!harvesterOutTimer.hasElapsed(.5)){
+    if(!harvesterOutTimer.hasElapsed(1.0)){
       speeds[1] = 0.0;
     }
     //TODO: ALL SBM ON HOLD DO NOT UNCOMMENT 
@@ -215,7 +221,7 @@ public class BallHandler extends SubsystemBase {
   }
 
   public boolean isHarvesterNotOut(){
-    return false;//TODO: swap for a test if harvesterTilt is equal to out(kReverse), then invert
+    return !(harvesterTilt.get() == Value.kReverse);
   }
 
   // public void intake(){

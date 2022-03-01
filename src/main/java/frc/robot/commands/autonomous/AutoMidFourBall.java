@@ -5,13 +5,20 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ShootHighGoal;
+import frc.robot.commands.StopShooterHandlerHood;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
+import frc.robot.commands.ballhandler.BallHandlerShootProgT;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.auto.DriveTurnToTarget;
+import frc.robot.commands.drive.util.DriveSetGyro;
+import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterPrepShot;
+import frc.robot.commands.shooter.ShooterSetSpeed;
+import frc.robot.commands.shooter.ShooterStop;
 import frc.robot.subsystems.BallHandler.State;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -30,21 +37,31 @@ public class AutoMidFourBall extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new BallHandlerSetState(State.kFillTo0),
-      new DriveFollowTrajectory("DriveToMidBall"),
-      new ShooterPrepShot(),
+      parallel(
+        new DriveSetGyro(46.04),
+        new WaitCommand(1.0)
+      ),
+      new ShooterSetSpeed(9200),//need 8950ish so going with 9200 bc bad pid
+      parallel(
+        new DriveFollowTrajectory("DriveToMidBall"),
+        new HoodToPosition(9.9)
+      ),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
-      new BallHandlerSetState(State.kOff),
-      new DriveTurnToTarget(),
-      new ShootHighGoal(1.0),
+      new BallHandlerShootProgT(0.0),
       new BallHandlerSetState(State.kFillTo1),
       new DriveFollowTrajectory("DriveMidBallToHuman"),
-      new ShooterPrepShot(),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new BallHandlerSetState(State.kOff),
-      // May need to drive forward before shooting
-      new DriveTurnToTarget(),
-      new ShootHighGoal(1.0)
+      new ShooterSetSpeed(9700),//need 9400 so use 9700 bc bad pid
+      parallel(
+        new DriveFollowTrajectory("DriveFromHumanStraight"),
+        new HoodToPosition(14.7)
+      ),
+      new BallHandlerShootProgT(0.0),
+      new StopShooterHandlerHood()
+      // new DriveTurnToTarget(),
+      // new ShootHighGoal(1.0)
     );
   }
 }

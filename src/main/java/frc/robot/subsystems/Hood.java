@@ -59,7 +59,8 @@ public class Hood extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("HoodLimit", !limitSwitch.get());
-    // SmartDashboard.putNumber("Hood Position", getPosition());
+    SmartDashboard.putNumber("Hood Position", getPosition());
+    // SmartDashboard.putBoolean("HoodHasPowerCycled", motor.getFault(FaultID.kHasReset));
   }
 
   /**
@@ -84,6 +85,7 @@ public class Hood extends SubsystemBase {
    * A method to check if the motor controller has 
    * power cycled, if so the hasBeenHomed is reset.
    */
+  @Deprecated
   public void checkForPowerCycle(){
     if(motor.getFault(FaultID.kHasReset)){
       setBeenHomed(false);

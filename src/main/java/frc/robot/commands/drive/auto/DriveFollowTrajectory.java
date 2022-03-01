@@ -68,8 +68,8 @@ public class DriveFollowTrajectory extends CommandBase {
     yController.reset();
     rotationController.reset(initialState.holonomicRotation.getDegrees());
     if(resetOdometry) {
-      RobotContainer.swerveDrive.setCurPose2d(new Pose2d(initialState.poseMeters.getTranslation(),new Rotation2d(0)));
-      RobotContainer.swerveDrive.setGyro(initialState.holonomicRotation.getDegrees());
+      RobotContainer.swerveDrive.setCurPose2d(new Pose2d(initialState.poseMeters.getTranslation(),RobotContainer.swerveDrive.getGyroRotation2d()));
+      // RobotContainer.swerveDrive.setGyro(initialState.holonomicRotation.getDegrees());
     }
   }
 
