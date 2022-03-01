@@ -34,6 +34,6 @@ public class LimeLightPowerCycle extends CommandBase {
   }
 
   public boolean isFinnished(){
-    return time.hasElapsed(.5);
+    return time.hasElapsed(1.0);
   }
 }

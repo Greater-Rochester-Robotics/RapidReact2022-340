@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.LimeLightPowerCycle;
 import frc.robot.commands.PrepLowFender;
 import frc.robot.commands.ShootHighFenderWithDriveBack;
 import frc.robot.commands.ShootHighGoal;
@@ -173,7 +174,7 @@ public class RobotContainer {
     SmartDashboard.putData(new HoodHome(true));//For setup
     SmartDashboard.putData(new DriveTurnToAngle(Constants.PI_OVER_TWO));
     SmartDashboard.putData(new ClimberExtendoHome());
-
+    SmartDashboard.putData(new LimeLightPowerCycle());
 
     SmartDashboard.putNumber("SpeedIShoot",0.0);
     SmartDashboard.putNumber("angleIShoot",0.0);
