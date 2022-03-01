@@ -109,7 +109,7 @@ public class SwerveModule {
         // System.out.println( "Status_8_PulseWidth" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth));
         // System.out.println( "Status_9_MotProfBuffer" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer));
         rotationMotor.setSelectedSensorPosition(0.0);
-        rotationMotor.configAllowableClosedloopError(0, Constants.SWERVE_MODULE_TOLERANCE, 0); //TODO: Check for correct slotIdx
+        rotationMotor.configAllowableClosedloopError(0, Constants.SWERVE_MODULE_TOLERANCE, 0);
         
 
         //the following sensor is angle of the module, as an absolute value

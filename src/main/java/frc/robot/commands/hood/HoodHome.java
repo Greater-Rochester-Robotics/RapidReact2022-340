@@ -22,7 +22,7 @@ public class HoodHome extends CommandBase {
 
   public void initialize(){
     //double check that the hood motor hasn't been power cycled
-    // RobotContainer.hood.checkForPowerCycle();//TODO:Test if this works before enabling code
+    // RobotContainer.hood.checkForPowerCycle();//This doesn't seem to work, don't use
   }
 
   @Override

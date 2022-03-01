@@ -60,7 +60,8 @@ public class Climber extends SubsystemBase {
     extendoMotorLeft.config_kF(0, Constants.EXTENDO_MOTOR_F);
     extendoMotorLeft.configMotionCruiseVelocity(Constants.EXTENDO_CRUISE_VELOCITY);
     extendoMotorLeft.configMotionAcceleration(Constants.EXTENDO_ACCELERATION);
-    this.setLeftSwitchEnabled(true);
+    this.setLeftSwitchEnabled(true);//enable the reverse limit
+    //disable the forward limit, nothing should be plugged in.
     extendoMotorLeft.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyOpen);
 
     // Configures the Right Extendo Motor
@@ -87,10 +88,11 @@ public class Climber extends SubsystemBase {
     extendoMotorRight.config_kF(1, Constants.EXTENDO_MOTOR_F_COMPENSATE);
     extendoMotorRight.configMotionCruiseVelocity(Constants.EXTENDO_CRUISE_VELOCITY);
     extendoMotorRight.configMotionAcceleration(Constants.EXTENDO_ACCELERATION);
-    this.setRightSwitchEnabled(true);
+    this.setRightSwitchEnabled(true);//enable the reverse limit
+    //disable the forward limit, nothing should be plugged in.
     extendoMotorRight.configForwardLimitSwitchSource(LimitSwitchSource.Deactivated, LimitSwitchNormal.NormallyOpen);
-    
-    // Tells us if the extendo arms are all the way in.
+
+    // Tells us if the extendo arms are all the way in. 
     leftBottomSwitch = extendoMotorLeft.getSensorCollection();// DigitalInput(Constants.CLIMBER_LEFT_BOTTOM_SWITCH);
     rightBottomSwitch = extendoMotorRight.getSensorCollection();// DigitalInput(Constants.CLIMBER_RIGHT_BOTTOM_SWITCH);
   }
@@ -120,6 +122,14 @@ public class Climber extends SubsystemBase {
   }
 
 /* ======================Functions for the pair of arms=====================*/
+  /**
+   * a setup method designed to link the right and left climber arms together. 
+   * The right is set as Main and the left follower. Right reads the left's 
+   * encoder and sends an altered ouput based on position difference. this 
+   * the the Aux PID.
+   * 
+   * This can be run just once.
+   */
   public void assignRemoteSensor(){
     TalonFXConfiguration rightConfig = new TalonFXConfiguration();
     TalonFXConfiguration leftConfig = new TalonFXConfiguration();
@@ -144,15 +154,16 @@ public class Climber extends SubsystemBase {
     leftConfig.primaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice();
     extendoMotorLeft.configAllSettings(leftConfig);
 		extendoMotorRight.configAllSettings(rightConfig);
-    
-
   }
+
+
   public void speedSensorFeedback(){
     extendoMotorRight.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 20);
 		extendoMotorRight.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 20);
 		extendoMotorRight.setStatusFramePeriod(StatusFrame.Status_14_Turn_PIDF1, 20);
 		extendoMotorLeft.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5);
   }
+  
   public void slowSensorFeedback(){
     extendoMotorRight.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 1000);
 		extendoMotorRight.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 1000);
@@ -170,7 +181,7 @@ public class Climber extends SubsystemBase {
   }
 
   /**
-   * stop both motors
+   * stop both motors, stops all PID funcions
    */
   public void stopBothMotors(){
     extendoMotorRight.set(ControlMode.PercentOutput, 0.0);
@@ -183,14 +194,15 @@ public class Climber extends SubsystemBase {
     extendoMotorRight.set(TalonFXControlMode.Position, (pos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR));
   }
 
-
+  /**
+   * a method to force the arm down, this could burnout 
+   * the motor if limit siwtch fails, so it must be used 
+   * sparingly. This is used to compensate for belt 
+   * stretching.
+   */
   public void extendoArmRightForceIn(){
-    // if(getExtendoRightSwitch()){
-    //   extendoMotorRight.set(TalonFXControlMode.PercentOutput, 0.0);
-    // }else{
-      extendoMotorRight.set(TalonFXControlMode.PercentOutput, 
+    extendoMotorRight.set(TalonFXControlMode.PercentOutput, 
       Constants.CLIMBER_EXTENDO_FORCE_IN);
-    // }
   }
 
   /**
@@ -213,14 +225,26 @@ public class Climber extends SubsystemBase {
     extendoMotorRight.set(TalonFXControlMode.PercentOutput, 0);
   }
 
+  /**
+   *polls the supply current of the right motor 
+   * @return current in Amps
+   */
   public double getExtendoRightCurrent() {
     return extendoMotorRight.getSupplyCurrent();
   }
 
+  /**
+   * accessor for the right limit switch
+   * @return true means it is pressed
+   */
   public boolean getExtendoRightSwitch() {
     return rightBottomSwitch.isRevLimitSwitchClosed()==1;
   }
 
+  /**
+   * used to enable and disable the rear limit switch
+   * @param enable true for limit switch on
+   */
   public void setRightSwitchEnabled(boolean enable){
     if(enable){
       extendoMotorRight.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
@@ -229,6 +253,10 @@ public class Climber extends SubsystemBase {
     }
   }
   
+  /**
+   * accessor for the right climber's  encoder
+   * @return distance up in inches
+   */
   public double getExtendoRightEncPos() {
     return extendoMotorRight.getSelectedSensorPosition() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;
   }
@@ -247,13 +275,15 @@ public class Climber extends SubsystemBase {
     extendoMotorLeft.set(TalonFXControlMode.Position, pos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);
   }
 
+/**
+   * a method to force the arm down, this could burnout 
+   * the motor if limit siwtch fails, so it must be used 
+   * sparingly. This is used to compensate for belt 
+   * stretching.
+   */
   public void extendoArmLeftForceIn(){
-    // if(getExtendoLeftSwitch()){
-    //   extendoMotorLeft.set(TalonFXControlMode.PercentOutput, 0.0);
-    // }else{
-      extendoMotorLeft.set(TalonFXControlMode.PercentOutput, 
+    extendoMotorLeft.set(TalonFXControlMode.PercentOutput, 
       Constants.CLIMBER_EXTENDO_FORCE_IN);
-    // }
   }
 
   /**
@@ -261,7 +291,7 @@ public class Climber extends SubsystemBase {
    */
   public void extendoArmLeftIn(){
     extendoMotorLeft.set(TalonFXControlMode.PercentOutput, 
-    Constants.CLIMBER_EXTENDO_SPEED_IN);
+      Constants.CLIMBER_EXTENDO_SPEED_IN);
   }
   
   /**
@@ -269,21 +299,33 @@ public class Climber extends SubsystemBase {
    */
   public void extendoArmLeftOut(){
     extendoMotorLeft.set(TalonFXControlMode.PercentOutput, 
-    Constants.CLIMBER_EXTENDO_SPEED_OUT);
+      Constants.CLIMBER_EXTENDO_SPEED_OUT);
   }
 
   public void stopExtendoLeftArm() {
     extendoMotorLeft.set(TalonFXControlMode.PercentOutput, 0);
   }
 
+  /**
+   *polls the supply current of the left motor 
+   * @return current in Amps
+   */
   public double getExtendoLeftCurrent() {
     return extendoMotorLeft.getSupplyCurrent();
   }
 
+  /**
+   * accessor for the right limit switch
+   * @return true means it is pressed
+   */
   public boolean getExtendoLeftSwitch() {
     return leftBottomSwitch.isRevLimitSwitchClosed()==1;
   }
   
+  /**
+   * used to enable and disable the rear limit switch
+   * @param enable true for limit switch on
+   */
   public void setLeftSwitchEnabled(boolean enable){
     if(enable){
       extendoMotorLeft.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
@@ -292,6 +334,10 @@ public class Climber extends SubsystemBase {
     }
   }
 
+  /**
+   * accessor for the left climber's  encoder
+   * @return distance up in inches
+   */
   public double getExtendoLeftEncPos() {
     return extendoMotorLeft.getSelectedSensorPosition() * Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR;
   }

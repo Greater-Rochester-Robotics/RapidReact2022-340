@@ -37,8 +37,8 @@ public class ClimberClimb extends SequentialCommandGroup {
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WaitUntilThirdBarReached"),
       new ClimberTiltIn().withName("TiltToNormal"),
       new WaitCommand(1.0).withName("PauseForTilt"),
-      new WaitUntilCommand(RobotContainer.climberButton::get).withName("WaitToStartClimbToThirdBar"),
-      new ClimberExtendoToPosition(Constants.CLIMBER_LIFT_POSITION,true),
+      new WaitUntilCommand(RobotContainer.climberButton::get).withName("WaitToReleaseSecondBar"),
+      new ClimberExtendoToPosition(Constants.CLIMBER_LIFT_POSITION,true).withName("ReleaseFromSecondBar"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WaitToClimbToThirdBar"),
       sequence(
         new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION,true),
@@ -48,12 +48,14 @@ public class ClimberClimb extends SequentialCommandGroup {
       new ClimberTiltOut().withName("TiltToFourthBar"),
       new ClimberExtendoToPosition(Constants.CLIMBER_RELEASE_POSITION).withName("ReleaseFromThirdBar"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WaitToExtendToFourthBar"),
-      new ClimberExtendoToPosition(Constants.CLIMBER_TOP_POSITION).withName("ReachToFourthBar"),
+      new ClimberExtendoToPosition(Constants.CLIMBER_TOP_POSITION).withName("ExtendToFourthBar"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WaitToTiltToNormal"),
       new ClimberTiltIn().withName("TiltToNormal"),
       new WaitCommand(1.0).withName("PauseToTilt"),
-      new WaitUntilCommand(RobotContainer.climberButton::get).withName("WaitToPullUp"),
-      new ClimberExtendoToPosition(Constants.CLIMBER_LIFT_POSITION).withName("PullUpToFourthPosition")
+      new WaitUntilCommand(RobotContainer.climberButton::get).withName("WaitToReleaseThirdbar"),
+      new ClimberExtendoToPosition(Constants.CLIMBER_LIFT_POSITION).withName("ReleaseFromThirdBar")
+      //TODO:add another WaitUntil
+      //TODO:add a pull all the way up to the fourth bar, 
     );
   }
 

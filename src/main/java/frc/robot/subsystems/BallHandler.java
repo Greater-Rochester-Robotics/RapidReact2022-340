@@ -34,40 +34,48 @@ public class BallHandler extends SubsystemBase {
   DoubleSolenoid harvesterTilt;
   VictorSPX harvesterMotor; 
   CANSparkMax handlerMotors[];
-  RelativeEncoder handleEncoders[];
-  double[] speeds = new double[4];
-  double[] currentSpeeds = new double[] { 0.0, 0.0, 0.0, 0.0};
-  boolean isSelectorReversed;
-  DigitalInput ballSensor0;
-  DigitalInput ballSensor1;
-  ColorSensorV3 colorSensor; 
-  Timer selectorTimer = new Timer();
-  Timer harvesterOutTimer = new Timer();
+  // RelativeEncoder handleEncoders[];//not using handler encoder
 
+  DigitalInput ballSensor0;//switch for detecting Ball0, the one near the intake
+  DigitalInput ballSensor1;//switch for detecting Ball1, the one near the shooter
+  ColorSensorV3 colorSensor;//sensor for deteccting ball color
+
+  Timer selectorTimer = new Timer();//timer for reversing the Ball0 motor, for kicking out wrong balls
+  Timer harvesterOutTimer = new Timer();//timer to delay moving Ball0 motor when harvestter is going down
+
+  /**
+   * the states for the BallHandler state machine
+   */
   public enum State {
    kOff, kFillTo1, kFillTo0, kShoot1, kShoot0, kSpitLow, kSpitMid, kSpitHigh
   }
+  
+  double[] speeds = new double[4];//speeds to set the motors to
+  double[] currentSpeeds = new double[] { 0.0, 0.0, 0.0, 0.0};//speeds stored from previous loop, to compare to current ones
 
-  private State state = State.kOff;
-  private State prevState = State.kOff;
-  private boolean rejectOppColor = true;
+  private State state = State.kOff;//storage for the current state of the state machine
+  private State prevState = State.kOff;//storing the previous state for determining if state has changed
 
+  private boolean rejectOppColor = true;//storage for whether we are runing SBM
+
+  //pull preset speeds of the motors from constants
   private static final double HARV_IN = Constants.HARVESTER_INTAKE_SPEED;
   private static final double HARV_OUT = Constants.HARVESTER_EXTAKE_SPEED;
   private static final double BALL0_IN = Constants.BALL_HANDLER_0_INTAKE_SPEED;
   private static final double BALL0_OUT = Constants.BALL_HANDLER_0_EXTAKE_SPEED;
+  private static final double BALL0_SHOOT = Constants.BALL_HANDLER_0_SHOOT_SPEED;
   private static final double BALL1_IN = Constants.BALL_HANDLER_1_INTAKE_SPEED;
   private static final double BALL1_OUT = Constants.BALL_HANDLER_1_EXTAKE_SPEED;
+  private static final double BALL1_SHOOT = Constants.BALL_HANDLER_1_SHOOT_SPEED;
   private static final double BALL2_OUT = Constants.BALL_HANDLER_2_EXTAKE_SPEED;
   private static final double BALL2_SHOOT = Constants.BALL_HANDLER_2_SHOOT_SPEED;
-  private static final double BALL1_SHOOT = Constants.BALL_HANDLER_1_SHOOT_SPEED;
-  private static final double BALL0_SHOOT = Constants.BALL_HANDLER_0_SHOOT_SPEED;
     
   
   /** Creates a new Intake. */
   public BallHandler() {
     harvesterTilt = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
       Constants.HARVESTER_TILT_IN, Constants.HARVESTER_TILT_OUT);
+    
     harvesterMotor = new VictorSPX(Constants.HARVESTER_MOTOR);
     harvesterMotor.setInverted(true);
     harvesterMotor.setNeutralMode(NeutralMode.Coast);
@@ -83,9 +91,9 @@ public class BallHandler extends SubsystemBase {
       handlerMotors[i].restoreFactoryDefaults();
       handlerMotors[i].setIdleMode(IdleMode.kBrake);// set brake mode, so motors stop on a dime
       handlerMotors[i].enableVoltageCompensation(10.50);// enable volatge compensation mode
-      handlerMotors[i].setInverted(i == 1);// only the second NEO in the ballHandler needs to be inverted.
+      handlerMotors[i].setInverted(i == 1);// only the second NEO550 in the ballHandler needs to be inverted.
 
-      // handleEncoders[i] = handlerMotors[i].getEncoder();//TODO: figure out if we need to get the encoder. also why did it cause the code to crash
+      // handleEncoders[i] = handlerMotors[i].getEncoder();//We done use encoder, but this was also causing the code to crash
 
       handlerMotors[i].burnFlash();//this saves settings, BUT MUST BE DONE LAST, SparkMAX won't accept commands for a moment after this call
     }
@@ -101,7 +109,6 @@ public class BallHandler extends SubsystemBase {
     harvesterOutTimer.reset();
     harvesterOutTimer.start();
 
-    isSelectorReversed = false;
     rejectOppColor = true;
   }
 
@@ -109,38 +116,43 @@ public class BallHandler extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-
-    // SmartDashboard.putBoolean("connected",colorSensor.isConnected());
-
     //BallHandler State Machine
     switch(state){
       case kShoot1:
+        //shooting just the first ball
         speeds = new double[] { 0, 0, BALL1_SHOOT, BALL2_SHOOT };
         break;
       case kShoot0:
+        //shooting both balls
         speeds = new double[] { 0, BALL0_SHOOT, BALL1_SHOOT, BALL2_SHOOT };
         break;
       case kSpitHigh:
+        //spitting out the balls, with harvester down and intaking
         speeds = new double[] { HARV_IN, BALL0_OUT, BALL1_OUT, BALL2_OUT};
         break;
       case kSpitMid:
+        //spitting balls, with harvester up and off
         speeds = new double[] { 0, BALL0_OUT, BALL1_OUT, BALL2_OUT};
         break;
       case kSpitLow:
+        //spitting balls, with harvester down and running out
         speeds = new double[] { HARV_OUT, BALL0_OUT, BALL1_OUT, BALL2_OUT };
         break;
       case kFillTo1:
+        //filling the robot until the Ball1 sensor is pressed
         speeds = new double[] { HARV_IN, BALL0_IN, BALL1_IN, 0 };
         if(isBall1()){
+          //if we see a Ball change state and fall to next case
           state = State.kFillTo0;
         }
         else{
           break;
         }
       case kFillTo0:
+        //filling the robot until the Ball0 sensor is pressed
         speeds = new double[] { HARV_IN, BALL0_IN, 0, 0 };
-
-        if(isBall0()){
+        if(isBall0()){//TODO:check if we need to add a delay if selectorTimer is low, or set up a second method to do it.
+          //if we see a Ball change state and fall to next case
           state = State.kOff;
         }
         else{
@@ -154,14 +166,15 @@ public class BallHandler extends SubsystemBase {
         System.out.println("default ball handler case reached");
     }
 
-    if((state == State.kFillTo1 || state == State.kFillTo0)){
-      //Smartdashboard pushes for testing
-      SmartDashboard.putNumber("Red Color", colorSensor.getRed());
-      SmartDashboard.putNumber("Blue Color", colorSensor.getBlue());
-      SmartDashboard.putNumber("Red - Blue", colorSensor.getRed() - colorSensor.getBlue());
-      SmartDashboard.putNumber("Blue - Red", colorSensor.getBlue() - colorSensor.getRed());
-      SmartDashboard.putNumber("Proximity", colorSensor.getProximity());
-    }
+    //testing the SBM
+    // if((state == State.kFillTo1 || state == State.kFillTo0)){
+    //   //Smartdashboard pushes for testing
+    //   SmartDashboard.putNumber("Red Color", colorSensor.getRed());
+    //   SmartDashboard.putNumber("Blue Color", colorSensor.getBlue());
+    //   SmartDashboard.putNumber("Red - Blue", colorSensor.getRed() - colorSensor.getBlue());
+    //   SmartDashboard.putNumber("Blue - Red", colorSensor.getBlue() - colorSensor.getRed());
+    //   SmartDashboard.putNumber("Proximity", colorSensor.getProximity());
+    // }
 
     //if state has changed, check to move harvester in or out
     if(state != prevState){
@@ -179,7 +192,7 @@ public class BallHandler extends SubsystemBase {
     }
 
     //If the wrong ball color is detected, reset spitout timer
-    if((state == State.kFillTo1 || state == State.kFillTo0)){//TODO:SBM ON HOLD !shouldIntakeBall() && 
+    if((state == State.kFillTo1 || state == State.kFillTo0) && !shouldIntakeBall()){
       // System.out.println("Reset selector timer");
       selectorTimer.reset();
     }
@@ -193,9 +206,10 @@ public class BallHandler extends SubsystemBase {
     //   speeds[1] *= -1;  
     // }
 
-    //If speed have changed, update the motor output speeds
+    //to avoid too much CAN uses, only change values when speeds change.
     if(!DriverStation.isDisabled() && 
       !Arrays.equals(speeds,currentSpeeds)){
+      //If speed have changed, update the motor output speeds
       harvesterMotor.set(VictorSPXControlMode.PercentOutput, speeds[0]);
       for (int i = 1; i <= 3; i++) {
           handlerMotors[i-1].set(speeds[i]);
@@ -212,10 +226,19 @@ public class BallHandler extends SubsystemBase {
     prevState = state;
   }
   
+  /**
+   * sets harvester pneumatic in. this is the place 
+   * the harvester should be when starting the 
+   * match, where it is safely in the robot.
+   */
   public void harvesterIn(){
     harvesterTilt.set(Value.kForward);
   }
 
+  /**
+   * sets harvester pneumatic out. Out is where the 
+   * harvester must be in order to intake balls.
+   */
   public void harvesterOut(){
     harvesterTilt.set(Value.kReverse);
   }
@@ -224,6 +247,7 @@ public class BallHandler extends SubsystemBase {
     return !(harvesterTilt.get() == Value.kReverse);
   }
 
+  //commented out because haverster is handled in periodic state machine
   // public void intake(){
   //   harvesterMotor.set(TalonSRXControlMode.PercentOutput, Constants.HARVESTER_INTAKE_SPEED);
   // }
@@ -236,10 +260,22 @@ public class BallHandler extends SubsystemBase {
   //   harvesterMotor.set(TalonSRXControlMode.PercentOutput, 0);
   // }
 
+  /**
+   * checks the first ball switch
+   * the one close to the intake
+   * 
+   * @return true if ball is present
+   */
   public boolean isBall0(){
     return !ballSensor0.get();
   }
   
+  /**
+   * checks the second ball switch,
+   * the one close to the shooter
+   * 
+   * @return true if ball is present
+   */
   public boolean isBall1(){
     return !ballSensor1.get();
   }
@@ -277,14 +313,33 @@ public class BallHandler extends SubsystemBase {
     }
   }
   
+  /**
+   * Set the state of the ballhandler. The ballhandler 
+   * is managed by the periodic function in the 
+   * ballhandler. This is used to change the state of 
+   * the ballhandler
+   * 
+   * @param state uses enum State(BallHandler.State)
+   */
   public void setState(State state){
     this.state = state;
   }
 
+  /**
+   * returns the current state of the ballhandler.
+   * 
+   * @return enum State (BallHandler.State)
+   */
   public State getState(){
     return state;
   }
   
+  /**
+   * used to turn on or off the opponant ball 
+   * rejection system. SBM
+   * 
+   * @param reject set true to turn on rejection
+   */
   public void rejectOppColor(boolean reject){
     this.rejectOppColor = reject;
   }

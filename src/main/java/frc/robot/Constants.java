@@ -55,7 +55,7 @@ public final class Constants {
     // public static final double SWERVE_ROT_ARB_FF_VOLTAGE = 0.0;//This is left over from NEO550 consider deleting
     // public static final double SWERVE_ROT_PID_VOLTAGE_MINIMUM = -12.0;//This is left over from NEO550 consider deleting
     // public static final double SWERVE_ROT_PID_VOLTAGE_MAXIMUM = 12.0;//This is left over from NEO550 consider deleting
-    public static final double SWERVE_MODULE_TOLERANCE = 0.1;//TODO: this is scaled from the NEO550, needs adjust for Falcon500
+    public static final double SWERVE_MODULE_TOLERANCE = 0.1;
     public static final double ROTATIONAL_VELOCITY_TOLERANCE = 1.0;
 
     /* Robot Rotation PID controller constants */
