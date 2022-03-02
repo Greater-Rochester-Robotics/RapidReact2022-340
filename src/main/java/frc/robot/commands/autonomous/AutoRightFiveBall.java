@@ -5,6 +5,14 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
+import frc.robot.commands.ShootHighFender;
+import frc.robot.commands.ShootHighFenderWithDriveBack;
+import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
+import frc.robot.commands.ballhandler.BallHandlerSetState;
+import frc.robot.commands.drive.auto.DriveFollowTrajectory;
+import frc.robot.subsystems.BallHandler.State;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -16,8 +24,12 @@ public class AutoRightFiveBall extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       //FenderHighgoal
+      // new ShootHighFender(),
       //start intaking
+      new BallHandlerIntakeOut(),
+      new BallHandlerSetState(State.kFillTo1)//,
       //drive shortpath to first(Right) ball
+      // new DriveFollowTrajectory(trajName),
       //run wait until with Ball1 sensor,with timeout
       //drive another path to second(middle) ball
       //shooter prep shot

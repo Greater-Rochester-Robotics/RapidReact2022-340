@@ -23,6 +23,7 @@ import frc.robot.commands.ShootHighFender;
 import frc.robot.commands.ShootLowGoalFender;
 import frc.robot.commands.SpitBalls;
 import frc.robot.commands.StopShooterHandlerHood;
+import frc.robot.commands.autonomous.AutoDriveStraightBackAndShootHigh;
 import frc.robot.commands.autonomous.AutoLeftBackOutOfWay;
 import frc.robot.commands.autonomous.AutoLeftTwoBallFromHub;
 import frc.robot.commands.autonomous.AutoMidFourBall;
@@ -42,6 +43,7 @@ import frc.robot.commands.drive.DriveOnTarget;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveStopAllModules;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
+import frc.robot.commands.drive.auto.DriveStraightBack;
 import frc.robot.commands.drive.util.DriveAdjustModuleZeroPoint;
 import frc.robot.commands.drive.util.DriveAllModulesPositionOnly;
 import frc.robot.commands.drive.util.DriveFindMaxAccel;
@@ -49,7 +51,6 @@ import frc.robot.commands.drive.util.DriveOneModule;
 import frc.robot.commands.drive.util.DriveResetAllModulePositionsToZero;
 import frc.robot.commands.drive.util.DriveResetGyroToZero;
 import frc.robot.commands.drive.util.DriveSetGyro;
-import frc.robot.commands.drive.util.DriveStraightBack;
 import frc.robot.commands.drive.util.DriveTuneDriveMotorFeedForward;
 import frc.robot.commands.drive.util.DriveTurnToAngle;
 import frc.robot.commands.hood.HoodHome;
@@ -176,7 +177,7 @@ public class RobotContainer {
     SmartDashboard.putData(new DriveTurnToAngle(Constants.PI_OVER_TWO));
     SmartDashboard.putData(new ClimberExtendoHome());
     SmartDashboard.putData(new LimeLightPowerCycle());
-    SmartDashboard.putData(new AutoMidFourBall());
+    SmartDashboard.putData(new AutoDriveStraightBackAndShootHigh(1.5));
 
 
     SmartDashboard.putNumber("SpeedIShoot",0.0);

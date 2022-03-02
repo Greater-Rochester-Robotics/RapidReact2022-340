@@ -53,9 +53,11 @@ public class ClimberClimb extends SequentialCommandGroup {
       new ClimberTiltIn().withName("TiltToNormal"),
       new WaitCommand(1.0).withName("PauseToTilt"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WaitToReleaseThirdbar"),
-      new ClimberExtendoToPosition(Constants.CLIMBER_LIFT_POSITION).withName("ReleaseFromThirdBar")
-      //TODO:add another WaitUntil
-      //TODO:add a pull all the way up to the fourth bar, 
+      new ClimberExtendoToPosition(Constants.CLIMBER_LIFT_POSITION).withName("ReleaseFromThirdBar"),
+      new WaitUntilCommand(RobotContainer.climberButton::get).withName("WaitToClimbToFourthBar"),
+      new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION).withName("ClimbToFourthBar"),
+      new WaitUntilCommand(RobotContainer.climberButton::get).withName("WaitToClimbToFourthBar"),
+      new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION).withName("ClimbToFourthBar")
     );
   }
 

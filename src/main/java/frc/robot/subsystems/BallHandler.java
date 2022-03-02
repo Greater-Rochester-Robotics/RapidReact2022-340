@@ -151,7 +151,7 @@ public class BallHandler extends SubsystemBase {
       case kFillTo0:
         //filling the robot until the Ball0 sensor is pressed
         speeds = new double[] { HARV_IN, BALL0_IN, 0, 0 };
-        if(isBall0()){//TODO:check if we need to add a delay if selectorTimer is low, or set up a second method to do it.
+        if(isBall0() && selectorTimer.hasElapsed(0.5)){
           //if we see a Ball change state and fall to next case
           state = State.kOff;
         }
@@ -201,10 +201,10 @@ public class BallHandler extends SubsystemBase {
       speeds[1] = 0.0;
     }
     //TODO: ALL SBM ON HOLD DO NOT UNCOMMENT 
-    // else if(!selectorTimer.hasElapsed(0.5)){
-    //   //if timer reset, run spit out timer for half second
-    //   speeds[1] *= -1;  
-    // }
+    else if(!selectorTimer.hasElapsed(0.5)){
+      //if timer reset, run spit out timer for half second
+      speeds[1] *= -1;  
+    }
 
     //to avoid too much CAN uses, only change values when speeds change.
     if(!DriverStation.isDisabled() && 
