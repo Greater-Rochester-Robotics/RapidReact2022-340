@@ -10,19 +10,14 @@ import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PrepLowFender extends SequentialCommandGroup {
   /** Creates a new PrepLowFender. */
   public PrepLowFender() {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new HoodHome(),
+      new HoodHome(),//Home the hood, but should fall through if hood has been homed
       parallel(
-        new ShooterSetSpeed(Constants.SHOOTER_LOW_GOAL_FENDER_SPEED).withTimeout(2),
-        new HoodToPosition(22.0)
+        new ShooterSetSpeed(Constants.SHOOTER_LOW_GOAL_FENDER_SPEED).withTimeout(2),//Set the Shooter to FenderSpeed
+        new HoodToPosition(22.0)//Set the hood to maximum position
       )
     );
   }

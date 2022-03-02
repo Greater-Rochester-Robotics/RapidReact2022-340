@@ -11,19 +11,28 @@ import frc.robot.RobotContainer;
 
 public class ShooterSetSpeed extends CommandBase {
   private double speed;//a set speed to drive the shooter
-  private DoubleSupplier speedSupplier;//a supplier that give a speed to the shooter
-  private boolean speedSupplierMode;//whether we use set speed or the supplier
+  private DoubleSupplier speedSupplier;//a supplier that gives a speed to the shooter
+  private boolean speedSupplierMode;//whether we use a preset speed or the supplier
   private boolean withLimelight;//Are we using the limelight as a supplier
   private boolean hasHadTarget;//if we have had a target with the limelight
+  private boolean waitForSpeed;//if this command should wait until speed is reached to end.
   private int atSpeedCount;//a count of how many times we are at speed
-  private boolean waitForSpeed;
+
+  /** 
+   * Sets speed of the shooter to a speed given 
+   * the double. this command ends immediately 
+   * as waitForspeed is set false. This command 
+   * does not stop the motor.
+   */
   public ShooterSetSpeed(double speed){
     this(speed, false);
   }
+
   /** 
    * Sets speed of the shooter to a speed given 
    * the double. this command ends when the shooter 
-   * is at speed. This command does not stop the motor.
+   * is at speed if waitForSpeed is true. This 
+   * command does not stop the motor.
    */
   public ShooterSetSpeed(double speed, boolean waitForSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -34,25 +43,25 @@ public class ShooterSetSpeed extends CommandBase {
     withLimelight = false;
   }
 
+  /** 
+   * Sets speed of the shooter to a speed given by the DoubleSupplier.
+   * This call is for use without the Limelight.
+   * This command does not stop the motor.
+   */
   public ShooterSetSpeed(DoubleSupplier speedSupplier) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(RobotContainer.shooter);
-    this.waitForSpeed = false;
-    speedSupplierMode = true;
-    this.speedSupplier = speedSupplier;
-    this.withLimelight = false;
+    this(speedSupplier, false);
   }
 
   /** 
    * Sets speed of the shooter to a speed given by the DoubleSupplier.
-   * This will only work when the limelight has target.
+   * If withLimeLight is true this will ONLY work when the limelight has a target.
+   * Having target means the supplier willl be read, and that this command can end.
    * This command does not stop the motor.
-   * 
    */
   public ShooterSetSpeed(DoubleSupplier speedSupplier, boolean withLimelight) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooter);
-    this.waitForSpeed = false;
+    this.waitForSpeed = true;
     speedSupplierMode = true;
     this.speedSupplier = speedSupplier;
     this.withLimelight = withLimelight;
@@ -61,9 +70,10 @@ public class ShooterSetSpeed extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    hasHadTarget = false;
-    atSpeedCount = 0;
+    hasHadTarget = false;// we haven't seen a target, wea are just starting
+    atSpeedCount = 0;//zero the debounce value might be high from last run of command
     if(withLimelight){
+      //if we are using the limelight, turn it on.
       RobotContainer.limeLight.setLightState(true, RobotContainer.shooter);
     }
   }
@@ -109,6 +119,6 @@ public class ShooterSetSpeed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (!speedSupplierMode || hasHadTarget) && (atSpeedCount >= 15);
+    return (!speedSupplierMode || hasHadTarget) && (atSpeedCount >= 15);//TODO: add not wait for time as the first OR with everything else after in  parentheses
   }
 }

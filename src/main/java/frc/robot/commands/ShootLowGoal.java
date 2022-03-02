@@ -14,23 +14,17 @@ import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.commands.shooter.ShooterStop;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootLowGoal extends SequentialCommandGroup {
   /** Creates a new ShootHighGoal. */
   public ShootLowGoal(double timeBewtweenBalls) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new HoodHome(),
+      new HoodHome(),//Home the hood, but should fall through if hood has been homed
       parallel(
-        new ShooterSetSpeed(RobotContainer.limeLight::getShooterLowSpeed,true).withTimeout(2),
-        new HoodToPosition(RobotContainer.limeLight::getHoodLowAngle,true)
+        new ShooterSetSpeed(RobotContainer.limeLight::getShooterLowSpeed,true).withTimeout(2),//Set the Shooter to low goal speed given the limelight distance
+        new HoodToPosition(RobotContainer.limeLight::getHoodLowAngle,true)//set the hood to the angle for the low goal given the limelight distance
       ),
-      // new WaitUntilCommand(RobotContainer.shooter::isAtSpeed),//this should fall through, left for options
-      new BallHandlerShootProgT(timeBewtweenBalls),
-      new ShooterStop()
+      new BallHandlerShootProgT(timeBewtweenBalls),//shoot the balls
+      new ShooterStop()//stop the shooter if we finish
     );
   }
 }

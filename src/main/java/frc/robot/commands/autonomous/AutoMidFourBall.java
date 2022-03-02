@@ -41,7 +41,7 @@ public class AutoMidFourBall extends SequentialCommandGroup {
         new DriveSetGyro(46.04),
         new WaitCommand(.75)//We need to wait for two reasons, the gyro takes time too set the value, and the harvester needs to come down
       ),
-      new ShooterSetSpeed(9200),//need 8950ish so going with 9200 bc bad pid
+      new ShooterSetSpeed(9200),//need 8950ish so going with 9200 bc bad pid, no need to wait to get to speed
       parallel(
         new DriveFollowTrajectory("DriveToMidBall"),
         new HoodToPosition(9.9)//while driving to the ball, set the hood
@@ -53,15 +53,13 @@ public class AutoMidFourBall extends SequentialCommandGroup {
       new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),//wait to get the first ball
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),//now wait for the second ball
       new BallHandlerSetState(State.kOff),
-      new ShooterSetSpeed(9700),//need 9400 so use 9700 bc bad pid
+      new ShooterSetSpeed(9700),//need 9400 so use 9700 bc bad pid, no need to wait to get to speed
       parallel(
         new DriveFollowTrajectory("DriveFromHumanStraight"),
         new HoodToPosition(14.7)//while driving to the shooting point, set the hood
       ),
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood()
-      // new DriveTurnToTarget(),
-      // new ShootHighGoal(1.0)
     );
   }
 }

@@ -10,14 +10,13 @@ import frc.robot.commands.hood.HoodStop;
 import frc.robot.commands.shooter.ShooterStop;
 import frc.robot.subsystems.BallHandler.State;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+
 public class StopShooterHandlerHood extends ParallelCommandGroup {
-  /** Creates a new StopShooterBallHandler. */
+  /** 
+   * A commandgroup that stops the hood, then the shooter, 
+   * then the BallHandler, each is an InstantCommand.
+   */
   public StopShooterHandlerHood() {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new HoodStop(),
       new ShooterStop(),

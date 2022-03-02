@@ -70,10 +70,12 @@ public class HoodToPosition extends CommandBase {
         position = positionSupplier.getAsDouble();
       }
       if(!withLimelight || hasHadTarget){
+        //TODO: If position is larger than max position, drop to HOOD_FORWARD_LIMIT_DEGREES
         //if we have ever seen the target set the setpoint to the position
         RobotContainer.hood.setPosition(position);
       } 
     }else{
+      //TODO: If position is larger than max position, drop to HOOD_FORWARD_LIMIT_DEGREES
       //if position input hardcoded, just set the position setpoint
       RobotContainer.hood.setPosition(position);
     }

@@ -9,14 +9,15 @@ import frc.robot.commands.ballhandler.BallHandlerSetState;
 import frc.robot.commands.shooter.ShooterPercentOutput;
 import frc.robot.subsystems.BallHandler.State;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+
 public class SpitBalls extends ParallelCommandGroup {
-  /** Creates a new SpitBalls. */
+  /** 
+   * A ParrallelCommadnGroup that runs both the shooter 
+   * and the BallHandler backwards, thus ejecting balls. 
+   * The state of the handler causes the harvester to be 
+   * up and not run.
+   */
   public SpitBalls() {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ShooterPercentOutput( -.05),
       new BallHandlerSetState(State.kSpitMid)

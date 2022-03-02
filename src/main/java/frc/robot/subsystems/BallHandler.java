@@ -11,10 +11,9 @@ import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ColorSensorV3;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -69,7 +68,9 @@ public class BallHandler extends SubsystemBase {
   private static final double BALL1_SHOOT = Constants.BALL_HANDLER_1_SHOOT_SPEED;
   private static final double BALL2_OUT = Constants.BALL_HANDLER_2_EXTAKE_SPEED;
   private static final double BALL2_SHOOT = Constants.BALL_HANDLER_2_SHOOT_SPEED;
-    
+
+  private static final double HARVESTER_OUT_DELAY = 1.0;
+  private static final double SBM_KICKOUT_TIME = .5;    
   
   /** Creates a new Intake. */
   public BallHandler() {
@@ -151,7 +152,7 @@ public class BallHandler extends SubsystemBase {
       case kFillTo0:
         //filling the robot until the Ball0 sensor is pressed
         speeds = new double[] { HARV_IN, BALL0_IN, 0, 0 };
-        if(isBall0() && selectorTimer.hasElapsed(0.5)){
+        if(isBall0() && selectorTimer.hasElapsed(SBM_KICKOUT_TIME)){
           //if we see a Ball change state and fall to next case
           state = State.kOff;
         }
@@ -198,11 +199,11 @@ public class BallHandler extends SubsystemBase {
       selectorTimer.reset();
     }
 
-    if( !harvesterOutTimer.hasElapsed(1.0) ){
+    if( !harvesterOutTimer.hasElapsed(HARVESTER_OUT_DELAY) ){
       speeds[1] = 0.0;
     }
     //TODO: ALL SBM ON HOLD DO NOT UNCOMMENT 
-    else if(  !selectorTimer.hasElapsed(.5) ){
+    else if(  !selectorTimer.hasElapsed(SBM_KICKOUT_TIME) ){
       //if timer reset, run spit out timer for half second
       // speeds = new double[] { 0, 0, 0, 0 };
       // state = State.kOff;
