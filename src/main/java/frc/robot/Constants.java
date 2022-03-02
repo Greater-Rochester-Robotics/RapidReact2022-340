@@ -116,8 +116,8 @@ public final class Constants {
     public static final double BALL_HANDLER_0_SHOOT_SPEED = 0.5;
 
     /* Intake Levels */
-    public static final int BLUE_LEVEL = 500;
-    public static final int RED_LEVEL = 500;
+    public static final int BLUE_LEVEL = -100;
+    public static final int RED_LEVEL = -100;
     
     public static final int INTAKE_PROXIMITY = 500;
 

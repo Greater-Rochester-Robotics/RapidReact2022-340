@@ -6,6 +6,7 @@ package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ShootHighGoal;
+import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.auto.DriveTurnToTarget;
@@ -25,6 +26,7 @@ public class AutoLeftBackOutOfWay extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new BallHandlerIntakeOut(),
       new DriveFollowTrajectory("DriveLeftBackOutOfWay"),
       new ShooterPrepShot(),
       new DriveTurnToTarget(),

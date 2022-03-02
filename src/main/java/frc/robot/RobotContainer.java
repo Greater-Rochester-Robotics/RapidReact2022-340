@@ -27,6 +27,7 @@ import frc.robot.commands.autonomous.AutoDriveStraightBackAndShootHigh;
 import frc.robot.commands.autonomous.AutoLeftBackOutOfWay;
 import frc.robot.commands.autonomous.AutoLeftTwoBallFromHub;
 import frc.robot.commands.autonomous.AutoMidFourBall;
+import frc.robot.commands.autonomous.AutoRightThreeBall;
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
@@ -43,7 +44,6 @@ import frc.robot.commands.drive.DriveOnTarget;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveStopAllModules;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
-import frc.robot.commands.drive.auto.DriveStraightBack;
 import frc.robot.commands.drive.util.DriveAdjustModuleZeroPoint;
 import frc.robot.commands.drive.util.DriveAllModulesPositionOnly;
 import frc.robot.commands.drive.util.DriveFindMaxAccel;
@@ -178,6 +178,8 @@ public class RobotContainer {
     SmartDashboard.putData(new ClimberExtendoHome());
     SmartDashboard.putData(new LimeLightPowerCycle());
     SmartDashboard.putData(new AutoDriveStraightBackAndShootHigh(1.5));
+    SmartDashboard.putData(new AutoMidFourBall());
+    SmartDashboard.putData(new AutoRightThreeBall());
 
 
     SmartDashboard.putNumber("SpeedIShoot",0.0);

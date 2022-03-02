@@ -169,11 +169,12 @@ public class BallHandler extends SubsystemBase {
     //testing the SBM
     // if((state == State.kFillTo1 || state == State.kFillTo0)){
     //   //Smartdashboard pushes for testing
-    //   SmartDashboard.putNumber("Red Color", colorSensor.getRed());
-    //   SmartDashboard.putNumber("Blue Color", colorSensor.getBlue());
-    //   SmartDashboard.putNumber("Red - Blue", colorSensor.getRed() - colorSensor.getBlue());
-    //   SmartDashboard.putNumber("Blue - Red", colorSensor.getBlue() - colorSensor.getRed());
-    //   SmartDashboard.putNumber("Proximity", colorSensor.getProximity());
+      SmartDashboard.putNumber("Red Color", colorSensor.getRed());
+      SmartDashboard.putNumber("Blue Color", colorSensor.getBlue());
+      SmartDashboard.putNumber("Red - Blue", colorSensor.getRed() - colorSensor.getBlue());
+      SmartDashboard.putNumber("Blue - Red", colorSensor.getBlue() - colorSensor.getRed());
+      SmartDashboard.putBoolean("SelectorTime", !selectorTimer.hasElapsed(.5));
+      SmartDashboard.putNumber("Proximity", colorSensor.getProximity());
     // }
 
     //if state has changed, check to move harvester in or out
@@ -186,7 +187,7 @@ public class BallHandler extends SubsystemBase {
         harvesterOut();
       }else if(state == State.kSpitHigh || state == State.kSpitLow){
         harvesterOut();
-      }else{
+      }else if(state == State.kOff){
         harvesterIn();
       }
     }
@@ -197,12 +198,14 @@ public class BallHandler extends SubsystemBase {
       selectorTimer.reset();
     }
 
-    if(!harvesterOutTimer.hasElapsed(1.0)){
+    if( !harvesterOutTimer.hasElapsed(1.0) ){
       speeds[1] = 0.0;
     }
     //TODO: ALL SBM ON HOLD DO NOT UNCOMMENT 
-    else if(!selectorTimer.hasElapsed(0.5)){
+    else if(  !selectorTimer.hasElapsed(.5) ){
       //if timer reset, run spit out timer for half second
+      // speeds = new double[] { 0, 0, 0, 0 };
+      // state = State.kOff;
       speeds[1] *= -1;  
     }
 
@@ -217,7 +220,7 @@ public class BallHandler extends SubsystemBase {
       //store the speeds sent to the motors as current speeds
       currentSpeeds = speeds;
     }
-
+    // System.out.println("speeds"+speeds[0]+":"+speeds[1]+":"+speeds[2]+":"+speeds[3]+":");
 
     SmartDashboard.putBoolean("ball0", isBall0());
     SmartDashboard.putBoolean("ball1", isBall1());
@@ -293,24 +296,26 @@ public class BallHandler extends SubsystemBase {
     }
     
     //Checking proximity to intake balls
-    if(proximity > Constants.INTAKE_PROXIMITY){
+    // if(proximity > Constants.INTAKE_PROXIMITY){
       if(DriverStation.getAlliance() == Alliance.Blue){
-        // System.out.println(blue - red);
-        // System.out.println(blue - red >= Constants.BLUE_LEVEL);
+        // System.out.print( red-blue + "      ");
+        System.out.print((red - blue >= Constants.BLUE_LEVEL));
+        
+        System.out.println("blue Aliance!!!!");
         return blue - red >= Constants.BLUE_LEVEL;
-      }
-      else if(DriverStation.getAlliance() == Alliance.Red){
+      }else if(DriverStation.getAlliance() == Alliance.Red){
         // System.out.println(red - blue);
-        // System.out.println(red - blue >= Constants.RED_LEVEL);
+        // System.out.println(blue - red >= Constants.BLUE_LEVEL);
+        // System.out.println("RED Aliancee.");
         return red - blue >= Constants.RED_LEVEL;
       }
       else{
         return true;
       }
-    }else{
-      // System.out.println("No ball");
-      return true;
-    }
+    // }else{
+    //   // System.out.println("No ball");
+    //   return true;
+    // }
   }
   
   /**

@@ -9,10 +9,19 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ShootHighGoal;
+import frc.robot.commands.StopShooterHandlerHood;
+import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
+import frc.robot.commands.ballhandler.BallHandlerShootProgT;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.auto.DriveTurnToTarget;
+import frc.robot.commands.drive.util.DriveSetGyro;
+import frc.robot.commands.drive.util.DriveTurnToAngle;
+import frc.robot.commands.hood.HoodHome;
+import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterPrepShot;
+import frc.robot.commands.shooter.ShooterSetSpeed;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.BallHandler.State;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -29,20 +38,35 @@ public class AutoRightThreeBall extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new HoodHome(),
+      new BallHandlerIntakeOut(),///Make sure intake out for shooting
+      parallel(
+        new DriveSetGyro(90.0),
+        new HoodToPosition(6.4),
+        new ShooterSetSpeed(7900)//7700
+        
+      ),
+      new BallHandlerShootProgT(0.0).withTimeout(1.0),
       new BallHandlerSetState(State.kFillTo1),
+      new ShooterSetSpeed(9600),
       new DriveFollowTrajectory("DriveToRightBall"),
-      new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
-      new BallHandlerSetState(State.kOff),
-      new ShooterPrepShot(),
-      new DriveTurnToTarget(),
-      new ShootHighGoal(1.0),
-      new BallHandlerSetState(State.kFillTo1),
-      new DriveFollowTrajectory("DriveFromRightBallToMidBall"),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
-      new BallHandlerSetState(State.kOff),
-      new ShooterPrepShot(),
-      new DriveTurnToTarget(),
-      new ShootHighGoal(0.0)
+      parallel(
+        new DriveFollowTrajectory("DriveFromRightBallToMidBall"),
+        new HoodToPosition(23.0)
+      ),
+      new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),//this works but next line doesnt?????
+      new DriveTurnToAngle(Math.toDegrees(42.16)).withTimeout(2.5),
+      new BallHandlerShootProgT(0.0),
+      new StopShooterHandlerHood()
+
+      // new BallHandlerSetState(State.kFillTo1),
+      // new DriveFollowTrajectory("DriveFromRightBallToMidBall"),
+      // new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
+      // new BallHandlerSetState(State.kOff),
+      // new ShooterPrepShot(),
+      // new DriveTurnToTarget(),
+      // new ShootHighGoal(0.0)
     );
   }
 }

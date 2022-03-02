@@ -16,15 +16,19 @@ public class ShooterSetSpeed extends CommandBase {
   private boolean withLimelight;//Are we using the limelight as a supplier
   private boolean hasHadTarget;//if we have had a target with the limelight
   private int atSpeedCount;//a count of how many times we are at speed
-
+  private boolean waitForSpeed;
+  public ShooterSetSpeed(double speed){
+    this(speed, false);
+  }
   /** 
    * Sets speed of the shooter to a speed given 
    * the double. this command ends when the shooter 
    * is at speed. This command does not stop the motor.
    */
-  public ShooterSetSpeed(double speed) {
+  public ShooterSetSpeed(double speed, boolean waitForSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooter);
+    this.waitForSpeed = waitForSpeed;
     this.speedSupplierMode = false;
     this.speed = speed;
     withLimelight = false;
@@ -33,6 +37,7 @@ public class ShooterSetSpeed extends CommandBase {
   public ShooterSetSpeed(DoubleSupplier speedSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooter);
+    this.waitForSpeed = false;
     speedSupplierMode = true;
     this.speedSupplier = speedSupplier;
     this.withLimelight = false;
@@ -47,6 +52,7 @@ public class ShooterSetSpeed extends CommandBase {
   public ShooterSetSpeed(DoubleSupplier speedSupplier, boolean withLimelight) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.shooter);
+    this.waitForSpeed = false;
     speedSupplierMode = true;
     this.speedSupplier = speedSupplier;
     this.withLimelight = withLimelight;
