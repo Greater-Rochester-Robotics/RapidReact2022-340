@@ -119,6 +119,6 @@ public class ShooterSetSpeed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (!speedSupplierMode || hasHadTarget) && (atSpeedCount >= 15);//TODO: add not wait for time as the first OR with everything else after in  parentheses
+    return !waitForSpeed || ((!speedSupplierMode || hasHadTarget) && (atSpeedCount >= 15));
   }
 }

@@ -209,6 +209,8 @@ public class RobotContainer {
     driverDDown.whenPressed(new ShootLowGoalFender(.5));
     driverDDown.whenReleased(new StopShooterHandlerHood());
 
+    coDriverB.whenPressed(new BallHandlerSetState(State.kSpitMid0));
+    coDriverB.whenReleased(new BallHandlerSetState(State.kOff));
     // coDriverX.whenPressed(new ShooterPrepShot());
     // coDriverY.whenPressed(new ShooterPrepShot());
     // coDriverBack.and(coDriverStart).whenActive(new ClimberClimb());

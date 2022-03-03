@@ -99,11 +99,12 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //TODO:Do a check if a command is running, if so then pass along the encoder values, use getCurrentCommand() for former
-    SmartDashboard.putNumber("Left Climb Encoder", getExtendoLeftEncPos());
-    SmartDashboard.putNumber("Right Climb Encoder", getExtendoRightEncPos());
-    SmartDashboard.putBoolean("Left Climber Switch", getExtendoLeftSwitch());
-    SmartDashboard.putBoolean("Right Climber Switch", getExtendoRightSwitch());
+    if(!(getCurrentCommand() == null)) {
+      SmartDashboard.putNumber("Left Climb Encoder", getExtendoLeftEncPos());
+      SmartDashboard.putNumber("Right Climb Encoder", getExtendoRightEncPos());
+      SmartDashboard.putBoolean("Left Climber Switch", getExtendoLeftSwitch());
+      SmartDashboard.putBoolean("Right Climber Switch", getExtendoRightSwitch());
+    }
   }
 
   /* ==================== Functions for the fixed arms ==================== */

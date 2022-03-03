@@ -46,7 +46,7 @@ public class BallHandler extends SubsystemBase {
    * the states for the BallHandler state machine
    */
   public enum State {
-   kOff, kFillTo1, kFillTo0, kShoot1, kShoot0, kSpitLow, kSpitMid, kSpitHigh
+   kOff, kFillTo1, kFillTo0, kShoot1, kShoot0, kSpitLow, kSpitMid1, kSpitHigh, kSpitMid0
   }
   
   double[] speeds = new double[4];//speeds to set the motors to
@@ -131,9 +131,13 @@ public class BallHandler extends SubsystemBase {
         //spitting out the balls, with harvester down and intaking
         speeds = new double[] { HARV_IN, BALL0_OUT, BALL1_OUT, BALL2_OUT};
         break;
-      case kSpitMid:
+      case kSpitMid1:
         //spitting balls, with harvester up and off
         speeds = new double[] { 0, BALL0_OUT, BALL1_OUT, BALL2_OUT};
+        break;
+      case kSpitMid0:
+        //spitting balls, with harvester up and off
+        speeds = new double[] { 0, BALL0_OUT, 0, 0};
         break;
       case kSpitLow:
         //spitting balls, with harvester down and running out

@@ -36,6 +36,7 @@ public class SwerveDrive extends SubsystemBase {
   private PIDController robotSpinController;
   private PIDController robotCounterSpinController;
   private boolean hasPoseBeenSet = false;
+  private boolean isOdometry = true;
 
   /**
    * This enumeration clarifies the numbering of the swerve module for new users.
@@ -97,19 +98,28 @@ public class SwerveDrive extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    //instatiate and construct a 4 large SwerveModuleState array
-    SwerveModuleState[] moduleStates =  new SwerveModuleState[4];
-    //get the current SwerveModuleStates from all modules in array
-    for (int i = 0; i < moduleStates.length; i++) {
-      moduleStates[i] = swerveModules[i].getModuleState();
-    }
-    //run odometry update on the odometry object
-    driveOdometry.update(getGyroRotation2d(), moduleStates);
     SmartDashboard.putNumber("Gyro", this.getGyroInDeg());
-    SmartDashboard.putNumber("GyroRate", this.getRotationalVelocity());
-    SmartDashboard.putNumber("Odometry X", getCurPose2d().getX());
-    SmartDashboard.putNumber("Odometry Y", getCurPose2d().getY());
+    //run odometry update on the odometry object
+    if(isOdometry) {
+      //instatiate and construct a 4 large SwerveModuleState array
+      SwerveModuleState[] moduleStates =  new SwerveModuleState[4];
+      //get the current SwerveModuleStates from all modules in array
+      for (int i = 0; i < moduleStates.length; i++) {
+        moduleStates[i] = swerveModules[i].getModuleState();
+      }
+      driveOdometry.update(getGyroRotation2d(), moduleStates);
+      SmartDashboard.putNumber("GyroRate", this.getRotationalVelocity());
+      SmartDashboard.putNumber("Odometry X", getCurPose2d().getX());
+      SmartDashboard.putNumber("Odometry Y", getCurPose2d().getY());
+    }
+  }
+
+  public void setIsOdometry(boolean isOdometry){
+    this.isOdometry = isOdometry;
+  }
+
+  public boolean getIsOdometry(){
+    return isOdometry;
   }
 
   /**

@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.SwerveDrive;
 
 /**
  * This helper class takes in a path and performs all necessary setup and tells the robot how to follow the provided path.
@@ -61,6 +62,7 @@ public class DriveFollowTrajectory extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.swerveDrive.setIsOdometry(true);
     timer.reset();
     timer.start();
     PathPlannerState initialState = (PathPlannerState) trajectory.sample(0.0);

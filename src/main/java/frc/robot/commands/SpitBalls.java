@@ -20,7 +20,7 @@ public class SpitBalls extends ParallelCommandGroup {
   public SpitBalls() {
     addCommands(
       new ShooterPercentOutput( -.05),
-      new BallHandlerSetState(State.kSpitMid)
+      new BallHandlerSetState(State.kSpitMid1)
     );
   }
 }

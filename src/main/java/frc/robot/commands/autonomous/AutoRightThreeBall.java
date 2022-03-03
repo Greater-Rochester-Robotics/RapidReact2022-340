@@ -22,6 +22,7 @@ import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterPrepShot;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.BallHandler.State;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -43,20 +44,19 @@ public class AutoRightThreeBall extends SequentialCommandGroup {
       parallel(
         new DriveSetGyro(90.0),
         new HoodToPosition(6.4),
-        new ShooterSetSpeed(7900)//7700
-        
+        new ShooterSetSpeed(7900, true)//7700
       ),
       new BallHandlerShootProgT(0.0).withTimeout(1.0),
       new BallHandlerSetState(State.kFillTo1),
-      new ShooterSetSpeed(9600),
+      new ShooterSetSpeed(9500),//9300 is real, rescale to 9600
       new DriveFollowTrajectory("DriveToRightBall"),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
       parallel(
         new DriveFollowTrajectory("DriveFromRightBallToMidBall"),
-        new HoodToPosition(23.0)//TODO:This is the problem. the hood can not be set at values greater than 22. this number is not what we had
+        new HoodToPosition(12.5)//TODO:This is the problem. the hood can not be set at values greater than 22. this number is not what we had
       ),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
-      new DriveTurnToAngle(Math.toDegrees(42.16)).withTimeout(2.5),//TODO: perhaps replace this with a Trajectory
+      new DriveFollowTrajectory("DriveMidBallToRotate"),
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood()
 
