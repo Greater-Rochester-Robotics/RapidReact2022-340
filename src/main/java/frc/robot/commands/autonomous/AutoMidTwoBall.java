@@ -28,12 +28,10 @@ import frc.robot.subsystems.BallHandler.State;
 /**
  * Starts at right zone, back is on line, front left corner touching left line.
  * Moves to pick up the middle ball and shoots both.
- * Moves back to human ball while human player is loading other ball
- * Shoots both balls at the high goal
  */
-public class AutoMidFourBall extends SequentialCommandGroup {
-  /** Creates a new AutoMidFourBall. */
-  public AutoMidFourBall() {
+public class AutoMidTwoBall extends SequentialCommandGroup {
+  /** Creates a new AutoMidTwoBall. */
+  public AutoMidTwoBall() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -49,17 +47,6 @@ public class AutoMidFourBall extends SequentialCommandGroup {
         new HoodToPosition(9.9)//while driving to the ball, set the hood
       ),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
-      new BallHandlerShootProgT(0.0),
-      new BallHandlerSetState(State.kFillTo1),
-      new DriveFollowTrajectory("DriveMidBallToHuman"),
-      new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),//wait to get the first ball
-      new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),//now wait for the second ball
-      new BallHandlerSetState(State.kOff),
-      new ShooterSetSpeed(9700),//need 9400 so use 9700 bc bad pid, no need to wait to get to speed
-      parallel(
-        new DriveFollowTrajectory("DriveFromHumanStraight"),
-        new HoodToPosition(14.7)//while driving to the shooting point, set the hood
-      ),
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood()
     );

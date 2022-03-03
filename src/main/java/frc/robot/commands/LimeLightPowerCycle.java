@@ -32,7 +32,13 @@ public class LimeLightPowerCycle extends CommandBase {
     RobotContainer.limeLight.setLimeLightPower(true);
   }
 
-  public boolean isFinnished(){
+  public boolean isFinished(){
     return time.hasElapsed(1.0);
+  }
+
+  @Override
+  public boolean runsWhenDisabled() {
+      // TODO Auto-generated method stub
+      return true;
   }
 }

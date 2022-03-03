@@ -20,6 +20,10 @@ import frc.robot.subsystems.BallHandler.State;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+/**
+ * TODO: Needs to fixed
+ */
+@Deprecated
 public class AutoLeftTwoBallThenOppToss extends SequentialCommandGroup {
   /** Creates a new AutoLefftTwoBallThenOppToss. */
   public AutoLeftTwoBallThenOppToss() {
@@ -27,7 +31,7 @@ public class AutoLeftTwoBallThenOppToss extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new BallHandlerSetState(State.kFillTo1),
-      new DriveFollowTrajectory("DriveToLeftBall"),
+      new DriveFollowTrajectory("DriveToLeftBallFromHub"),
       new ShooterPrepShot(),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new DriveTurnToTarget(),

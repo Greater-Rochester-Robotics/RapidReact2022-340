@@ -53,20 +53,12 @@ public class AutoRightThreeBall extends SequentialCommandGroup {
       new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
       parallel(
         new DriveFollowTrajectory("DriveFromRightBallToMidBall"),
-        new HoodToPosition(12.5)//TODO:This is the problem. the hood can not be set at values greater than 22. this number is not what we had
+        new HoodToPosition(12.5)
       ),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new DriveFollowTrajectory("DriveMidBallToRotate"),
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood()
-
-      // new BallHandlerSetState(State.kFillTo1),
-      // new DriveFollowTrajectory("DriveFromRightBallToMidBall"),
-      // new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
-      // new BallHandlerSetState(State.kOff),
-      // new ShooterPrepShot(),
-      // new DriveTurnToTarget(),
-      // new ShootHighGoal(0.0)
     );
   }
 }

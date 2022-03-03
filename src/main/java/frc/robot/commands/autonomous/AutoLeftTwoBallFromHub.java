@@ -21,9 +21,12 @@ import frc.robot.subsystems.BallHandler.State;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 /**
+ * TODO: Needs to fixed
+ * 
  * Starting at hub, corner at leftmost hub corner.
  * Pick up left ball and shoot both balls.
  */
+@Deprecated
 public class AutoLeftTwoBallFromHub extends SequentialCommandGroup {
   /** Creates a new AutoTwoBall. */
   public AutoLeftTwoBallFromHub() {
@@ -31,7 +34,7 @@ public class AutoLeftTwoBallFromHub extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new BallHandlerSetState(State.kFillTo1),
-      new DriveFollowTrajectory("DriveToLeftBall"),
+      new DriveFollowTrajectory("DriveToLeftBallFromHub"),
       new ShooterPrepShot(),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new DriveTurnToTarget(),

@@ -25,9 +25,11 @@ import frc.robot.commands.SpitBalls;
 import frc.robot.commands.StopShooterHandlerHood;
 import frc.robot.commands.autonomous.AutoDriveStraightBackAndShootHigh;
 import frc.robot.commands.autonomous.AutoLeftBackOutOfWay;
+import frc.robot.commands.autonomous.AutoLeftTwoBall;
 import frc.robot.commands.autonomous.AutoLeftTwoBallFromHub;
-import frc.robot.commands.autonomous.AutoMidFourBall;
+import frc.robot.commands.autonomous.AutoMidTwoBall;
 import frc.robot.commands.autonomous.AutoRightThreeBall;
+import frc.robot.commands.autonomous.AutoRightTwoBall;
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
@@ -152,7 +154,7 @@ public class RobotContainer {
     hood = new Hood();
 
     //Add all autos to the auto selector
-    // configureAutoModes();
+    configureAutoModes();
 
     // Configure the button bindings
     configureButtonBindings();
@@ -178,7 +180,7 @@ public class RobotContainer {
     SmartDashboard.putData(new ClimberExtendoHome());
     SmartDashboard.putData(new LimeLightPowerCycle());
     SmartDashboard.putData(new AutoDriveStraightBackAndShootHigh(1.5));
-    SmartDashboard.putData(new AutoMidFourBall());
+    SmartDashboard.putData(new AutoMidTwoBall());
     SmartDashboard.putData(new AutoRightThreeBall());
 
 
@@ -204,7 +206,7 @@ public class RobotContainer {
     driverY.whenReleased(new StopShooterHandlerHood());
     driverLB.whenPressed(new DriveResetGyroToZero());
     driverRB.whileHeld(new DriveOnTarget());
-    driverStart.whileHeld(new AutoMidFourBall());
+    driverStart.whileHeld(new AutoMidTwoBall());
     driverBack.toggleWhenActive(new DriveRobotCentric());
     driverDDown.whenPressed(new ShootLowGoalFender(.5));
     driverDDown.whenReleased(new StopShooterHandlerHood());
@@ -237,7 +239,13 @@ public class RobotContainer {
   private void configureAutoModes() {
     //TODO:add auto modes to the sendable chooser when autos written
     autoChooser.setDefaultOption("Wait 1 sec(do nothing)", new WaitCommand(1));
-
+    autoChooser.addOption("Drives backwards 1.5 robot, shoots", new AutoDriveStraightBackAndShootHigh(1.5));
+    autoChooser.addOption("Drives backwards 2.5 robot, shoots", new AutoDriveStraightBackAndShootHigh(2.5));
+    autoChooser.addOption("Grab mid ball, shoot. Get 2 terminal, shoot", new AutoMidTwoBall());
+    autoChooser.addOption("Grab mid ball, shoot", new AutoMidTwoBall());
+    autoChooser.addOption("Shoot, grab rightball, grab midball, shoot", new AutoRightThreeBall());
+    autoChooser.addOption("Grab left ball, shoot", new AutoLeftTwoBall());
+    autoChooser.addOption("Grab right ball, shoot", new AutoRightTwoBall());
     // autoChooser.addOption("Barrel Racing 64", new AutoBarrelPath());
   // autoChooser.addOption("TestPath", new TestPath());
 
