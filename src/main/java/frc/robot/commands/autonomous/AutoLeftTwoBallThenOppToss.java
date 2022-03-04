@@ -25,7 +25,8 @@ import frc.robot.subsystems.BallHandler.State;
  */
 @Deprecated
 public class AutoLeftTwoBallThenOppToss extends SequentialCommandGroup {
-  /** Creates a new AutoLefftTwoBallThenOppToss. */
+  /** Creates a new AutoLefftTwoBallThenOppToss. not tested*/
+  @Deprecated
   public AutoLeftTwoBallThenOppToss() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());

@@ -294,7 +294,7 @@ public class BallHandler extends SubsystemBase {
     int blue = colorSensor.getBlue();
     int red = colorSensor.getRed();
 
-    // System.out.println("prox"+proximity+"blue diff red "+(blue - red));
+    //TODO:separate out "not connected" and return without reconstructing
 
     if(!rejectOppColor || !colorSensor.isConnected() || (proximity == 0 && blue == 0 && red == 0)) {
       colorSensor = new ColorSensorV3(I2C.Port.kOnboard);

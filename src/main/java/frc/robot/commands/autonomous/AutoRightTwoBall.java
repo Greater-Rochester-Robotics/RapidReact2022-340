@@ -28,8 +28,6 @@ import frc.robot.subsystems.BallHandler.State;
 public class AutoRightTwoBall extends SequentialCommandGroup {
   /** Creates a new AutoRightTwoBall. */
   public AutoRightTwoBall() {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new HoodHome(),
       new BallHandlerSetState(State.kFillTo0),

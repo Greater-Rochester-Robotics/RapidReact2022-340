@@ -18,7 +18,8 @@ import frc.robot.subsystems.BallHandler.State;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoRightFiveBall extends SequentialCommandGroup {
-  /** Creates a new AutoRightFiveBall. */
+  /** Creates a new AutoRightFiveBall. not written*/
+  @Deprecated
   public AutoRightFiveBall() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());

@@ -21,7 +21,8 @@ import frc.robot.commands.shooter.ShooterPrepShot;
  * Moves back and shoots one ball.
  */
 public class AutoLeftBackOutOfWay extends SequentialCommandGroup {
-  /** Creates a new AutoLeftBackOutOfWay. */
+  /** Creates a new AutoLeftBackOutOfWay. not tested, replaced with {@link AutoDriveBackAndShoot}*/
+  @Deprecated
   public AutoLeftBackOutOfWay() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());

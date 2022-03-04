@@ -23,7 +23,7 @@ import frc.robot.commands.ShootHighFender;
 import frc.robot.commands.ShootLowGoalFender;
 import frc.robot.commands.SpitBalls;
 import frc.robot.commands.StopShooterHandlerHood;
-import frc.robot.commands.autonomous.AutoDriveStraightBackAndShootHigh;
+import frc.robot.commands.autonomous.AutoDriveBackAndShoot;
 import frc.robot.commands.autonomous.AutoLeftBackOutOfWay;
 import frc.robot.commands.autonomous.AutoLeftTwoBall;
 import frc.robot.commands.autonomous.AutoLeftTwoBallFromHub;
@@ -57,7 +57,6 @@ import frc.robot.commands.drive.util.DriveTuneDriveMotorFeedForward;
 import frc.robot.commands.drive.util.DriveTurnToAngle;
 import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
-import frc.robot.commands.shooter.ShooterPercentOutput;
 import frc.robot.commands.shooter.ShooterPrepShot;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.commands.shooter.ShooterStop;
@@ -100,8 +99,8 @@ public class RobotContainer {
   static final Button driverDDown = new POVButton(driver, 180);
   static final Button driverDLeft = new POVButton(driver, 270);
   static final Button driverDRight = new POVButton(driver, 90);
-  // final Button driverLTButton = new JoyTriggerButton(driver, .3, Axis.LEFT_TRIGGER);
-  // final Button driverRTButton = new JoyTriggerButton(driver, .3, Axis.RIGHT_TRIGGER);
+  // final Button driverLTButton = new JoyTriggerButton(driver, .3, Axis.LEFT_TRIGGER);//This is used in driving, don't enable
+  // final Button driverRTButton = new JoyTriggerButton(driver, .3, Axis.RIGHT_TRIGGER);//This is used in driving, don't enable
 
   ///////////////////////
   // CO-DRIVER BUTTONS //
@@ -166,22 +165,20 @@ public class RobotContainer {
     SmartDashboard.putData("Drive Module 1", new DriveOneModule(1));//For setup of swerve
     SmartDashboard.putData("Drive Module 2", new DriveOneModule(2));//For setup of swerve
     SmartDashboard.putData("Drive Module 3", new DriveOneModule(3));//For setup of swerve
-    SmartDashboard.putData(new DriveFindMaxAccel());//This is for PathPlanning Parameters
-    SmartDashboard.putData(new DriveStopAllModules());//For setup of swerve
-    SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));//this is for Velocity PID parameters, Path Planning by Extention
     SmartDashboard.putData(new DriveAllModulesPositionOnly());
-    // SmartDashboard.putData(new BallHandlerIntakeIn());
-    // SmartDashboard.putData(new BallHandlerIntakeOut()); 
+    SmartDashboard.putData(new DriveStopAllModules());//For setup of swerve
+    SmartDashboard.putData(new HoodHome(true));//For setup, leave for drives to use
+    SmartDashboard.putData(new ClimberExtendoHome());//for setup
+    SmartDashboard.putData(new LimeLightPowerCycle());//allows the drivers to restart the Limelight at will(good for hangups)
+    // SmartDashboard.putData(new DriveFindMaxAccel());//This is for tuning acceleration constants
+    // SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));//this is for Velocity PID parameters
     SmartDashboard.putData(new ShooterSetSpeed(this::speedIShoot));//Testing Shooter
     SmartDashboard.putData(new HoodToPosition(this::angleIShoot));//Testing Shooter
     SmartDashboard.putData(new ShooterStop());//Testing Shooter
-    SmartDashboard.putData(new HoodHome(true));//For setup
-    SmartDashboard.putData(new DriveTurnToAngle(Constants.PI_OVER_TWO));
-    SmartDashboard.putData(new ClimberExtendoHome());
-    SmartDashboard.putData(new LimeLightPowerCycle());
-    SmartDashboard.putData(new AutoDriveStraightBackAndShootHigh(1.5));
-    SmartDashboard.putData(new AutoMidTwoBall());
-    SmartDashboard.putData(new AutoRightThreeBall());
+    // SmartDashboard.putData(new DriveTurnToAngle(Constants.PI_OVER_TWO));//for testing turn to angle function
+    // SmartDashboard.putData(new AutoDriveStraightBackAndShootHigh(1.5));//AutoTesting
+    // SmartDashboard.putData(new AutoMidTwoBall());//AutoTesting
+    // SmartDashboard.putData(new AutoRightThreeBall());//AutoTesting
 
 
     SmartDashboard.putNumber("SpeedIShoot",0.0);
@@ -236,19 +233,19 @@ public class RobotContainer {
   /**
    * Define all autonomous modes here to have them 
    * appear in the autonomous select drop down menu.
+   * They will appear in the order entered
    */
   private void configureAutoModes() {
-    //TODO:add auto modes to the sendable chooser when autos written
+    
     autoChooser.setDefaultOption("Wait 1 sec(do nothing)", new WaitCommand(1));
-    autoChooser.addOption("Drives backwards 1.5 robot, shoots", new AutoDriveStraightBackAndShootHigh(1.5));
-    autoChooser.addOption("Drives backwards 2.5 robot, shoots", new AutoDriveStraightBackAndShootHigh(2.5));
-    autoChooser.addOption("Grab mid ball, shoot. Get 2 terminal, shoot", new AutoMidTwoBall());
-    autoChooser.addOption("Grab mid ball, shoot", new AutoMidTwoBall());
-    autoChooser.addOption("Shoot, grab rightball, grab midball, shoot", new AutoRightThreeBall());
+    autoChooser.addOption("Drives backwards 1.5 robot, shoots", new AutoDriveBackAndShoot(1.5));
+    autoChooser.addOption("Drives backwards 2.5 robot, shoots", new AutoDriveBackAndShoot(2.5));
     autoChooser.addOption("Grab left ball, shoot", new AutoLeftTwoBall());
+    autoChooser.addOption("Grab mid ball, shoot", new AutoMidTwoBall());
     autoChooser.addOption("Grab right ball, shoot", new AutoRightTwoBall());
-    // autoChooser.addOption("Barrel Racing 64", new AutoBarrelPath());
-  // autoChooser.addOption("TestPath", new TestPath());
+    autoChooser.addOption("Shoot, grab right then mid ball, shoot", new AutoRightThreeBall());
+    autoChooser.addOption("Grab mid ball, shoot. Get 2 terminal, shoot", new AutoMidTwoBall());//TODO:shouldn't this be 4 ball?
+
 
     SmartDashboard.putData(RobotContainer.autoChooser);
   }
