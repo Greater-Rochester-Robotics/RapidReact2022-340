@@ -174,12 +174,12 @@ public class BallHandler extends SubsystemBase {
     //testing the SBM
     // if((state == State.kFillTo1 || state == State.kFillTo0)){
     //   //Smartdashboard pushes for testing
-      SmartDashboard.putNumber("Red Color", colorSensor.getRed());
-      SmartDashboard.putNumber("Blue Color", colorSensor.getBlue());
-      SmartDashboard.putNumber("Red - Blue", colorSensor.getRed() - colorSensor.getBlue());
-      SmartDashboard.putNumber("Blue - Red", colorSensor.getBlue() - colorSensor.getRed());
-      SmartDashboard.putBoolean("SelectorTime", !selectorTimer.hasElapsed(.5));
-      SmartDashboard.putNumber("Proximity", colorSensor.getProximity());
+      // SmartDashboard.putNumber("Red Color", colorSensor.getRed());
+      // SmartDashboard.putNumber("Blue Color", colorSensor.getBlue());
+      // SmartDashboard.putNumber("Red - Blue", colorSensor.getRed() - colorSensor.getBlue());
+      // SmartDashboard.putNumber("Blue - Red", colorSensor.getBlue() - colorSensor.getRed());
+      // SmartDashboard.putBoolean("SelectorTime", !selectorTimer.hasElapsed(.5));
+      // SmartDashboard.putNumber("Proximity", colorSensor.getProximity());
     // }
 
     //if state has changed, check to move harvester in or out
@@ -297,6 +297,7 @@ public class BallHandler extends SubsystemBase {
     // System.out.println("prox"+proximity+"blue diff red "+(blue - red));
 
     if(!rejectOppColor || !colorSensor.isConnected() || (proximity == 0 && blue == 0 && red == 0)) {
+      colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
       return true;
     }
     

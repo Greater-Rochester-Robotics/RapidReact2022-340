@@ -15,11 +15,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
-// import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.SPI;
-// import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-// import edu.wpi.first.wpilibj.ADIS16470_IMU.CalibrationTime;
+
 
 import frc.robot.Constants;
 import frc.robot.subsystems.ADIS.CalibrationTime;
@@ -93,6 +91,7 @@ public class SwerveDrive extends SubsystemBase {
     robotCounterSpinController.setTolerance(Constants.ROBOT_SPIN_PID_TOLERANCE);
 
     hasPoseBeenSet = false;
+    isOdometry = true;
   }
 
   @Override

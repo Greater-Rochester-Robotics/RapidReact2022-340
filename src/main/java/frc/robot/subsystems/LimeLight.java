@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 public class LimeLight extends SubsystemBase {
   static Map<String,Boolean> subsystemsUsingLight = new HashMap<String,Boolean>();
   Solenoid light;
+
   PowerDistribution pdh = new PowerDistribution(1, ModuleType.kRev);
 
   /** Creates a new LimeLight. */

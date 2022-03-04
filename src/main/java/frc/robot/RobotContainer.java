@@ -196,27 +196,28 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    /* ==================== DRIVER BUTTONS ==================== */
     driverA.whenPressed(new BallHandlerSetState(State.kFillTo1));
     driverA.whenReleased(new BallHandlerSetState(State.kOff));
     driverB.whenPressed(new SpitBalls());
     driverB.whenReleased(new StopShooterHandlerHood());
-    driverX.whileHeld(new ShootHighFenderWithDriveBack(0.0));
+    driverX.whileHeld(new ShootLowGoalFender(.5));
     driverX.whenReleased(new StopShooterHandlerHood());
     driverY.whenPressed(new ShootHighGoal(0.0));
     driverY.whenReleased(new StopShooterHandlerHood());
     driverLB.whenPressed(new DriveResetGyroToZero());
-    driverRB.whileHeld(new DriveOnTarget());
-    driverStart.whileHeld(new AutoMidTwoBall());
+    driverRB.whileHeld(new DriveOnTarget(12));
     driverBack.toggleWhenActive(new DriveRobotCentric());
-    driverDDown.whenPressed(new ShootLowGoalFender(.5));
+    // driverStart.whileHeld(new AutoMidTwoBall());
+    driverDDown.whenPressed(new ShootHighFenderWithDriveBack(0.0));
     driverDDown.whenReleased(new StopShooterHandlerHood());
 
-    coDriverB.whenPressed(new BallHandlerSetState(State.kSpitMid0));
+    /* =================== CODRIVER BUTTONS =================== */
+    coDriverB.whenPressed(new BallHandlerSetState(State.kSpitMid0));//spit ball0
     coDriverB.whenReleased(new BallHandlerSetState(State.kOff));
-    // coDriverX.whenPressed(new ShooterPrepShot());
-    // coDriverY.whenPressed(new ShooterPrepShot());
-    // coDriverBack.and(coDriverStart).whenActive(new ClimberClimb());
-    // coDriverDDown.whenPressed(new PrepLowFender());
+    coDriverX.whenPressed(new PrepLowFender());//prep low goal, aka hood to position and shooter to speed
+    coDriverY.whenPressed(new ShooterPrepShot());//prep high goal, aka shooter to a starter speed
+    coDriverBack.and(coDriverStart).whenActive(new ClimberClimb());
   }
 
   /**
