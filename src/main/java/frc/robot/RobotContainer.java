@@ -209,10 +209,12 @@ public class RobotContainer {
     driverLB.whenPressed(new DriveResetGyroToZero());
     driverRB.whileHeld(new DriveOnTarget(12));
     driverBack.toggleWhenActive(new DriveRobotCentric());
-    driverStart.whenPressed(new AutoLeftFourBall());
+    driverStart.whenPressed(new AutoLeftFourBall()); 
     // driverStart.whileHeld(new AutoMidTwoBall());
     driverDDown.whenPressed(new ShootHighFenderWithDriveBack(0.0));
     driverDDown.whenReleased(new StopShooterHandlerHood());
+    driverDRight.whenPressed(new BallHandlerIntakeOut());
+    driverDLeft.whenPressed(new BallHandlerIntakeIn());
 
     /* =================== CODRIVER BUTTONS =================== */
     coDriverB.whenPressed(new BallHandlerSetState(State.kSpitMid0));//spit ball0
