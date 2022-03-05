@@ -70,7 +70,7 @@ public class BallHandler extends SubsystemBase {
   private static final double BALL2_SHOOT = Constants.BALL_HANDLER_2_SHOOT_SPEED;
 
   private static final double HARVESTER_OUT_DELAY = 1.0;
-  private static final double SBM_KICKOUT_TIME = .1;    
+  private static final double SBM_KICKOUT_TIME = .15;
   
   /** Creates a new Intake. */
   public BallHandler() {

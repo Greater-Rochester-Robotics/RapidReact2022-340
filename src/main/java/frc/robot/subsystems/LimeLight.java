@@ -55,6 +55,7 @@ public class LimeLight extends SubsystemBase {
    */
   public void setLimeLightPower(boolean isOn){
     pdh.setSwitchableChannel(isOn);
+
   }
 
   /**
@@ -70,8 +71,11 @@ public class LimeLight extends SubsystemBase {
     subsystemsUsingLight.put(subsystem.getName(), lightOn);
     Collection<Boolean> values = subsystemsUsingLight.values();
     boolean sumOfBooleans = false;
+    System.out.println("Starting: ");
     for (Boolean v : values) {
       sumOfBooleans |=  v;
+      System.out.println("v: " + v);
+      System.out.println("End");
     }
     System.out.println("sumBool"+sumOfBooleans);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(sumOfBooleans? 3 : 1);  //controls if limelight is on or not // 3 is on, 1 is off

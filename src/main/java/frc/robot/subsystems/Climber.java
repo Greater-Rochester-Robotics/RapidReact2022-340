@@ -352,4 +352,8 @@ public class Climber extends SubsystemBase {
     extendoMotorLeft.setSelectedSensorPosition(sensorPos / Constants.EXTENDO_INCHES_PER_PULSE_CONVERSION_FACTOR);
   }
 
+  public boolean getExtendoBothSwitch(){
+    return getExtendoLeftSwitch() && getExtendoRightSwitch();
+  }
+
 }
