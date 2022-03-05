@@ -289,16 +289,18 @@ public class BallHandler extends SubsystemBase {
   }
 
   public boolean shouldIntakeBall(){
+    if(!colorSensor.isConnected()){
+      return true;
+    }
     int proximity = colorSensor.getProximity();
     
     int blue = colorSensor.getBlue();
     int red = colorSensor.getRed();
 
-    //TODO:separate out "not connected" and return without reconstructing
+    //separates out "not connected" and return without reconstructing
 
-    if(!rejectOppColor || !colorSensor.isConnected() || (proximity == 0 && blue == 0 && red == 0)) {
+    if(!rejectOppColor || (proximity == 0 && blue == 0 && red == 0)){
       colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
-      return true;
     }
     
     //Checking proximity to intake balls

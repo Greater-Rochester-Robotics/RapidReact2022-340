@@ -25,6 +25,7 @@ import frc.robot.commands.SpitBalls;
 import frc.robot.commands.StopShooterHandlerHood;
 import frc.robot.commands.autonomous.AutoDriveBackAndShoot;
 import frc.robot.commands.autonomous.AutoLeftBackOutOfWay;
+import frc.robot.commands.autonomous.AutoLeftFourBall;
 import frc.robot.commands.autonomous.AutoLeftTwoBall;
 import frc.robot.commands.autonomous.AutoLeftTwoBallFromHub;
 import frc.robot.commands.autonomous.AutoMidFourBall;
@@ -208,6 +209,7 @@ public class RobotContainer {
     driverLB.whenPressed(new DriveResetGyroToZero());
     driverRB.whileHeld(new DriveOnTarget(12));
     driverBack.toggleWhenActive(new DriveRobotCentric());
+    driverStart.whenPressed(new AutoLeftFourBall());
     // driverStart.whileHeld(new AutoMidTwoBall());
     driverDDown.whenPressed(new ShootHighFenderWithDriveBack(0.0));
     driverDDown.whenReleased(new StopShooterHandlerHood());
