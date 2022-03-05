@@ -36,7 +36,7 @@ public class DriveTurnToAngle extends CommandBase {
   @Override
   public void execute() {
     double output = RobotContainer.swerveDrive.getRobotRotationPIDOut(angle);
-    System.out.println("pid output"+output);
+    // System.out.println("pid output"+output);
     RobotContainer.swerveDrive.driveRobotCentric(0, 0, output, false, true);
     if(Math.abs(angle - RobotContainer.swerveDrive.getGyroInRad()) < .03){
       onTargetCount++;
@@ -55,6 +55,6 @@ public class DriveTurnToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;//onTargetCount >= 10; //TODO:fix the end condition
+    return onTargetCount >= 10; //TODO:fix the end condition
   }
 }

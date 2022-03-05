@@ -27,7 +27,9 @@ import frc.robot.commands.autonomous.AutoDriveBackAndShoot;
 import frc.robot.commands.autonomous.AutoLeftBackOutOfWay;
 import frc.robot.commands.autonomous.AutoLeftTwoBall;
 import frc.robot.commands.autonomous.AutoLeftTwoBallFromHub;
+import frc.robot.commands.autonomous.AutoMidFourBall;
 import frc.robot.commands.autonomous.AutoMidTwoBall;
+import frc.robot.commands.autonomous.AutoPartnerPickupLeftBall;
 import frc.robot.commands.autonomous.AutoRightThreeBall;
 import frc.robot.commands.autonomous.AutoRightTwoBall;
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
@@ -179,6 +181,7 @@ public class RobotContainer {
     // SmartDashboard.putData(new AutoDriveStraightBackAndShootHigh(1.5));//AutoTesting
     // SmartDashboard.putData(new AutoMidTwoBall());//AutoTesting
     // SmartDashboard.putData(new AutoRightThreeBall());//AutoTesting
+    SmartDashboard.putData(new AutoPartnerPickupLeftBall());
 
 
     SmartDashboard.putNumber("SpeedIShoot",0.0);
@@ -244,7 +247,8 @@ public class RobotContainer {
     autoChooser.addOption("Grab mid ball, shoot", new AutoMidTwoBall());
     autoChooser.addOption("Grab right ball, shoot", new AutoRightTwoBall());
     autoChooser.addOption("Shoot, grab right then mid ball, shoot", new AutoRightThreeBall());
-    autoChooser.addOption("Grab mid ball, shoot. Get 2 terminal, shoot", new AutoMidTwoBall());//TODO:shouldn't this be 4 ball?
+    autoChooser.addOption("Grab mid ball, shoot. Get 2 terminal, shoot", new AutoMidFourBall());
+    autoChooser.addOption("Partner ball, shoot, grab left, shoot", new AutoPartnerPickupLeftBall());
 
 
     SmartDashboard.putData(RobotContainer.autoChooser);
