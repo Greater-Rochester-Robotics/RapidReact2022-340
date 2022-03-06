@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
+import frc.robot.commands.StopShooterHandlerHood;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
 import frc.robot.commands.ballhandler.BallHandlerShootProgT;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
@@ -40,16 +41,23 @@ public class AutoLeftFourBall extends SequentialCommandGroup {
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new BallHandlerSetState(State.kOff),
       new BallHandlerShootProgT(0.0),
-      new BallHandlerSetState(State.kFillTo1),
-      new ShooterSetSpeed(0.0), //This value is not correct
       parallel(
-       new DriveFollowTrajectory("DriveFromLeftBallToHuman"),
-       new HoodToPosition(0.0) //This value is not correct
+        new DriveFollowTrajectory("DriveFromLeftBallToHuman"),
+        sequence(
+          new WaitCommand(1.0),
+          new BallHandlerSetState(State.kFillTo1)
+        )
       ),
+      new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new BallHandlerSetState(State.kOff),
-      new DriveFollowTrajectory("DriveStraightFromHumanLeft"),
-      new BallHandlerShootProgT() //This whole command has not been tested, so make sure this thing works.
+      new ShooterSetSpeed(9700),
+      parallel(
+        new DriveFollowTrajectory("DriveFromHumanStraight"),
+        new HoodToPosition(14.7)
+      ),
+      new BallHandlerShootProgT(), //This whole command has not been tested, so make sure this thing works.
+      new StopShooterHandlerHood()
       );
   }
 }
