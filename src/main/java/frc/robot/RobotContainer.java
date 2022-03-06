@@ -31,6 +31,7 @@ import frc.robot.commands.autonomous.AutoLeftTwoBallFromHub;
 import frc.robot.commands.autonomous.AutoMidFourBall;
 import frc.robot.commands.autonomous.AutoMidTwoBall;
 import frc.robot.commands.autonomous.AutoPartnerPickupLeftBall;
+import frc.robot.commands.autonomous.AutoRightFiveBall;
 import frc.robot.commands.autonomous.AutoRightThreeBall;
 import frc.robot.commands.autonomous.AutoRightTwoBall;
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
@@ -188,6 +189,8 @@ public class RobotContainer {
     SmartDashboard.putNumber("SpeedIShoot",0.0);
     SmartDashboard.putNumber("angleIShoot",0.0);
 
+    SmartDashboard.putData(new AutoRightFiveBall());
+
   }
 
   /**
@@ -208,8 +211,7 @@ public class RobotContainer {
     driverY.whenReleased(new StopShooterHandlerHood());
     driverLB.whenPressed(new DriveResetGyroToZero());
     driverRB.whileHeld(new DriveOnTarget(12));
-    driverBack.toggleWhenActive(new DriveRobotCentric());
-    driverStart.whenPressed(new AutoLeftFourBall()); 
+    driverBack.toggleWhenActive(new DriveRobotCentric()); 
     // driverStart.whileHeld(new AutoMidTwoBall());
     driverDDown.whenPressed(new ShootHighFenderWithDriveBack(0.0));
     driverDDown.whenReleased(new StopShooterHandlerHood());
@@ -253,6 +255,7 @@ public class RobotContainer {
     autoChooser.addOption("Shoot, grab right then mid ball, shoot", new AutoRightThreeBall());
     autoChooser.addOption("Grab mid ball, shoot. Get 2 terminal, shoot", new AutoMidFourBall());
     autoChooser.addOption("Partner ball, shoot, grab left, shoot", new AutoPartnerPickupLeftBall());
+    // autoChooser.addOption("5 ball", new AutoRightFiveBall());
 
 
     SmartDashboard.putData(RobotContainer.autoChooser);

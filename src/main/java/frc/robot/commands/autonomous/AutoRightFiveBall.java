@@ -4,22 +4,23 @@
 
 package frc.robot.commands.autonomous;
 
+import javax.swing.text.Position;
+
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.Robot;
+
 import frc.robot.RobotContainer;
-import frc.robot.commands.ShootHighFender;
-import frc.robot.commands.ShootHighFenderWithDriveBack;
-import frc.robot.commands.ShootHighGoal;
+import frc.robot.commands.StopShooterHandlerHood;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
 import frc.robot.commands.ballhandler.BallHandlerShootProgT;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.auto.DriveTurnToTarget;
 import frc.robot.commands.drive.util.DriveSetGyro;
+import frc.robot.commands.drive.util.DriveTurnToAngle;
 import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
-import frc.robot.commands.shooter.ShooterPrepShot;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.subsystems.BallHandler.State;
 
@@ -27,32 +28,53 @@ import frc.robot.subsystems.BallHandler.State;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoRightFiveBall extends SequentialCommandGroup {
-  /** Creates a new AutoRightFiveBall. not written*/
+  /** Creates a new AutoRightFiveBall. Doesn't finish yet*/
   @Deprecated
   public AutoRightFiveBall() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      //FenderHighgoal
-      // new ShootHighFender(),
-      //start intaking
       new HoodHome(),
       new BallHandlerIntakeOut(),
       parallel(
-        new DriveSetGyro(0.0)//,
+        new DriveSetGyro(90.00),
+        new WaitCommand(0.5),//This must stay here
+        new HoodToPosition(6.4),
+        new ShooterSetSpeed(7900,true)
       ),
-      new DriveTurnToTarget(),
-      new ShooterPrepShot(),
-      new ShootHighGoal(0.0).withTimeout(1.0),
+      new BallHandlerShootProgT(0.0).withTimeout(1.0),
       new BallHandlerSetState(State.kFillTo1),
+      new ShooterSetSpeed(9500),
       new DriveFollowTrajectory("DriveToRightBall"),
-      new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
-      new DriveFollowTrajectory("DriveFromRightBallToMidBall"),
+      race(
+        new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),//rather than
+        new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0)
+
+      ),
+      parallel(
+        new DriveFollowTrajectory("DriveFromRightBallToMidBall"),
+        new HoodToPosition(12.5)
+      ),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new BallHandlerSetState(State.kOff),
-      new DriveFollowTrajectory("DriveMidBallToRotate"),
-      new ShooterPrepShot(),
-      new DriveTurnToTarget()      
+      new DriveTurnToAngle(Math.toRadians(45.28)),
+      new BallHandlerShootProgT(0.0),
+      new BallHandlerSetState(State.kFillTo1),
+      new DriveFollowTrajectory("DriveRightMidBallToHuman"),
+      new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
+      new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
+      new BallHandlerSetState(State.kOff),
+      parallel(
+        new DriveFollowTrajectory("DriveRightFromHumanStraight"),
+        new ShooterSetSpeed(9800),
+        new HoodToPosition(15.0)
+      ),
+      // new DriveTurnToAngle(Math.toRadians(37.54)),//not needed, might need turn to target
+      new BallHandlerShootProgT(0.0),
+      new StopShooterHandlerHood()
+      //FenderHighgoal
+      // new ShootHighFender(),
+      //start intaking
       //drive shortpath to first(Right) ball
       // new DriveFollowTrajectory(trajName),
       //run wait until with Ball1 sensor,with timeout

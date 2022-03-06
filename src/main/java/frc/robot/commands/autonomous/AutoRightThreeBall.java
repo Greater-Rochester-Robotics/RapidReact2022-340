@@ -6,15 +6,12 @@ package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.commands.ShootHighGoal;
 import frc.robot.commands.StopShooterHandlerHood;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
 import frc.robot.commands.ballhandler.BallHandlerShootProgT;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
-import frc.robot.commands.drive.auto.DriveTurnToTarget;
 import frc.robot.commands.drive.util.DriveSetGyro;
 import frc.robot.commands.drive.util.DriveTurnToAngle;
 import frc.robot.commands.hood.HoodHome;
@@ -56,7 +53,7 @@ public class AutoRightThreeBall extends SequentialCommandGroup {
         new HoodToPosition(12.5)
       ),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
-      new DriveFollowTrajectory("DriveMidBallToRotate"),
+      new DriveTurnToAngle(Math.toRadians(45.28)),
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood()
     );
