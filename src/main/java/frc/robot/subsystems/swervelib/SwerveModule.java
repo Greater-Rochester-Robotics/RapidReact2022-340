@@ -68,12 +68,12 @@ public class SwerveModule {
                           Constants.SWERVE_DRIVE_D_VALUE, Constants.SWERVE_DRIVE_FF_VALUE);
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);//TODO: rethink if we need this speed
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 239);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 252);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 263);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 274);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 286);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_15_FirmwareApiStatus, 297);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 255);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 255);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 255);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 255);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 255);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_15_FirmwareApiStatus, 255);
         driveMotor.setSelectedSensorPosition(0.0);
 
         //contruct and setup rotation falcon
@@ -90,12 +90,12 @@ public class SwerveModule {
                           Constants.SWERVE_ROT_D_VALUE, Constants.SWERVE_ROT_FF_VALUE);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 240);//This packet is the motor output, limit switches, faults, we care about none of those
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);//This is the sensor feedback, i.e. relative encoder
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 238);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 251);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 262);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 273);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 284);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_15_FirmwareApiStatus, 296);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 255);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 255);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 255);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 255);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 255);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_15_FirmwareApiStatus, 255);
         // System.out.println( "Status_10_MotionMagic" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic));
         // System.out.println( "Status_1_General" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_1_General));
         // System.out.println( "11_UartGadgeteer" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer));
@@ -116,7 +116,7 @@ public class SwerveModule {
         rotateAbsSensor = new CANCoder(canCoderID);
         rotateAbsSensor.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
         rotateAbsSensor.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 20);//The default on this is 10, but 20 might be better given our code loop rate
-        rotateAbsSensor.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 333);
+        rotateAbsSensor.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 255);
         System.out.println( "VbatFaults" + rotateAbsSensor.getStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults));
         // rotateAbsSensor.getStatusFramePeriod(frame);
     }

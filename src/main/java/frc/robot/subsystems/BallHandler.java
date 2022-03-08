@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -93,7 +94,10 @@ public class BallHandler extends SubsystemBase {
       handlerMotors[i].setIdleMode(IdleMode.kBrake);// set brake mode, so motors stop on a dime
       handlerMotors[i].enableVoltageCompensation(10.50);// enable volatge compensation mode
       handlerMotors[i].setInverted(i == 1);// only the second NEO550 in the ballHandler needs to be inverted.
-
+      handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
+      handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus1, 60000);
+      handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus2, 60000);
+      
       // handleEncoders[i] = handlerMotors[i].getEncoder();//We done use encoder, but this was also causing the code to crash
 
       handlerMotors[i].burnFlash();//this saves settings, BUT MUST BE DONE LAST, SparkMAX won't accept commands for a moment after this call

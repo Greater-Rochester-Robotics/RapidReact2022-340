@@ -39,6 +39,7 @@ public class DriveFieldRelativeAdvanced extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // RobotContainer.swerveDrive.setIsOdometry(false);
     currentAngle = RobotContainer.swerveDrive.getGyroInRad();
     wasDriverControl = false;
   }

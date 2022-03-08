@@ -35,6 +35,7 @@ public class DriveRobotCentric extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // RobotContainer.swerveDrive.setIsOdometry(false);
     RobotContainer.setDriverRumble(0.25, 0.25);
   }
 

@@ -36,6 +36,12 @@ public class Shooter extends SubsystemBase {
     motor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
     motor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);
     motor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 255);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 255);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc, 255);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 255);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 255);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_15_FirmwareApiStatus, 255);
 
     motor.config_kP(0, Constants.SHOOTER_MAIN_MOTOR_P);
     motor.config_kI(0, Constants.SHOOTER_MAIN_MOTOR_I);
@@ -47,7 +53,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Shooter Speed", getSpeed());
+    // SmartDashboard.putNumber("Shooter Speed", getSpeed());
     // SmartDashboard.putBoolean("AtSpeed",isAtSpeed());
   }
 

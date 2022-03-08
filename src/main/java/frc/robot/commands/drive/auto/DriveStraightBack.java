@@ -39,6 +39,7 @@ public class DriveStraightBack extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.swerveDrive.setIsOdometry(true);
     intpPose2d = RobotContainer.swerveDrive.getCurPose2d();
     curDistance = 0.0;
     backController.reset();

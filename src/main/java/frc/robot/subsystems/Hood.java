@@ -12,6 +12,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,6 +46,8 @@ public class Hood extends SubsystemBase {
 
     motor.setSoftLimit(SoftLimitDirection.kForward, (float) (Constants.HOOD_FORWARD_LIMIT_DEGREES/Constants.HOOD_DEGREE_CONVERSION));
     motor.enableSoftLimit(SoftLimitDirection.kForward, true);//This doesn't work right, added code in set position
+    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);//reduce the rate of this packet, basic stuff
+    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 60000);//reduce the rate of this packet, which is the encoder speed
 
     motor.clearFaults();//clear motor fault so we can check when rebooted
 
@@ -59,8 +62,12 @@ public class Hood extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("HoodLimit", !limitSwitch.get());
-    SmartDashboard.putNumber("Hood Position", getPosition());
+    
+    if(!(getCurrentCommand() == null)) {
+      SmartDashboard.putNumber("Hood Position", getPosition());
+    }
     // SmartDashboard.putBoolean("HoodHasPowerCycled", motor.getFault(FaultID.kHasReset));
+
   }
 
   /**

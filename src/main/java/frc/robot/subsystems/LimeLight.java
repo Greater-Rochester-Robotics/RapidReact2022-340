@@ -30,12 +30,28 @@ public class LimeLight extends SubsystemBase {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
     light = new Solenoid(PneumaticsModuleType.REVPH, Constants.LL_LIGHT);
     light.set(false);
+    // subsystemsUsingLight.put(this.getName(), false);
   }
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    // int count = 0;
+    // if(count == 0) {
+    //   Collection<Boolean> values = subsystemsUsingLight.values();
+    //   boolean sumOfBooleans = false;
+    //   for (Boolean v : values) {
+    //     sumOfBooleans |=  v;
+
+    //   }
+    //   NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(sumOfBooleans? 3 : 1);  //controls if limelight is on or not // 3 is on, 1 is off
+    //   light.set(sumOfBooleans);
+    //   count++;
+    // } else {
+      
+    // }
+    // count++;
   }
   public void setStreamMode(int Stream){
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(Stream);
