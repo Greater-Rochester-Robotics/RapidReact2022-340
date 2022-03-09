@@ -182,8 +182,8 @@ public final class Constants {
     }
 
     /* Climber Constants */
-    public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.3;//This is for testing up 
-    public static final double CLIMBER_EXTENDO_SPEED_IN = -0.3;//This is for testing down and homing
+    public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.6;//This is for testing up 
+    public static final double CLIMBER_EXTENDO_SPEED_IN = -0.6;//This is for testing down and homing
     public static final double CLIMBER_EXTENDO_FORCE_IN = -0.6;
 
     public static final double EXTENDO_MOTOR_P = 1.0;

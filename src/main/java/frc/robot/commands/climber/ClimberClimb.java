@@ -51,24 +51,31 @@ public class ClimberClimb extends SendableCommandGroup {
        new ClimberExtendoForceToBottom(.5)
       ).withName("ClimbToThirdBar"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToReleaseFromThirdBar"),
-      new ClimberExtendoToPosition(Constants.CLIMBER_RELEASE_POSITION).withName("ReleaseFromThirdBar"),
+      new ClimberExtendoToPosition(Constants.CLIMBER_TOP_POSITION).withName("ReleaseFromThirdBar"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToTiltToFourth"),
       new ClimberTiltOut().withName("TiltToFourthBar"),
       new WaitCommand(1.0).withName("PauseToTilt"),
-      new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToExtendToFouthBar"),
-      new ClimberExtendoToPosition(Constants.CLIMBER_TOP_POSITION).withName("ExtendToFouthBar"),
-      new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToTiltToNormal"),
-      new ClimberTiltIn().withName("TiltToNormal"),
+      // new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToExtendToFouthBar"),
+      // new ClimberExtendoToPosition(Constants.CLIMBER_TOP_POSITION).withName("ExtendToFouthBar"),
+      // new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToTiltToNormal"),
+      // new ClimberTiltIn().withName("TiltToNormal"),
+      // new WaitCommand(1.0).withName("PauseToTilt"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToLiftOffThirdbar"),
       new ClimberExtendoToPosition(Constants.CLIMBER_LIFT_POSITION).withName("LiftOffThirdBar"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToClimbToFourthBar"),
-      // race(
-        new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION,true),
-        // new WaitUntilCommand(RobotContainer.climber::getExtendoBothSwitch)
-      // ),
-      new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToClimbToFourthBar"),
-      // race(
-        new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION,true) //,
+      new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION,true),
+      new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToTiltToNormal"),
+      new ClimberTiltIn().withName("TiltToNormal"),
+      new WaitCommand(1.0).withName("PauseToTilt"),
+      new ClimberExtendoStop() //,
+      // new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToClimbToFourthBar"),
+      // // race(
+      //   new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION,true),
+      //   // new WaitUntilCommand(RobotContainer.climber::getExtendoBothSwitch)
+      // // ),
+      // new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToClimbToFourthBar"),
+      // // race(
+      //   new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION,true) //,
         // new WaitUntilCommand(RobotContainer.climber::getExtendoBothSwitch)
       // )
     );

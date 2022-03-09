@@ -10,9 +10,9 @@ import frc.robot.RobotContainer;
 /**
  * This is a testing command to drive the Arms In. it should be bound to a whileHeld() button
  */
-public class ClimberExtendIn extends CommandBase {
+public class ClimberExtendBothIn extends CommandBase {
   /** Creates a new ClimberExtendOut. */
-  public ClimberExtendIn() {
+  public ClimberExtendBothIn() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.climber);
   }

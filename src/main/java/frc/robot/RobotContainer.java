@@ -11,10 +11,14 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SendableCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+
 import frc.robot.commands.LimeLightPowerCycle;
 import frc.robot.commands.PrepLowFender;
 import frc.robot.commands.ShootHighFenderWithDriveBack;
@@ -38,8 +42,10 @@ import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
 import frc.robot.commands.climber.ClimberClimb;
-import frc.robot.commands.climber.ClimberExtendIn;
+import frc.robot.commands.climber.ClimberExtendBothIn;
+import frc.robot.commands.climber.ClimberExtendLeftIn;
 import frc.robot.commands.climber.ClimberExtendOut;
+import frc.robot.commands.climber.ClimberExtendRightIn;
 import frc.robot.commands.climber.ClimberExtendoHome;
 import frc.robot.commands.climber.ClimberExtendoToPosition;
 import frc.robot.commands.climber.ClimberTiltIn;
@@ -64,6 +70,7 @@ import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterPrepShot;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.commands.shooter.ShooterStop;
+
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Compressor;
 import frc.robot.subsystems.Hood;
@@ -124,11 +131,14 @@ public class RobotContainer {
   static final Button coDriverDDown = new POVButton(coDriver, 180);
   static final Button coDriverDLeft = new POVButton(coDriver, 270);
   static final Button coDriverDRight = new POVButton(coDriver, 90);
-  // final Button coDriverLTButton = new JoyTriggerButton(coDriver, .7, Axis.LEFT_TRIGGER);
-  // final Button coDriverRTButton = new JoyTriggerButton(coDriver, .7, Axis.RIGHT_TRIGGER);
+  static final Button coDriverLTButton70 = new JoyTriggerButton(coDriver, .7, Axis.kLeftTrigger);
+  static final Button coDriverRTButton70 = new JoyTriggerButton(coDriver, .7, Axis.kRightTrigger);
+  static final Button coDriverLTButton25 = new JoyTriggerButton(coDriver, .25, Axis.kLeftTrigger);
+  static final Button coDriverRTButton25 = new JoyTriggerButton(coDriver, .25, Axis.kRightTrigger);
 
   //Climber next step button is aliased here.
   public static final Button climberButton = coDriverA;
+  public static SendableCommandGroup climbCommand;
 
   //The robot's subsystems are instantiated here
   public static Compressor compressor;
@@ -156,6 +166,8 @@ public class RobotContainer {
     shooter = new Shooter();
     hood = new Hood();
 
+    climbCommand = new ClimberClimb();
+
     //Add all autos to the auto selector
     configureAutoModes();
 
@@ -172,7 +184,10 @@ public class RobotContainer {
     SmartDashboard.putData(new DriveAllModulesPositionOnly());
     SmartDashboard.putData(new DriveStopAllModules());//For setup of swerve
     SmartDashboard.putData(new HoodHome(true));//For setup, leave for drives to use
-    SmartDashboard.putData(new ClimberExtendoHome());//for setup
+    SmartDashboard.putData("Climber Home", new SequentialCommandGroup(
+                            new ClimberTiltIn(),
+                            new ClimberExtendoHome(),
+                            climbCommand.resetCommandCommand()));//for setup
     SmartDashboard.putData(new LimeLightPowerCycle());//allows the drivers to restart the Limelight at will(good for hangups)
     // SmartDashboard.putData(new DriveFindMaxAccel());//This is for tuning acceleration constants
     // SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));//this is for Velocity PID parameters
@@ -183,13 +198,14 @@ public class RobotContainer {
     // SmartDashboard.putData(new AutoDriveStraightBackAndShootHigh(1.5));//AutoTesting
     // SmartDashboard.putData(new AutoMidTwoBall());//AutoTesting
     // SmartDashboard.putData(new AutoRightThreeBall());//AutoTesting
-    SmartDashboard.putData(new AutoPartnerPickupLeftBall());
+    // SmartDashboard.putData(new AutoPartnerPickupLeftBall());
+    SmartDashboard.putData(climbCommand);
 
 
     SmartDashboard.putNumber("SpeedIShoot",0.0);
     SmartDashboard.putNumber("angleIShoot",0.0);
 
-    SmartDashboard.putData(new AutoRightFiveBall());
+    // SmartDashboard.putData(new AutoRightFiveBall());
 
   }
 
@@ -223,7 +239,15 @@ public class RobotContainer {
     coDriverB.whenReleased(new BallHandlerSetState(State.kOff));
     coDriverX.whenPressed(new PrepLowFender());//prep low goal, aka hood to position and shooter to speed
     coDriverY.whenPressed(new ShooterPrepShot());//prep high goal, aka shooter to a starter speed
-    coDriverBack.and(coDriverStart).whenActive(new ClimberClimb());
+
+    coDriverRB.and(coDriverDUp).whenActive(climbCommand.iterateFowardCommand());
+    coDriverLB.and(coDriverDUp).whenActive(climbCommand.iterateBackwardCommand());
+
+    coDriverBack.and(coDriverStart).whenActive(climbCommand);
+
+    coDriverLTButton25.and(coDriverRTButton25).whileActiveContinuous(new ClimberExtendBothIn());
+    coDriverRTButton70.and(coDriverLTButton25.negate()).whileActiveContinuous(new ClimberExtendRightIn());
+    coDriverLTButton70.and(coDriverRTButton25.negate()).whileActiveContinuous(new ClimberExtendLeftIn());
   }
 
   /**
