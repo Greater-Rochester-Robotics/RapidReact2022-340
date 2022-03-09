@@ -15,6 +15,7 @@ import frc.robot.commands.ballhandler.BallHandlerShootProgT;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.auto.DriveStraightBack;
 import frc.robot.commands.drive.util.DriveSetGyro;
+import frc.robot.commands.drive.util.DriveTurnToAngle;
 import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterSetSpeed;
@@ -40,7 +41,16 @@ public class AutoRightTwoBall extends SequentialCommandGroup {
         new DriveFollowTrajectory("DriveToRightBall"),
         new HoodToPosition(9.9)//while driving to the ball, set the hood
       ),
-      new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
+      race(
+        new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(4.0),
+        sequence(
+          new DriveTurnToAngle(Math.toRadians(75.31)).withTimeout(1.0),
+          new WaitCommand(.5),
+          new DriveTurnToAngle(Math.toRadians(85.31)).withTimeout(2.0),
+          new WaitCommand(.5)
+        )
+      ),
+      new DriveTurnToAngle(Math.toRadians(80.31)).withTimeout(1.5),
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood(),
       new BallHandlerSetState(State.kOff),
