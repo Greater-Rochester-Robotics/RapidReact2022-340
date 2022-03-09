@@ -273,12 +273,12 @@ public class RobotContainer {
     autoChooser.setDefaultOption("Wait 1 sec(do nothing)", new WaitCommand(1));
     autoChooser.addOption("Drives backwards 1.5 robot, shoots", new AutoDriveBackAndShoot(1.5));
     autoChooser.addOption("Drives backwards 2.5 robot, shoots", new AutoDriveBackAndShoot(2.5));
-    autoChooser.addOption("Grab left ball, shoot", new AutoLeftTwoBall());
-    autoChooser.addOption("Grab mid ball, shoot", new AutoMidTwoBall());
-    autoChooser.addOption("Grab right ball, shoot", new AutoRightTwoBall());
-    autoChooser.addOption("Shoot, grab right then mid ball, shoot", new AutoRightThreeBall());
-    autoChooser.addOption("Grab mid ball, shoot. Get 2 terminal, shoot", new AutoMidFourBall());
-    autoChooser.addOption("Partner ball, shoot, grab left, shoot", new AutoPartnerPickupLeftBall());
+    autoChooser.addOption("Left Two Ball", new AutoLeftTwoBall());
+    autoChooser.addOption("Mid Two Ball", new AutoMidTwoBall());
+    autoChooser.addOption("Right Two Ball", new AutoRightTwoBall());
+    autoChooser.addOption("Right Three Ball", new AutoRightThreeBall());
+    autoChooser.addOption("Mid Four Ball", new AutoMidFourBall());
+    autoChooser.addOption("Hungry Hungry Hippo", new AutoPartnerPickupLeftBall());
     // autoChooser.addOption("5 ball", new AutoRightFiveBall());
 
 

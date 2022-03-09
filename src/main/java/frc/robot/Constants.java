@@ -136,9 +136,9 @@ public final class Constants {
     public static final LookUpTable SHOOTER_HIGH_SPEEDS_TABLE = new LookUpTable();
     static {
         //use put(distance, speed)
-        SHOOTER_HIGH_SPEEDS_TABLE.put(153.25, 9800);
-        SHOOTER_HIGH_SPEEDS_TABLE.put(115, 9400);
-        SHOOTER_HIGH_SPEEDS_TABLE.put(92, 8600);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(153.25, 9400);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(115, 9000);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(92, 8200);
         SHOOTER_HIGH_SPEEDS_TABLE.put(75.25, 8150);
         SHOOTER_HIGH_SPEEDS_TABLE.put(65.75, 8000);
         SHOOTER_HIGH_SPEEDS_TABLE.put(43.75, 7600);
