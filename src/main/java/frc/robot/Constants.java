@@ -85,7 +85,7 @@ public final class Constants {
     // public static final double DRIVE_ROTATION_MIN_VELOCITY = 25;
 
     /* Driver Scaling Constants */
-    public static final double DRIVER_SPEED_SCALE_LINEAR = 0.6;
+    public static final double DRIVER_SPEED_SCALE_LINEAR = 0.65;
     public static final double DRIVER_SPEED_SCALE_ROTATIONAL = 1.5;
 
     /* Limelight Values*/
