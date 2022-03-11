@@ -182,9 +182,9 @@ public final class Constants {
     }
 
     /* Climber Constants */
-    public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.6;//This is for testing up 
+    public static final double CLIMBER_EXTENDO_SPEED_OUT = 0.4;//This is for testing up 
     public static final double CLIMBER_EXTENDO_SPEED_IN = -0.6;//This is for testing down and homing
-    public static final double CLIMBER_EXTENDO_FORCE_IN = -0.6;
+    public static final double CLIMBER_EXTENDO_FORCE_IN = -0.7;
 
     public static final double EXTENDO_MOTOR_P = 1.0;
     public static final double EXTENDO_MOTOR_I = 0.0;
@@ -204,7 +204,7 @@ public final class Constants {
     public static final double CLIMBER_TOP_POSITION = 23;
     public static final double CLIMBER_LIFT_POSITION = 17;
     public static final double CLIMBER_RELEASE_POSITION = 4;
-    public static final double CLIMBER_BOTTOM_POSITION = -.5;
+    public static final double CLIMBER_BOTTOM_POSITION = -.7;
 
     public static final int SELECTED_FEEDBACK_COEFFICIENT = 1;
 

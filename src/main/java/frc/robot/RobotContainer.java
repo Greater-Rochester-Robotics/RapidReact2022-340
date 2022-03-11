@@ -245,9 +245,16 @@ public class RobotContainer {
 
     coDriverBack.and(coDriverStart).whenActive(climbCommand);
 
+    coDriverDDown.whenActive(new SequentialCommandGroup(
+      new ClimberTiltIn(),
+      new ClimberExtendoHome(),
+      climbCommand.resetCommandCommand()));
+
     coDriverLTButton25.and(coDriverRTButton25).whileActiveContinuous(new ClimberExtendBothIn());
     coDriverRTButton70.and(coDriverLTButton25.negate()).whileActiveContinuous(new ClimberExtendRightIn());
     coDriverLTButton70.and(coDriverRTButton25.negate()).whileActiveContinuous(new ClimberExtendLeftIn());
+
+    
   }
 
   /**
