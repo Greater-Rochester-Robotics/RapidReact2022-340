@@ -23,7 +23,7 @@ public class ShootHighFender extends SequentialCommandGroup {
    * replaced by ShootHighFenderWithDriveBack
    * @param timeBewtweenBalls
    */
-  @Deprecated
+  // @Deprecated
   public ShootHighFender(double timeBewtweenBalls) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());

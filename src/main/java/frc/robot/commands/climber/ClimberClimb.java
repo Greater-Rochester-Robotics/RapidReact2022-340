@@ -45,7 +45,6 @@ public class ClimberClimb extends SendableCommandGroup {
       new ClimberExtendOutSlow(Constants.CLIMBER_TOP_POSITION).withName("ExtendToThirdBar"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-UntilTiltInThirdBar"),
       new ClimberTiltIn().withName("TiltToNormal"),
-      new WaitCommand(1.0).withName("PauseForTilt"),
       new WaitUntilCommand(RobotContainer.climberButton.negate()::get).withName("WATI-ReleaseButton"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToLiftOffSecondBar"),
       new ClimberExtendoToPosition(Constants.CLIMBER_LIFT_POSITION,true).withName("LiftOffSecondBar"),

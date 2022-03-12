@@ -22,14 +22,15 @@ public class Compressor extends SubsystemBase {
   @Override
   public void periodic() {
     //constant updates to the smartDashboard, about the pressure sensor is bad, once every half sec is fine.    
+    if(count > 50){
+      count = 0;
+    }
+
     if(count == 0){
       // push value of getPressure() to SmartDashboard, round the output before pushing to SD. decimal is not needed
       SmartDashboard.putNumber("Pressure", Math.round(getPressure()));
-      count++;
-    }else if(count > 25){
-      count = 0;
     }
-    
+    count++;
   }
 
   /**
