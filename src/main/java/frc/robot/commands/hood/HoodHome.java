@@ -9,19 +9,35 @@ import frc.robot.RobotContainer;
 
 public class HoodHome extends CommandBase {
   boolean overrideBeenHomed = false;//Used to skip homing if hood has been homed since robot boot
-  /** Creates a new HoodHome. */
+  
+  /**
+   * A command that homes the hood by slowly driving 
+   * the hood toward the limit switch. It stops once 
+   * the limit switch is pressed. If the hood has been 
+   * homed since the robot has been booted, it will 
+   * not home again.
+   */
   public HoodHome() {
     this(false);
   }
 
+  /**
+   *  A command that homes the hood by slowly driving 
+   * the hood toward the limit switch. It stops once 
+   * the limit switch is pressed. If the hood has been 
+   * homed since the robot has been booted, it will 
+   * not home if overrideBeenHomed is false. If true 
+   * is passed, then the hood will be homed again.
+   * 
+   * @param overrideBeenHomed
+   */
   public HoodHome(boolean overrideBeenHomed){
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.hood);
     this.overrideBeenHomed = overrideBeenHomed;
   }
 
   public void initialize(){
-    //double check that the hood motor hasn't been power cycled
+    //double check that the hood motor hasn't been power cycled- on hold
     // RobotContainer.hood.checkForPowerCycle();//This doesn't seem to work, don't use
   }
 

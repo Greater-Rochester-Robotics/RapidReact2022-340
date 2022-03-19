@@ -24,7 +24,7 @@ public class ShootLowGoalFender extends SequentialCommandGroup {
         new HoodToPosition(22.0)//Set the hood to maximum position
       ),
       new BallHandlerShootProgT(timeBewtweenBalls),//shoot the balls
-      new ShooterStop()//stop the shooter if we finish
+      new ShooterStop()//stop the shooter if we finish, makes using this commandgroup for autos posible
     );
   }
 }

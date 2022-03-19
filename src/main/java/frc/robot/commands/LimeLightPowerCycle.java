@@ -10,9 +10,10 @@ import frc.robot.RobotContainer;
 
 public class LimeLightPowerCycle extends CommandBase {
   Timer time;
+
   /**
    * A command to turn off then on again the LImelight 
-   * by switching the PDH's switchablle power output.
+   * by switching the PDH's switchable power output.
    */
   public LimeLightPowerCycle() {
     addRequirements(RobotContainer.limeLight);
@@ -23,16 +24,21 @@ public class LimeLightPowerCycle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    //turn off the limelight
     RobotContainer.limeLight.setLimeLightPower(false);
+
+    //start the timer
     time.reset();
     time.start();
   }
 
   public void end(boolean interrupted){
+    //turn on the limelight
     RobotContainer.limeLight.setLimeLightPower(true);
   }
 
   public boolean isFinished(){
+    //end command after 1 second
     return time.hasElapsed(1.0);
   }
 

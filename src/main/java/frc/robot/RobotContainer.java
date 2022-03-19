@@ -27,6 +27,7 @@ import frc.robot.commands.ShootHighFender;
 import frc.robot.commands.ShootLowGoalFender;
 import frc.robot.commands.SpitBalls;
 import frc.robot.commands.StopShooterHandlerHood;
+
 import frc.robot.commands.autonomous.AutoDriveBackAndShoot;
 import frc.robot.commands.autonomous.AutoLeftBackOutOfWay;
 import frc.robot.commands.autonomous.AutoLeftFourBall;
@@ -38,9 +39,11 @@ import frc.robot.commands.autonomous.AutoPartnerPickupLeftBall;
 import frc.robot.commands.autonomous.AutoRightFiveBall;
 import frc.robot.commands.autonomous.AutoRightThreeBall;
 import frc.robot.commands.autonomous.AutoRightTwoBall;
+
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
+
 import frc.robot.commands.climber.ClimberClimb;
 import frc.robot.commands.climber.ClimberExtendBothIn;
 import frc.robot.commands.climber.ClimberExtendLeftIn;
@@ -50,6 +53,7 @@ import frc.robot.commands.climber.ClimberExtendoHome;
 import frc.robot.commands.climber.ClimberExtendoToPosition;
 import frc.robot.commands.climber.ClimberTiltIn;
 import frc.robot.commands.climber.ClimberTiltOut;
+
 import frc.robot.commands.drive.DriveFieldRelative;
 import frc.robot.commands.drive.DriveFieldRelativeAdvanced;
 import frc.robot.commands.drive.DriveOnTarget;
@@ -65,8 +69,10 @@ import frc.robot.commands.drive.util.DriveResetGyroToZero;
 import frc.robot.commands.drive.util.DriveSetGyro;
 import frc.robot.commands.drive.util.DriveTuneDriveMotorFeedForward;
 import frc.robot.commands.drive.util.DriveTurnToAngle;
+
 import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
+
 import frc.robot.commands.shooter.ShooterPrepShot;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.commands.shooter.ShooterStop;
@@ -199,7 +205,8 @@ public class RobotContainer {
     // SmartDashboard.putData(new AutoMidTwoBall());//AutoTesting
     // SmartDashboard.putData(new AutoRightThreeBall());//AutoTesting
     // SmartDashboard.putData(new AutoPartnerPickupLeftBall());
-    SmartDashboard.putData(climbCommand);
+    
+    SmartDashboard.putData(climbCommand);//this is for the LED to see that this command is running
 
 
     SmartDashboard.putNumber("SpeedIShoot",0.0);
@@ -246,7 +253,7 @@ public class RobotContainer {
 
     coDriverBack.and(coDriverStart).whenActive(climbCommand);
 
-    coDriverDDown.whenActive(new SequentialCommandGroup(
+    coDriverDDown.whenPressed(new SequentialCommandGroup(
       new ClimberTiltIn(),
       new ClimberExtendoHome(),
       climbCommand.resetCommandCommand())

@@ -15,24 +15,19 @@ import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.commands.shooter.ShooterStop;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+
 public class ShootHighFender extends SequentialCommandGroup {
   /**
    * replaced by ShootHighFenderWithDriveBack
    * @param timeBewtweenBalls
    */
   public ShootHighFender(double timeBewtweenBalls) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new HoodHome(),
       parallel(
         new ShooterSetSpeed(Constants.SHOOTER_FENDER_SHOT_SPEED).withTimeout(2),
         new HoodToPosition(0.0)
       ),
-      // new WaitUntilCommand(RobotContainer.shooter::isAtSpeed),//this should fall through, left for options
       new BallHandlerShootProgT(timeBewtweenBalls),
       new ShooterStop()
     );

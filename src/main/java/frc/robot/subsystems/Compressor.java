@@ -21,7 +21,7 @@ public class Compressor extends SubsystemBase {
 
   @Override
   public void periodic() {
-    //constant updates to the smartDashboard, about the pressure sensor is bad, once every half sec is fine.    
+    //constant updates to the smartDashboard, about the pressure sensor is bad, once every sec is fine.    
     if(count > 50){
       count = 0;
     }

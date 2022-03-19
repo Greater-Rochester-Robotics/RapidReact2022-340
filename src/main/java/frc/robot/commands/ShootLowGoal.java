@@ -15,7 +15,11 @@ import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.commands.shooter.ShooterStop;
 
 public class ShootLowGoal extends SequentialCommandGroup {
-  /** Creates a new ShootHighGoal. */
+  /** 
+   * meant for shooting to the low goal at any distance, 
+   * but the lookup chart for this does not yet exist
+   */
+  @Deprecated
   public ShootLowGoal(double timeBewtweenBalls) {
     addCommands(
       new HoodHome(),//Home the hood, but should fall through if hood has been homed
@@ -24,7 +28,7 @@ public class ShootLowGoal extends SequentialCommandGroup {
         new HoodToPosition(RobotContainer.limeLight::getHoodLowAngle,true)//set the hood to the angle for the low goal given the limelight distance
       ),
       new BallHandlerShootProgT(timeBewtweenBalls),//shoot the balls
-      new ShooterStop()//stop the shooter if we finish
+      new ShooterStop()//stop the shooter if we finish, makes using this commandgroup for autos posible
     );
   }
 }

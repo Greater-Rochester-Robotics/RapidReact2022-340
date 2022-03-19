@@ -4,19 +4,19 @@
 
 package frc.robot.commands.drive.util;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+
 public class DriveSetGyro extends InstantCommand {
   private double angle;
 
-
-  /** Creates a new HoodToPosition */
+  /**
+   * Set the gyro's current angle to the input 
+   * param. CCW is positive.
+   * 
+   * @param angle an angle in DEGREES!!!
+   */
   public DriveSetGyro(double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.swerveDrive);

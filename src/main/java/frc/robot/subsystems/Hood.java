@@ -35,7 +35,7 @@ public class Hood extends SubsystemBase {
     motor.enableVoltageCompensation(10.5);//scale power with voltage drop
     motor.setInverted(false); //this is the right direction 2022
 
-    encoder = motor.getEncoder();
+    encoder = motor.getEncoder();//pull encoder to separate object for brevity
     encoder.setPositionConversionFactor(Constants.HOOD_DEGREE_CONVERSION);//convert to degrees
 
     pidController = motor.getPIDController();
@@ -49,13 +49,13 @@ public class Hood extends SubsystemBase {
     motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);//reduce the rate of this packet, basic stuff
     motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 60000);//reduce the rate of this packet, which is the encoder speed
 
-    motor.clearFaults();//clear motor fault so we can check when rebooted
+    motor.clearFaults();//clear motor fault so we can check when rebooted(check when rebotted doesn't work)
 
     motor.burnFlash();//make the previous settings hold after power cycle, must be last
     
     limitSwitch = new DigitalInput(Constants.SHOOTER_HOOD_SWITCH);
 
-    hasBeenHomed = false;
+    hasBeenHomed = false;//on first boot, the hood has not been homed
   }
 
   @Override
@@ -63,10 +63,12 @@ public class Hood extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("HoodLimit", !limitSwitch.get());
     
+    //If the hood is running a command...
     if(!(getCurrentCommand() == null)) {
+      //pass the current hood position to the dashboard
       SmartDashboard.putNumber("Hood Position", getPosition());
     }
-    // SmartDashboard.putBoolean("HoodHasPowerCycled", motor.getFault(FaultID.kHasReset));
+    // SmartDashboard.putBoolean("HoodHasPowerCycled", motor.getFault(FaultID.kHasReset));//this doesn't work, left for later testing
 
   }
 
@@ -91,6 +93,8 @@ public class Hood extends SubsystemBase {
   /**
    * A method to check if the motor controller has 
    * power cycled, if so the hasBeenHomed is reset.
+   * 
+   * !currently this doesn't work!
    */
   @Deprecated
   public void checkForPowerCycle(){
@@ -123,7 +127,8 @@ public class Hood extends SubsystemBase {
   }
 
   /**
-   * Create reset position modifier method that will set the position of the encoder object. this will act as our reset device, use setPosion of encoder object
+   * Resets position of the encoder object to zero. 
+   * this will act as our reset device
    */
   public void resetEncoderPosition(){
     resetEncoderPosition(0);
@@ -132,6 +137,7 @@ public class Hood extends SubsystemBase {
   /**
    * Set the current position of the hood to the 
    * input position.
+   * 
    * @param position
    */
   public void resetEncoderPosition(double position) {

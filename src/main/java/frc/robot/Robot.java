@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    //when we disable the robot, reset the climb sequence. this make testing much easier
     RobotContainer.climbCommand.resetCommandCommand().schedule();
   }
 

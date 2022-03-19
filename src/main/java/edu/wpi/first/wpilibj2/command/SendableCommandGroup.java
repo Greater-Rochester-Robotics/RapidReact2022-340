@@ -53,61 +53,31 @@ public class SendableCommandGroup extends CommandGroupBase {
     //ungroup commands like normal
     requireUngrouped(commands);
 
-    //this is a CommandGroup, for later checks, needs more than one command
-    // if( commands.length == 0 ){
-    //   return;//on construction the SendableCommandGroup Constructor is called, with no Commands, so resolve out of bounds error
-    // }else if(commands.length == 1){
-    //   throw new IllegalStateException(
-    //     "SendableCommandGroups must contain at least 2 commands");
-    // }
-
     //stop the addition of commands if the command is running
     if (getCurrentCommandIndex() > -1) {
       throw new IllegalStateException(
           "Commands cannot be added to a CommandGroup while the group is running");
     }
-    // System.out.println("number of incoming commands: " + commands.length);
-    //check to see if a different version of this commandGroup exists with different commands, throw error if true
-    // String[] incomingCommandNames = new String[commands.length];
-    // String[] existingCommandNames = SmartDashboard.getStringArray(m_groupName+"CommandList", new String[0]);
-    // System.out.println(incomingCommandNames[0]+incomingCommandNames.length);//this was for testing
-    // System.out.println(existingCommandNames[0]+existingCommandNames.length);//this was for testing
-    // if( (existingCommandNames != null) ){
-    //   if(existingCommandNames.length != incomingCommandNames.length){
-    //     throw new IllegalStateException(
-    //       "Identically named SendableCommandGroups can not have different numbers of commands");
-    //   }
-    //   int count = 0;
-    //   for (Command command : commands) {
-    //     incomingCommandNames[count]=command.getName();
-    //     if(!(existingCommandNames[count].equals(incomingCommandNames[count]))){
-    //       throw new IllegalStateException(
-    //         "Identically named SendableCommandGroups can not have different commands or sequences of commands");
-    //     }
-    //     count++;
-    //   }
-    // }else{
-    //   int count = 0;
-    //   for (Command command : commands) {
-    //     incomingCommandNames[count]=command.getName();
-    //     count++;
-    //   }
-    // }
 
     registerGroupedCommands(commands);
 
+    //add commands and command requirements to the m_commands List and m_requirements Set respectively
     for (Command command : commands) {
       m_commands.add(command);
       m_requirements.addAll(command.getRequirements());
       m_runWhenDisabled &= command.runsWhenDisabled();
     }
-    // SmartDashboard.putStringArray(m_groupName+"CommandList", incomingCommandNames);
+    
+    //Post the current command, which should be "NOT_STARTED"
     postCurrentCommand();
   }
 
   @Override
   public void initialize() {
+    //poll the currentCommandIndex(stored in the SmartDashboard)
     int currentCommandIndex = getCurrentCommandIndex();
+
+    //if the index is out of bounds set the index to zero, the first command
     if(currentCommandIndex <= -1 
       ||currentCommandIndex >= m_commands.size()){
         
@@ -115,10 +85,15 @@ public class SendableCommandGroup extends CommandGroupBase {
       currentCommandIndex = 0;
     }
   
+    //if the list of commands is not empty...
     if (!m_commands.isEmpty()) {
+      //start the current command per the index
       m_commands.get(currentCommandIndex).initialize();
+      //post said command to the SmartDashboard
       postCurrentCommand();
     }
+
+    //store the currentCommandIndex as the previous, as we are initializing
     m_lastCommandIndexExecuted = currentCommandIndex;
   }
 

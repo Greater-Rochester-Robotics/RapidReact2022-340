@@ -4,9 +4,6 @@
 
 package frc.robot.commands.drive.auto;
 
-import javax.swing.SpringLayout.Constraints;
-import javax.swing.plaf.nimbus.State;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -23,11 +20,17 @@ public class DriveStraightBack extends CommandBase {
   Pose2d intpPose2d;
   double curDistance;
   private double currentAngle = 0;
-  /** Creates a new DriveStraightBack. */
+
+  /**
+   *Simple autonomous for backing robot up 
+   by the given distance(m)
+
+   @param distance in meters backwards
+   */
   public DriveStraightBack(double distance) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.distance = distance;
     addRequirements(RobotContainer.swerveDrive);
+
+    this.distance = distance;
     timer = new Timer();
     backController = new PIDController(Constants.DRIVE_POS_ERROR_CONTROLLER_P, Constants.DRIVE_POS_ERROR_CONTROLLER_I, Constants.DRIVE_POS_ERROR_CONTROLLER_D);
     TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(Constants.MOTOR_MAXIMUM_VELOCITY, Constants.MAXIMUM_ACCELERATION);
@@ -63,6 +66,7 @@ public class DriveStraightBack extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    //stop the drive when this command ends
     RobotContainer.swerveDrive.stopAllModules();
     
   }
@@ -70,7 +74,7 @@ public class DriveStraightBack extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //stop the command when we are within 5 cm of the target distance 
     return Math.abs(distance - curDistance) <= 0.05;
-    // return false;
   }
 }

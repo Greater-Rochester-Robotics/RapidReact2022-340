@@ -15,9 +15,6 @@ import frc.robot.commands.shooter.ShooterPrepShot;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.commands.shooter.ShooterStop;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootHighGoal extends SequentialCommandGroup {
   /**
    * 
@@ -27,8 +24,6 @@ public class ShootHighGoal extends SequentialCommandGroup {
   }
   /** Creates a new ShootHighGoal. */
   public ShootHighGoal(double timeBewtweenBalls) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new HoodHome(),
       new ShooterPrepShot(),

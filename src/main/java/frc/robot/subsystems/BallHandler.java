@@ -98,7 +98,7 @@ public class BallHandler extends SubsystemBase {
       handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus1, 60000);
       handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus2, 60000);
       
-      // handleEncoders[i] = handlerMotors[i].getEncoder();//We done use encoder, but this was also causing the code to crash
+      // handleEncoders[i] = handlerMotors[i].getEncoder();//We don't use encoder, but this was also causing the code to crash
 
       handlerMotors[i].burnFlash();//this saves settings, BUT MUST BE DONE LAST, SparkMAX won't accept commands for a moment after this call
     }
