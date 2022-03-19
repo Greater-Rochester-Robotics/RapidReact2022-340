@@ -202,7 +202,7 @@ public final class Constants {
     public static final double EXTENDO_ALLOWABLE_ERROR = 0.25;
 
     public static final double CLIMBER_TOP_POSITION = 23;
-    public static final double CLIMBER_LIFT_POSITION = 15;
+    public static final double CLIMBER_LIFT_POSITION = 12;
     public static final double CLIMBER_RELEASE_POSITION = 4;
     public static final double CLIMBER_BOTTOM_POSITION = -.7;
 

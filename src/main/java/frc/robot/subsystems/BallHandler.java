@@ -210,7 +210,6 @@ public class BallHandler extends SubsystemBase {
     if( !harvesterOutTimer.hasElapsed(HARVESTER_OUT_DELAY) ){
       speeds[1] = 0.0;
     }
-    //TODO: ALL SBM ON HOLD DO NOT UNCOMMENT 
     else if(  !selectorTimer.hasElapsed(SBM_KICKOUT_TIME) ){
       //if timer reset, run spit out timer for half second
       // speeds = new double[] { 0, 0, 0, 0 };
@@ -293,42 +292,40 @@ public class BallHandler extends SubsystemBase {
   }
 
   public boolean shouldIntakeBall(){
+
+    //check if sensor is connected(fault could cause not connected), or not rejecting wrong color
     if(!colorSensor.isConnected() || !rejectOppColor ){
+      //return true in fault condition, best to just intake on failure
       return true;
     }
+
+    //poll sensor once for the needed values
     int proximity = colorSensor.getProximity();
-    
     int blue = colorSensor.getBlue();
     int red = colorSensor.getRed();
 
-    //separates out "not connected" and return without reconstructing
-
+    //in connected but not working situation, reconstruct and return.
     if((proximity == 0 && blue == 0 && red == 0)){
       colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
       return true;
     }
     
-    //Checking proximity to intake balls
-    // if(proximity > Constants.INTAKE_PROXIMITY){
-      if(DriverStation.getAlliance() == Alliance.Blue){
-        // System.out.print( red-blue + "      ");
-        System.out.print((red - blue >= Constants.BLUE_LEVEL));
-        
-        System.out.println("blue Aliance!!!!");
-        return blue - red >= Constants.BLUE_LEVEL;
-      }else if(DriverStation.getAlliance() == Alliance.Red){
-        // System.out.println(red - blue);
-        // System.out.println(blue - red >= Constants.BLUE_LEVEL);
-        // System.out.println("RED Aliancee.");
-        return red - blue >= Constants.RED_LEVEL;
-      }
-      else{
-        return true;
-      }
-    // }else{
-    //   // System.out.println("No ball");
-    //   return true;
-    // }
+    //Checking Alliance then test if the ball is incorrect
+    if(DriverStation.getAlliance() == Alliance.Blue){
+      // System.out.print( red-blue + "      ");
+      // System.out.print((red - blue >= Constants.BLUE_LEVEL));
+      // System.out.println("blue Aliance!!!!");
+      return blue - red >= Constants.BLUE_LEVEL;
+    }else if(DriverStation.getAlliance() == Alliance.Red){
+      // System.out.println(red - blue);
+      // System.out.println(blue - red >= Constants.BLUE_LEVEL);
+      // System.out.println("RED Alliance.");
+      return red - blue >= Constants.RED_LEVEL;
+    }
+    else{
+      return true;
+    }
+  
   }
   
   /**

@@ -651,6 +651,7 @@ public class ADIS implements AutoCloseable, NTSendable {
       m_integ_angle = 0.0;
     }
   }
+  
   public void setGyroAngle(double angle) {
     synchronized (this) {
       m_integ_angle = angle;

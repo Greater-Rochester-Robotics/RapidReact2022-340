@@ -25,6 +25,7 @@ public class ClimberClimb extends SendableCommandGroup {
 
       /* Climb To Second Bar */
       new ClimberExtendOutSlow(Constants.CLIMBER_TOP_POSITION).withName("ExtendToSecondBar"),
+      new WaitUntilCommand(RobotContainer.climberButton.negate()::get).withName("WAIT-ReleaseButton"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToPullUp"),
       sequence(
           new ClimberExtendoToPosition(Constants.CLIMBER_BOTTOM_POSITION,true).withTimeout(0.8),
