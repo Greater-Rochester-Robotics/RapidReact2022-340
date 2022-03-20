@@ -96,7 +96,7 @@ public final class Constants {
     public static final double LL_TARGET_RADIUS = 26.69;
     public static final double LL_TARGET_TO_FENDER = 7.2;
     public static final double LL_DISTANCE_TO_FRONT = 4.5;
-    public static final double LL_MOUNT_ANGLE = 42.0;
+    public static final double LL_MOUNT_ANGLE = 35.5;
     public static final double LL_DISTANCE_TO_ROBOT_CENTER = 0.0;
 
     /* Aiming Values*/
@@ -136,7 +136,11 @@ public final class Constants {
     public static final LookUpTable SHOOTER_HIGH_SPEEDS_TABLE = new LookUpTable();
     static {
         //use put(distance, speed)
+        SHOOTER_HIGH_SPEEDS_TABLE.put(260, 12000);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(220, 10600);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(180, 10000);
         SHOOTER_HIGH_SPEEDS_TABLE.put(153.25, 9400);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(130, 9200);
         SHOOTER_HIGH_SPEEDS_TABLE.put(115, 9000);
         SHOOTER_HIGH_SPEEDS_TABLE.put(92, 8200);
         SHOOTER_HIGH_SPEEDS_TABLE.put(75.25, 8150);
@@ -166,11 +170,15 @@ public final class Constants {
     public static final LookUpTable HOOD_HIGH_POSITION_TABLE = new LookUpTable();
     static {
         //use put(distance, angle)
+        HOOD_HIGH_POSITION_TABLE.put(260, 19);
+        HOOD_HIGH_POSITION_TABLE.put(220, 18);
+        HOOD_HIGH_POSITION_TABLE.put(180, 16.5);
         HOOD_HIGH_POSITION_TABLE.put(153.25, 15);
-        HOOD_HIGH_POSITION_TABLE.put(115,10);
-        HOOD_HIGH_POSITION_TABLE.put(92,9.5);
-        HOOD_HIGH_POSITION_TABLE.put(75.25,8.5);
-        HOOD_HIGH_POSITION_TABLE.put(65.75,8);
+        HOOD_HIGH_POSITION_TABLE.put(130, 14);
+        HOOD_HIGH_POSITION_TABLE.put(115,14);
+        HOOD_HIGH_POSITION_TABLE.put(92,12.5);
+        HOOD_HIGH_POSITION_TABLE.put(75.25,11);
+        HOOD_HIGH_POSITION_TABLE.put(65.75,11);
         HOOD_HIGH_POSITION_TABLE.put(43.75,4);
         HOOD_HIGH_POSITION_TABLE.put(23.5,0);
     }

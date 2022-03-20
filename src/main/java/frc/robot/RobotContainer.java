@@ -233,9 +233,9 @@ public class RobotContainer {
     driverY.whenPressed(new ShootHighGoal(0.0));
     driverY.whenReleased(new StopShooterHandlerHood());
     driverLB.whenPressed(new DriveResetGyroToZero());
-    driverRB.whileHeld(new DriveOnTarget(6));
+    driverRB.whileHeld(new DriveOnTarget(4));
     driverBack.toggleWhenActive(new DriveRobotCentric()); 
-    // driverStart.whileHeld(new AutoMidTwoBall());
+    driverStart.whenPressed(new AutoMidFourBall());
     driverDUp.whenPressed(new ShootHighFender(0.1));
     driverDDown.whenPressed(new ShootHighFenderWithDriveBack(0.1));
     driverDDown.whenReleased(new StopShooterHandlerHood());

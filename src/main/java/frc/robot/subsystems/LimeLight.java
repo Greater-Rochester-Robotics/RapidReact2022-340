@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LimeLight extends SubsystemBase {
   Solenoid light;
@@ -163,6 +164,8 @@ public class LimeLight extends SubsystemBase {
    * @return distance in inches
    */
   public double distanceToTarget(){
+
+    SmartDashboard.putNumber("DistanceToTarget", Constants.LL_TARGET_TO_LL_HEIGHT / Math.tan(Math.toRadians(verticalAngleToTarget() + Constants.LL_MOUNT_ANGLE))); 
     return Constants.LL_TARGET_TO_LL_HEIGHT / Math.tan(Math.toRadians(verticalAngleToTarget() + Constants.LL_MOUNT_ANGLE));
   }
 

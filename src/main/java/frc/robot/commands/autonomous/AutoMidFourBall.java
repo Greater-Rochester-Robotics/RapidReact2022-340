@@ -7,6 +7,7 @@ package frc.robot.commands.autonomous;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ShootHighGoal;
 import frc.robot.commands.StopShooterHandlerHood;
@@ -43,22 +44,22 @@ public class AutoMidFourBall extends SequentialCommandGroup {
         new DriveSetGyro(46.04),
         new WaitCommand(.75)//We need to wait for two reasons, the gyro takes time too set the value, and the harvester needs to come down
       ),
-      new ShooterSetSpeed(9200),//need 8950ish so going with 9200 bc bad pid, no need to wait to get to speed
+      new ShooterSetSpeed(Constants.SHOOTER_HIGH_SPEEDS_TABLE.lookup(118)),//need 8950ish so going with 9200 bc bad pid, no need to wait to get to speed
       parallel(
-        new DriveFollowTrajectory("DriveToMidBall"),
-        new HoodToPosition(9.9)//while driving to the ball, set the hood
+        new DriveFollowTrajectory("DriveToMidBall", 4.5, 1.5),
+        new HoodToPosition(Constants.HOOD_HIGH_POSITION_TABLE.lookup(118))//while driving to the ball, set the hood
       ),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new BallHandlerShootProgT(0.0).withTimeout(2.0),
       new BallHandlerSetState(State.kFillTo1),
-      new DriveFollowTrajectory("DriveMidBallToHuman"),
+      new DriveFollowTrajectory("DriveMidBallToHuman", 4.5, 1.5),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),//wait to get the first ball
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),//now wait for the second ball
-      new BallHandlerSetState(State.kOff),
-      new ShooterSetSpeed(9700),//need 9400 so use 9700 bc bad pid, no need to wait to get to speed
+      // new BallHandlerSetState(State.kOff),
+      new ShooterSetSpeed(Constants.SHOOTER_HIGH_SPEEDS_TABLE.lookup(144)),//need 9400 so use 9700 bc bad pid, no need to wait to get to speed
       parallel(
-        new DriveFollowTrajectory("DriveFromHumanStraight"),
-        new HoodToPosition(14.7)//while driving to the shooting point, set the hood
+        new DriveFollowTrajectory("DriveFromHumanStraight", 4.5, 1.5),
+        new HoodToPosition(Constants.HOOD_HIGH_POSITION_TABLE.lookup(144))//while driving to the shooting point, set the hood
       ),
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood()
