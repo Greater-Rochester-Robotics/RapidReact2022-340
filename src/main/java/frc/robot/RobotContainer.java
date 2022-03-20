@@ -252,7 +252,7 @@ public class RobotContainer {
     coDriverLB.and(coDriverDUp).whenActive(climbCommand.iterateBackwardCommand());
 
     coDriverBack.and(coDriverStart).whenActive(climbCommand);
-
+    coDriverLS.and(coDriverRS).whenActive(new ClimberTiltIn());
     coDriverDDown.whenPressed(new SequentialCommandGroup(
       new ClimberTiltIn(),
       new ClimberExtendoHome(),
