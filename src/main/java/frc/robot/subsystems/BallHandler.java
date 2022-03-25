@@ -73,12 +73,6 @@ public class BallHandler extends SubsystemBase {
 
   private static final double HARVESTER_OUT_DELAY = 1.0;
   private static final double SBM_KICKOUT_TIME = .15;
-
-
-  public BallHandler(boolean sbmDelay){
-    this();
-    sbmAutoDelay = sbmDelay;
-  }
   
   /** Creates a new Intake. */
   public BallHandler() {
@@ -347,6 +341,18 @@ public class BallHandler extends SubsystemBase {
     this.state = state;
   }
 
+   /**
+   * Set the state of the ballhandler. The ballhandler 
+   * is managed by the periodic function in the 
+   * ballhandler. This is used to change the state of 
+   * the ballhandler
+   * 
+   * @param state uses enum State(BallHandler.State)
+   */
+  public void setState(State state, boolean sbmDelay){
+    sbmAutoDelay = sbmDelay;
+    this.setState(state);
+  }
   /**
    * returns the current state of the ballhandler.
    * 

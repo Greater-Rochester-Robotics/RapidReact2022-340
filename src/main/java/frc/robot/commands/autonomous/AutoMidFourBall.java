@@ -4,6 +4,8 @@
 
 package frc.robot.commands.autonomous;
 
+import org.opencv.features2d.FastFeatureDetector;
+
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -39,7 +41,7 @@ public class AutoMidFourBall extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new HoodHome(),
-      new BallHandlerSetState(State.kFillTo0),
+      new BallHandlerSetState(State.kFillTo0, true),
       parallel(
         new DriveSetGyro(46.04),
         new WaitCommand(.75)//We need to wait for two reasons, the gyro takes time too set the value, and the harvester needs to come down
@@ -51,7 +53,7 @@ public class AutoMidFourBall extends SequentialCommandGroup {
       ),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new BallHandlerShootProgT(0.0).withTimeout(2.0),
-      new BallHandlerSetState(State.kFillTo1),
+      new BallHandlerSetState(State.kFillTo1, false),
       new DriveFollowTrajectory("DriveMidBallToHuman", 4.5, 1.5),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),//wait to get the first ball
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),//now wait for the second ball

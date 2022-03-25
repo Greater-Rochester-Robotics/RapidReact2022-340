@@ -11,6 +11,8 @@ import frc.robot.subsystems.BallHandler.State;
 public class BallHandlerSetState extends InstantCommand {
 
   State state;
+  boolean sbmAutoDelay = false;
+
 
   /** Creates a new BallHandlerSetState. */
 
@@ -21,10 +23,16 @@ public class BallHandlerSetState extends InstantCommand {
 
   }
 
+  public BallHandlerSetState(State state, boolean sbmDelay){
+    this(state);
+    sbmAutoDelay = sbmDelay;
+
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.ballHandler.setState(state);
+    RobotContainer.ballHandler.setState(state, sbmAutoDelay);
   }
 
   public boolean runsWhenDisabled(){
