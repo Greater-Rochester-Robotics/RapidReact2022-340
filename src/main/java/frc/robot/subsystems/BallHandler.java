@@ -57,6 +57,7 @@ public class BallHandler extends SubsystemBase {
   private State prevState = State.kOff;//storing the previous state for determining if state has changed
 
   private boolean rejectOppColor = true;//storage for whether we are runing SBM
+  private boolean sbmAutoDelay = false;
 
   //pull preset speeds of the motors from constants
   private static final double HARV_IN = Constants.HARVESTER_INTAKE_SPEED;
@@ -72,6 +73,12 @@ public class BallHandler extends SubsystemBase {
 
   private static final double HARVESTER_OUT_DELAY = 1.0;
   private static final double SBM_KICKOUT_TIME = .15;
+
+
+  public BallHandler(boolean sbmDelay){
+    this();
+    sbmAutoDelay = sbmDelay;
+  }
   
   /** Creates a new Intake. */
   public BallHandler() {
@@ -207,7 +214,7 @@ public class BallHandler extends SubsystemBase {
       selectorTimer.reset();
     }
 
-    if( !harvesterOutTimer.hasElapsed(HARVESTER_OUT_DELAY) ){
+    if( !harvesterOutTimer.hasElapsed(HARVESTER_OUT_DELAY) || sbmAutoDelay){
       speeds[1] = 0.0;
     }
     else if(  !selectorTimer.hasElapsed(SBM_KICKOUT_TIME) ){
