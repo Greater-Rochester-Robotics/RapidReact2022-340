@@ -55,7 +55,7 @@ public class AutoRightTwoBall extends SequentialCommandGroup {
       new StopShooterHandlerHood(),
       new BallHandlerSetState(State.kOff),
       new WaitCommand(1.0),
-      new DriveStraightBack(0.15)
+      new DriveStraightBack(0.25)
     );
   }
 }

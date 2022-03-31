@@ -53,7 +53,7 @@ public class AutoLeftTwoBall extends SequentialCommandGroup {
       new DriveTurnToAngle(Math.toRadians(-31.43)).withTimeout(1.5),
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood(),
-      new DriveStraightBack(0.10)
+      new DriveStraightBack(0.20)
     );
   }
 }
