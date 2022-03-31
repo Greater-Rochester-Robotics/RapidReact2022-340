@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.ADIS.IMUAxis;
 
 public class DriveTurnToTarget extends CommandBase {
   Timer timer = new Timer();
@@ -30,6 +31,7 @@ public class DriveTurnToTarget extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.swerveDrive.setGyroAxis(IMUAxis.kY);
     RobotContainer.limeLight.setLightState(true, RobotContainer.swerveDrive);
     timer.start();
     hasHadTarget = false;

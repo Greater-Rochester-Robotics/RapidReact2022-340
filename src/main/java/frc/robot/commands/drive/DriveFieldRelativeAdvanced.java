@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.ADIS.IMUAxis;
 
 /**
  * This command is designed so that a driver can drive 
@@ -39,9 +40,11 @@ public class DriveFieldRelativeAdvanced extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.swerveDrive.setGyroAxis(IMUAxis.kY);
     // RobotContainer.swerveDrive.setIsOdometry(false);
     currentAngle = RobotContainer.swerveDrive.getGyroInRad();
     wasDriverControl = false;
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.ADIS.IMUAxis;
 
 /**
  * This command takes a file name as an arguement. It will 
@@ -88,6 +89,7 @@ public class DriveFollowTrajectory extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.swerveDrive.setGyroAxis(IMUAxis.kY);
     //make sure odometry is on
     RobotContainer.swerveDrive.setIsOdometry(true);
 
