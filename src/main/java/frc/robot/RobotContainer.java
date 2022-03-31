@@ -58,6 +58,7 @@ import frc.robot.commands.drive.DriveFieldRelative;
 import frc.robot.commands.drive.DriveFieldRelativeAdvanced;
 import frc.robot.commands.drive.DriveOnTarget;
 import frc.robot.commands.drive.DriveRobotCentric;
+import frc.robot.commands.drive.DriveRobotCentricNoGyro;
 import frc.robot.commands.drive.DriveStopAllModules;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.util.DriveAdjustModuleZeroPoint;
@@ -251,7 +252,10 @@ public class RobotContainer {
     coDriverRB.and(coDriverDUp).whenActive(climbCommand.iterateFowardCommand());
     coDriverLB.and(coDriverDUp).whenActive(climbCommand.iterateBackwardCommand());
 
-    coDriverBack.and(coDriverStart).whenActive(climbCommand);
+    coDriverBack.and(coDriverStart).whenActive(new ParallelCommandGroup(
+      climbCommand,
+      new DriveRobotCentricNoGyro()));
+
     coDriverLS.and(coDriverRS).whenActive(new ClimberTiltIn());
     coDriverDDown.whenPressed(new SequentialCommandGroup(
       new ClimberTiltIn(),
