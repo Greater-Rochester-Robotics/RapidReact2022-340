@@ -47,7 +47,7 @@ public class BallHandler extends SubsystemBase {
    * the states for the BallHandler state machine
    */
   public enum State {
-   kOff, kFillTo1, kFillTo0, kShoot1, kShoot0, kSpitLow, kSpitMid1, kSpitHigh, kSpitMid0
+   kOff, kFillTo1, kFillTo0, kShoot1, kShoot0, kSpitLow1, kSpitMid1, kSpitHigh, kSpitMid0, kSpitLow0
   }
   
   double[] speeds = new double[4];//speeds to set the motors to
@@ -57,6 +57,7 @@ public class BallHandler extends SubsystemBase {
   private State prevState = State.kOff;//storing the previous state for determining if state has changed
 
   private boolean rejectOppColor = true;//storage for whether we are runing SBM
+  private boolean hasHarvesterBeenOut;
 
   //pull preset speeds of the motors from constants
   private static final double HARV_IN = Constants.HARVESTER_INTAKE_SPEED;
@@ -115,6 +116,7 @@ public class BallHandler extends SubsystemBase {
     harvesterOutTimer.start();
 
     rejectOppColor = true;
+    hasHarvesterBeenOut = false;
   }
 
   @Override
@@ -135,15 +137,27 @@ public class BallHandler extends SubsystemBase {
         //spitting out the balls, with harvester down and intaking
         speeds = new double[] { HARV_IN, BALL0_OUT, BALL1_OUT, BALL2_OUT};
         break;
-      case kSpitMid1:
-        //spitting balls, with harvester up and off
-        speeds = new double[] { 0, BALL0_OUT, BALL1_OUT, BALL2_OUT};
-        break;
       case kSpitMid0:
         //spitting balls, with harvester up and off
         speeds = new double[] { 0, BALL0_OUT, 0, 0};
+        if(!hasHarvesterBeenOut()){
+          state = State.kSpitLow0;
+        }else{
+          break;
+        }
+      case kSpitLow0:
+        //spitting balls, with harvester down and running out
+        speeds = new double[] { HARV_OUT, BALL0_OUT, 0, 0 };
         break;
-      case kSpitLow:
+      case kSpitMid1:
+        //spitting balls, with harvester up and off
+        speeds = new double[] { 0, BALL0_OUT, BALL1_OUT, BALL2_OUT};
+        if(!hasHarvesterBeenOut()){
+          state = State.kSpitLow1;
+        }else{
+          break;
+        }
+      case kSpitLow1:
         //spitting balls, with harvester down and running out
         speeds = new double[] { HARV_OUT, BALL0_OUT, BALL1_OUT, BALL2_OUT };
         break;
@@ -189,15 +203,25 @@ public class BallHandler extends SubsystemBase {
     //if state has changed, check to move harvester in or out
     if(state != prevState){
       if(state == State.kFillTo1 || state == State.kFillTo0) {
-        if(isHarvesterNotOut()){
+        if(!hasHarvesterBeenOut()){
           //if the harvester isn't out right now, reset the timer
           harvesterOutTimer.reset();
         }
         harvesterOut();
-      }else if(state == State.kSpitHigh || state == State.kSpitLow){
+      }else if(state == State.kSpitHigh || state == State.kSpitLow1 || state== State.kSpitLow0){
+        if(!hasHarvesterBeenOut()){
+          //if the harvester isn't out right now, reset the timer
+          harvesterOutTimer.reset();
+        }
         harvesterOut();
       }else if(state == State.kOff){
         harvesterIn();
+      }
+      else if(state == State.kShoot0){
+        if(!hasHarvesterBeenOut()){
+          harvesterOutTimer.reset();
+          harvesterOut();
+        }
       }
     }
 
@@ -252,10 +276,19 @@ public class BallHandler extends SubsystemBase {
    */
   public void harvesterOut(){
     harvesterTilt.set(Value.kReverse);
+    hasHarvesterBeenOut = true;
+  }
+
+  public void resetHasHarvesterBeenOut(){
+    hasHarvesterBeenOut = false;
   }
 
   public boolean isHarvesterNotOut(){
     return !(harvesterTilt.get() == Value.kReverse);
+  }
+
+  public boolean hasHarvesterBeenOut(){
+    return hasHarvesterBeenOut;
   }
 
   //commented out because haverster is handled in periodic state machine

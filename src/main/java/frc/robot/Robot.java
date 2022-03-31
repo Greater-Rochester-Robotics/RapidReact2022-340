@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
+  private Timer disableTimer;
 
   public static RobotContainer robotContainer;
 
@@ -32,6 +34,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+    disableTimer = new Timer();
   }
 
   /**
@@ -54,11 +57,17 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     //when we disable the robot, reset the climb sequence. this make testing much easier
-    RobotContainer.climbCommand.resetCommandCommand().schedule();
+    disableTimer.start();
+    disableTimer.reset();
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if(disableTimer.hasElapsed(5) && !disableTimer.hasElapsed(5.1)){
+      RobotContainer.climbCommand.resetCommandCommand().schedule();
+      RobotContainer.ballHandler.resetHasHarvesterBeenOut();
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
