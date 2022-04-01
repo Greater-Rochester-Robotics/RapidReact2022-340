@@ -46,8 +46,10 @@ public class Hood extends SubsystemBase {
 
     motor.setSoftLimit(SoftLimitDirection.kForward, (float) (Constants.HOOD_FORWARD_LIMIT_DEGREES/Constants.HOOD_DEGREE_CONVERSION));
     motor.enableSoftLimit(SoftLimitDirection.kForward, true);//This doesn't work right, added code in set position
-    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);//reduce the rate of this packet, basic stuff
+    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 1000);//reduce the rate of this packet, basic stuff
     motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 60000);//reduce the rate of this packet, which is the encoder speed
+    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 20);
+    motor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, 60000);
 
     motor.clearFaults();//clear motor fault so we can check when rebooted(check when rebotted doesn't work)
 

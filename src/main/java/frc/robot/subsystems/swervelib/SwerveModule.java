@@ -68,11 +68,11 @@ public class SwerveModule {
                           Constants.SWERVE_DRIVE_D_VALUE, Constants.SWERVE_DRIVE_FF_VALUE);
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);//TODO: rethink if we need this speed
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 255);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 255);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 255);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 255);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 255);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 251);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 241);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 239);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 233);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 229);
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_15_FirmwareApiStatus, 255);
         driveMotor.setSelectedSensorPosition(0.0);
 
@@ -90,11 +90,11 @@ public class SwerveModule {
                           Constants.SWERVE_ROT_D_VALUE, Constants.SWERVE_ROT_FF_VALUE);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 240);//This packet is the motor output, limit switches, faults, we care about none of those
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);//This is the sensor feedback, i.e. relative encoder
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 255);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 255);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 255);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 255);
-        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 255);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 251);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 241);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 239);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 233);
+        rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 229);
         rotationMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_15_FirmwareApiStatus, 255);
         // System.out.println( "Status_10_MotionMagic" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic));
         // System.out.println( "Status_1_General" + rotationMotor.getStatusFramePeriod(StatusFrameEnhanced.Status_1_General));

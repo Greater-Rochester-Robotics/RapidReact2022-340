@@ -217,7 +217,7 @@ public final class Constants {
     public static final int SELECTED_FEEDBACK_COEFFICIENT = 1;
 
     /* Compressor Pressure Constants */
-    public static final double MIN_PRESSURE = 95.0;
+    public static final double MIN_PRESSURE = 100.0;
     public static final double MAX_PRESSURE = 120.0;//TODO: change this on between comp bot and prac , 100 for prac, 120 for comp
 
     /* IDENTIFICATION NUMBERS FOR DEVICES */
@@ -257,6 +257,8 @@ public final class Constants {
     public static final int HARVESTER_TILT_OUT = 9;//Intake
     public static final int CLIMBER_TILT_IN = 13;//Climber
     public static final int CLIMBER_TILT_OUT = 12;//Climber
+    public static final int CLIMBER_DAMPING_RIGHT = 14;//Climber
+    public static final int CLIMBER_DAMPING_LEFT = 15;//Climber
     public static final int LL_LIGHT = 0;//Limelight
 
     /* Digital Input */

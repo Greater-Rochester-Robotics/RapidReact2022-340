@@ -23,7 +23,7 @@ public class ShootHighFenderWithDriveBack extends SequentialCommandGroup {
     addCommands(
       new HoodHome(),
       parallel(
-        new ShooterSetSpeed(Constants.SHOOTER_FENDER_SHOT_SPEED).withTimeout(2),
+        new ShooterSetSpeed(Constants.SHOOTER_FENDER_SHOT_SPEED,true).withTimeout(2),
         new HoodToPosition(0.0),
         new DriveStraightBack(0.305)
       ),

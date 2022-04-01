@@ -55,8 +55,11 @@ public class BallHandlerShootProgT extends CommandBase {
     ballsToShoot = (RobotContainer.ballHandler.isBall0()?1:0) 
       + (RobotContainer.ballHandler.isBall1()?1:0); 
 
-    timeBypass = ballsToShoot == 0;
-    
+    if(!RobotContainer.ballHandler.hasHarvesterBeenOut()){
+      timeBypass = true;
+    }else{
+      timeBypass = ballsToShoot == 0;
+    }
 
     //check the state of the first sensor
     wasBall1Pressed = RobotContainer.ballHandler.isBall1();

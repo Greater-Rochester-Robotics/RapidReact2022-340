@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import java.util.Arrays;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
@@ -83,6 +85,19 @@ public class BallHandler extends SubsystemBase {
     harvesterMotor.setInverted(true);
     harvesterMotor.setNeutralMode(NeutralMode.Coast);
     harvesterMotor.configVoltageCompSaturation(10.5);
+    
+    harvesterMotor.setStatusFramePeriod(StatusFrame.Status_1_General, 255);
+    harvesterMotor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 251);
+    harvesterMotor.setStatusFramePeriod(StatusFrame.Status_4_AinTempVbat, 241);
+    harvesterMotor.setStatusFramePeriod(StatusFrame.Status_6_Misc, 239);
+    harvesterMotor.setStatusFramePeriod(StatusFrame.Status_7_CommStatus, 233);
+    harvesterMotor.setStatusFramePeriod(StatusFrame.Status_9_MotProfBuffer, 229);
+    harvesterMotor.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 255);
+    harvesterMotor.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 251);
+    harvesterMotor.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 241);
+    harvesterMotor.setStatusFramePeriod(StatusFrame.Status_14_Turn_PIDF1, 239);
+    harvesterMotor.setStatusFramePeriod(StatusFrame.Status_15_FirmwareApiStatus, 233);
+    harvesterMotor.setStatusFramePeriod(StatusFrame.Status_17_Targets1, 229);
 
     handlerMotors = new CANSparkMax[]{
       new CANSparkMax(Constants.BALL_HANDLER_MOTOR_0, MotorType.kBrushless),//axleWheels,
@@ -98,6 +113,7 @@ public class BallHandler extends SubsystemBase {
       handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
       handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus1, 60000);
       handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus2, 60000);
+      handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus3, 60000);
       
       // handleEncoders[i] = handlerMotors[i].getEncoder();//We don't use encoder, but this was also causing the code to crash
 
@@ -216,8 +232,7 @@ public class BallHandler extends SubsystemBase {
         harvesterOut();
       }else if(state == State.kOff){
         harvesterIn();
-      }
-      else if(state == State.kShoot0){
+      }else if(state == State.kShoot0){
         if(!hasHarvesterBeenOut()){
           harvesterOutTimer.reset();
           harvesterOut();
@@ -233,11 +248,8 @@ public class BallHandler extends SubsystemBase {
 
     if( !harvesterOutTimer.hasElapsed(HARVESTER_OUT_DELAY) ){
       speeds[1] = 0.0;
-    }
-    else if(  !selectorTimer.hasElapsed(SBM_KICKOUT_TIME) ){
+    }else if( !selectorTimer.hasElapsed(SBM_KICKOUT_TIME) ){
       //if timer reset, run spit out timer for half second
-      // speeds = new double[] { 0, 0, 0, 0 };
-      // state = State.kOff;
       speeds[1] *= -1;  
     }
 

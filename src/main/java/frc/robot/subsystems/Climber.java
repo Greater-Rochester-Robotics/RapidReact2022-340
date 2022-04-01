@@ -30,6 +30,7 @@ import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
   DoubleSolenoid tiltRobot; // attatched to the fixed arm
+  DoubleSolenoid dampingBar;
   TalonFX extendoMotorLeft; // attatched to the left extending arm
   TalonFX extendoMotorRight; // attatched to the right extending arm, not mechanically linked to left
   TalonFXSensorCollection leftBottomSwitch;
@@ -39,6 +40,9 @@ public class Climber extends SubsystemBase {
   public Climber() {
     tiltRobot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
       Constants.CLIMBER_TILT_IN, Constants.CLIMBER_TILT_OUT);
+
+    dampingBar = new DoubleSolenoid(PneumaticsModuleType.REVPH,
+      Constants.CLIMBER_DAMPING_RIGHT, Constants.CLIMBER_DAMPING_LEFT);
 
     // Configures the Left Extendo Motor
     extendoMotorLeft = new TalonFX(Constants.CLIMBER_LEFT_ARM);
@@ -107,6 +111,16 @@ public class Climber extends SubsystemBase {
     }
   }
 
+  /* ==================== Functions for the damping bars ==================== */
+
+  public void dampingBarOut(){
+    dampingBar.set(Value.kReverse);
+  }
+
+  public void dampingBarIn(){
+    dampingBar.set(Value.kForward);
+  }
+
   /* ==================== Functions for the fixed arms ==================== */
 
   /**
@@ -137,7 +151,7 @@ public class Climber extends SubsystemBase {
     TalonFXConfiguration leftConfig = new TalonFXConfiguration();
     rightConfig.remoteFilter1.remoteSensorDeviceID = extendoMotorLeft.getDeviceID(); //Device ID of Remote Source
 		rightConfig.remoteFilter1.remoteSensorSource = RemoteSensorSource.TalonFX_SelectedSensor; //Remote Source Type
-    /* Master is not inverted, both sides are positive so we can diff them. */
+    /* Master is not inverted, both sides are positive so we can di+ff them. */
     rightConfig.diff0Term = TalonFXFeedbackDevice.RemoteSensor1.toFeedbackDevice();    //Aux Selected Sensor
     rightConfig.diff1Term = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(); //Local IntegratedSensor
     rightConfig.auxiliaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.SensorDifference.toFeedbackDevice(); //Sum0 + Sum1

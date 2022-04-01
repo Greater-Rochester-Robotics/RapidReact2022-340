@@ -146,6 +146,12 @@ public class RobotContainer {
   //Climber next step button is aliased here.
   public static final Button climberButton = coDriverA;
   public static SendableCommandGroup climbCommand;
+  public class ClimberCommandRunning extends Button{
+    public boolean get(){
+      return climbCommand.isScheduled();
+    }
+  };
+  public static ClimberCommandRunning climberCommandRunning;
 
   //The robot's subsystems are instantiated here
   public static Compressor compressor;
@@ -174,6 +180,7 @@ public class RobotContainer {
     hood = new Hood();
 
     climbCommand = new ClimberClimb();
+    climberCommandRunning = new ClimberCommandRunning();
 
     //Add all autos to the auto selector
     configureAutoModes();
@@ -233,9 +240,9 @@ public class RobotContainer {
     driverX.whenReleased(new StopShooterHandlerHood());
     driverY.whenPressed(new ShootHighGoal(0.0));
     driverY.whenReleased(new StopShooterHandlerHood());
-    driverLB.whenPressed(new DriveResetGyroToZero());
-    driverRB.whileHeld(new DriveOnTarget(4));
-    driverBack.toggleWhenActive(new DriveRobotCentric()); 
+    driverLB.and(climberCommandRunning.negate()).whenActive(new DriveResetGyroToZero());
+    driverRB.and(climberCommandRunning.negate()).whileActiveContinuous(new DriveOnTarget(4));
+    driverBack.and(climberCommandRunning.negate()).toggleWhenActive(new DriveRobotCentric()); 
     // driverStart.whenPressed(new AutoMidFourBall());
     driverDUp.whenPressed(new ShootHighFender(0.1));
     driverDDown.whenPressed(new ShootHighFenderWithDriveBack(0.1));
