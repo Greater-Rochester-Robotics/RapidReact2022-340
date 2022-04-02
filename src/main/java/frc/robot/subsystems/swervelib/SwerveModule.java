@@ -29,7 +29,11 @@ import frc.robot.Constants;
  * module. This class handles all access to these objects.
  * 
  * This class hanndles the inverting the drive motor, in 
- * order to change wheel direction faster.
+ * order to change wheel direction faster, as the optimize 
+ * is in this class.
+ * 
+ * More on swerve found here:
+ * https://docs.google.com/presentation/d/1feVl0L5lgIKSZhKCheWgWhkOydIu-ibgdp7oqA0yqAQ/edit?usp=sharing
  */
 public class SwerveModule {
     private TalonFX driveMotor;
@@ -66,8 +70,8 @@ public class SwerveModule {
         driveMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setDriveMotorPIDF(Constants.SWERVE_DRIVE_P_VALUE, Constants.SWERVE_DRIVE_I_VALUE,
                           Constants.SWERVE_DRIVE_D_VALUE, Constants.SWERVE_DRIVE_FF_VALUE);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);//TODO: rethink if we need this speed
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);//TODO: rethink if we need this speed, I don't think we do
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);//This is key to odometry must be around same as code loop
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 251);
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 241);
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 239);

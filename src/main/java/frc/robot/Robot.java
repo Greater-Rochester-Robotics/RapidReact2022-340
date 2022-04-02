@@ -31,8 +31,8 @@ public class Robot extends TimedRobot {
     //Stop the liveWindow from starting, we don't use it.
     LiveWindow.setEnabled(false);
     LiveWindow.disableAllTelemetry();
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
+    // Instantiate our RobotContainer.  This will perform all our button bindings,
+    // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
     disableTimer = new Timer();
   }
@@ -56,15 +56,19 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    //when we disable the robot, reset the climb sequence. this make testing much easier
+    //TODO: turn the rejectOpp color back on
+    //set a timer so we can reset things a few seconds into disabled
     disableTimer.start();
     disableTimer.reset();
   }
 
   @Override
   public void disabledPeriodic() {
+    //wait for the robot to be disabled for 5 seconds before we change anything, avoids momentary comm errors
     if(disableTimer.hasElapsed(5) && !disableTimer.hasElapsed(5.1)){
+      //when we disable the robot, reset the climb sequence. this make testing much easier
       RobotContainer.climbCommand.resetCommandCommand().schedule();
+      //reset the hasHarvesterBeenOut so that the harvester doesn't lock the floppy roller motor up
       RobotContainer.ballHandler.resetHasHarvesterBeenOut();
     }
   }

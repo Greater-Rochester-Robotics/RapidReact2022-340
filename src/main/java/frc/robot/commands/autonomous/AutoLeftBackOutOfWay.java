@@ -12,9 +12,6 @@ import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.auto.DriveTurnToTarget;
 import frc.robot.commands.shooter.ShooterPrepShot;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 /**
  * Starts at tape of left zone.
  * Back left corner of robot is at center of tape.

@@ -16,8 +16,14 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.ADIS.IMUAxis;
 
 /**
- * This command is designed so that a driver can drive 
- * the swerve drive based around the robot's orientation.
+ * This command is designed for when the climber is being 
+ * run. It is very much programmed the same as 
+ * {@link DriveRobotCentric}. The difference is that it 
+ * disables the gyro reading in the Y plane and turn it to 
+ * reading it in the Z. It re engages reading the gyro in 
+ * Y when the command is ended. 
+ *  
+ * Drive control is based around the robot's orientation.
  * Forward on the stick will cause the robot to drive 
  * forward. left and right on the stick will cause the 
  * robot to move to its left or right. This command does
@@ -37,8 +43,9 @@ public class DriveRobotCentricNoGyro extends CommandBase {
   @Override
   public void initialize() {
     RobotContainer.swerveDrive.setGyroAxis(IMUAxis.kZ);
+    //TODO: figure a way for the reset to only happen when we are on the ground, 
     RobotContainer.swerveDrive.resetGyroZ();
-    // RobotContainer.swerveDrive.setIsOdometry(false);
+    RobotContainer.swerveDrive.setIsOdometry(false);
     RobotContainer.setDriverRumble(0.25, 0.25);
   }
 

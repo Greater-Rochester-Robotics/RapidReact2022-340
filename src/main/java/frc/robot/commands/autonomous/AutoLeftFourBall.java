@@ -18,9 +18,7 @@ import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.subsystems.BallHandler.State;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+
 public class AutoLeftFourBall extends SequentialCommandGroup {
   /** Creates a new AutoLeftFourBall. Not written yet*/
   public AutoLeftFourBall() {

@@ -33,24 +33,24 @@ public class AutoLeftTwoBall extends SequentialCommandGroup {
       new HoodHome(),
       new BallHandlerSetState(State.kFillTo0),
       parallel(
-        new DriveSetGyro(-45.0),
+        new DriveSetGyro(-45.0),//set the gyro to a specific angle that we start the robot in
         new WaitCommand(.75)//We need to wait for two reasons, the gyro takes time too set the value, and the harvester needs to come down
       ),
-      new ShooterSetSpeed(9200),
+      new ShooterSetSpeed(9200),//set the shooter wheel speed, but dont wait to get to speed
       parallel(
         new DriveFollowTrajectory("DriveToLeftBall"),
         new HoodToPosition(9.9)//while driving to the ball, set the hood
       ),
       race(
-        new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(4.0),
+        new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(4.0),//Wait for ball0 switch, race with a wiggle
         sequence(
-          new DriveTurnToAngle(Math.toRadians(-26.43)).withTimeout(1.0),
-          new WaitCommand(.5),
-          new DriveTurnToAngle(Math.toRadians(-36.43)).withTimeout(2.0),
-          new WaitCommand(.5)
+          new DriveTurnToAngle(Math.toRadians(-26.43)).withTimeout(1.0),//wiggle 5 degrees clockwise
+          new WaitCommand(.5),//wait for a moment 
+          new DriveTurnToAngle(Math.toRadians(-36.43)).withTimeout(2.0),//wiggle 5 degrees counter-clockwise(total of 10 deg)
+          new WaitCommand(.5)//wait for a moment
         )
       ),
-      new DriveTurnToAngle(Math.toRadians(-31.43)).withTimeout(1.5),
+      new DriveTurnToAngle(Math.toRadians(-31.43)).withTimeout(1.5),//make sure we return to start rotation
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood(),
       new DriveStraightBack(0.20)

@@ -261,7 +261,8 @@ public class RobotContainer {
 
     coDriverBack.and(coDriverStart).whenActive(new ParallelCommandGroup(
       climbCommand,
-      new DriveRobotCentricNoGyro()));
+      new DriveRobotCentricNoGyro())
+      );
 
     coDriverLS.and(coDriverRS).whenActive(new ClimberTiltIn());
     coDriverDDown.whenPressed(new SequentialCommandGroup(

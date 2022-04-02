@@ -40,7 +40,7 @@ public class BallHandler extends SubsystemBase {
 
   DigitalInput ballSensor0;//switch for detecting Ball0, the one near the intake
   DigitalInput ballSensor1;//switch for detecting Ball1, the one near the shooter
-  ColorSensorV3 colorSensor;//sensor for deteccting ball color
+  ColorSensorV3 colorSensor;//sensor for detecting ball color
 
   Timer selectorTimer = new Timer();//timer for reversing the Ball0 motor, for kicking out wrong balls
   Timer harvesterOutTimer = new Timer();//timer to delay moving Ball0 motor when harvestter is going down
@@ -59,7 +59,7 @@ public class BallHandler extends SubsystemBase {
   private State prevState = State.kOff;//storing the previous state for determining if state has changed
 
   private boolean rejectOppColor = true;//storage for whether we are runing SBM
-  private boolean hasHarvesterBeenOut;
+  private boolean hasHarvesterBeenOut;//a check to see if the harvester has been out, used to avoid handlerMotors[0] burn out
 
   //pull preset speeds of the motors from constants
   private static final double HARV_IN = Constants.HARVESTER_INTAKE_SPEED;
@@ -110,10 +110,10 @@ public class BallHandler extends SubsystemBase {
       handlerMotors[i].setIdleMode(IdleMode.kBrake);// set brake mode, so motors stop on a dime
       handlerMotors[i].enableVoltageCompensation(10.50);// enable volatge compensation mode
       handlerMotors[i].setInverted(i == 1);// only the second NEO550 in the ballHandler needs to be inverted.
-      handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);
-      handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus1, 60000);
-      handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus2, 60000);
-      handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus3, 60000);
+      handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus0, 20);//applied output, faults, sticky faults //TODO: can this be higher???
+      handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus1, 60000);//Velocity, Temperature, Voltage, Current
+      handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus2, 60000);//Position(not used at all)
+      handlerMotors[i].setPeriodicFramePeriod(PeriodicFrame.kStatus3, 60000);//analog sensor(not used at all)
       
       // handleEncoders[i] = handlerMotors[i].getEncoder();//We don't use encoder, but this was also causing the code to crash
 
@@ -156,7 +156,9 @@ public class BallHandler extends SubsystemBase {
       case kSpitMid0:
         //spitting balls, with harvester up and off
         speeds = new double[] { 0, BALL0_OUT, 0, 0};
+        //check if harvester has ever been out
         if(!hasHarvesterBeenOut()){
+          //if harvester hasn't been out switch to the kSpitLow0 to avoid buring out handlerMotors[0]
           state = State.kSpitLow0;
         }else{
           break;
@@ -168,7 +170,9 @@ public class BallHandler extends SubsystemBase {
       case kSpitMid1:
         //spitting balls, with harvester up and off
         speeds = new double[] { 0, BALL0_OUT, BALL1_OUT, BALL2_OUT};
+        //check if harvester has ever been out
         if(!hasHarvesterBeenOut()){
+          //if harvester hasn't been out switch to the kSpitLow1 to avoid buring out handlerMotors[0]
           state = State.kSpitLow1;
         }else{
           break;
@@ -205,7 +209,7 @@ public class BallHandler extends SubsystemBase {
         System.out.println("default ball handler case reached");
     }
 
-    //testing the SBM
+    //testing the SBM, this is data intensive, enable only for testing
     // if((state == State.kFillTo1 || state == State.kFillTo0)){
     //   //Smartdashboard pushes for testing
       // SmartDashboard.putNumber("Red Color", colorSensor.getRed());
@@ -220,20 +224,22 @@ public class BallHandler extends SubsystemBase {
     if(state != prevState){
       if(state == State.kFillTo1 || state == State.kFillTo0) {
         if(!hasHarvesterBeenOut()){
-          //if the harvester isn't out right now, reset the timer
+          //if the harvester has never been out, reset the timer(which pauses the floppy arm motor)
           harvesterOutTimer.reset();
         }
         harvesterOut();
       }else if(state == State.kSpitHigh || state == State.kSpitLow1 || state== State.kSpitLow0){
         if(!hasHarvesterBeenOut()){
-          //if the harvester isn't out right now, reset the timer
+          //if the harvester has never been out, reset the timer(which pauses the floppy arm motor)
           harvesterOutTimer.reset();
         }
         harvesterOut();
       }else if(state == State.kOff){
+        //if the state is off, pull in the harvester
         harvesterIn();
       }else if(state == State.kShoot0){
         if(!hasHarvesterBeenOut()){
+          //if the harvester has never been out, drop the harvester and reset the timer(which pauses the floppy arm motor)
           harvesterOutTimer.reset();
           harvesterOut();
         }
@@ -247,6 +253,7 @@ public class BallHandler extends SubsystemBase {
     }
 
     if( !harvesterOutTimer.hasElapsed(HARVESTER_OUT_DELAY) ){
+      //if we think the floppy roller is in, pause the handlerMotors[0] for a minute
       speeds[1] = 0.0;
     }else if( !selectorTimer.hasElapsed(SBM_KICKOUT_TIME) ){
       //if timer reset, run spit out timer for half second
@@ -291,16 +298,41 @@ public class BallHandler extends SubsystemBase {
     hasHarvesterBeenOut = true;
   }
 
+  /**
+   * reset the hasHarvesterBeenOut boolean to false
+   * this shoould be done in disabled, as the 
+   * hasHarvesterBeenOut boolean is key to stopping 
+   * the handlerMotors[0] from burning out because 
+   * it is caught in the upright position while 
+   * being held in by the harvester.
+   */
   public void resetHasHarvesterBeenOut(){
     hasHarvesterBeenOut = false;
   }
 
-  public boolean isHarvesterNotOut(){
-    return !(harvesterTilt.get() == Value.kReverse);
-  }
-
+  /**
+   * accesor foor the hasHarvesterBeenOut boolean, 
+   * which is used as a test to see if the floppy 
+   * roller, which is connected to the 
+   * handlerMorors[0], is stuck up by the harvester 
+   * which is part of starting confingureation.
+   * 
+   * @return true if harvesterOut() has been called since last disable (that has lasted more than 5 seconds)
+   */
   public boolean hasHarvesterBeenOut(){
     return hasHarvesterBeenOut;
+  }
+
+  /**
+   * An accessor that sees whether the harvester is 
+   * currently set to out. This is function is not 
+   * used given we use hasHarvesterBeenOut and 
+   * changed logic accordingly.
+   * 
+   * @return false if we know harvester is out
+   */
+  public boolean isHarvesterNotOut(){
+    return !(harvesterTilt.get() == Value.kReverse);
   }
 
   //commented out because haverster is handled in periodic state machine

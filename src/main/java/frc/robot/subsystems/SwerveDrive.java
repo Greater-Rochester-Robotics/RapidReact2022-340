@@ -24,6 +24,12 @@ import frc.robot.subsystems.ADIS.CalibrationTime;
 import frc.robot.subsystems.ADIS.IMUAxis;
 import frc.robot.subsystems.swervelib.SwerveModule;
 
+/**
+ * This subsystem contains all SwerveModule objects, and runs all drive functions.
+ * 
+ * More on swerve found here:
+ * https://docs.google.com/presentation/d/1feVl0L5lgIKSZhKCheWgWhkOydIu-ibgdp7oqA0yqAQ/edit?usp=sharing
+ */
 public class SwerveDrive extends SubsystemBase {
 
   private static SwerveModule swerveModules[];
