@@ -57,7 +57,11 @@ public class AutoLeftTwoBallThenOppToss extends SequentialCommandGroup {
       new BallHandlerSetState(State.kFillTo1),
       race(
         parallel(
-          new DriveFollowTrajectory("DriveLeftBallToOpponentBall"),//drive to opponent's ball
+          sequence(
+            new DriveTurnToAngle(Math.toRadians(-135)).withTimeout(2.5),
+            new WaitCommand(.5),
+            new DriveFollowTrajectory("DriveLeftToOppBallShoot")//drive to opponent's ball
+          ),
           new ShooterSetSpeed(Constants.SHOOTER_LOW_GOAL_FENDER_SPEED, true).withTimeout(2),//set the shooter to fender speed
           new HoodToPosition(22.0)//set the hood to maximum position
         ),
@@ -65,7 +69,7 @@ public class AutoLeftTwoBallThenOppToss extends SequentialCommandGroup {
         new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0)//when ball is in robot stop prep and shoot
       ),
       new BallHandlerRejectOppColor(),//set intake to reject Opp color
-      new DriveTurnToAngle(15.0 * Math.PI / 180),//TODO: adjust this angle, we want to shoot into the hanger
+      new DriveTurnToAngle(-Math.PI),//TODO: adjust this angle, we want to shoot into the hanger
       new BallHandlerSetState(State.kOff),
       new BallHandlerShootProgT(0.0),//shoot the ball
       new StopShooterHandlerHood()//stop shooter (and ballhandler and hood if they aren't already)

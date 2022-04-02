@@ -18,6 +18,7 @@ public class ClimberClimb extends SendableCommandGroup {
       new ClimberExtendoHome().withName("StartAndHomeClimber"),
 
       /* Climb To Second Bar */
+      new ClimberDampeningOut().withName("DampeningBarOut"),
       new ClimberExtendOutSlow(Constants.CLIMBER_TOP_POSITION).withName("ExtendToSecondBar"),
       new WaitUntilCommand(RobotContainer.climberButton.negate()::get).withName("WAIT-ReleaseButton"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToPullUp"),
@@ -62,10 +63,10 @@ public class ClimberClimb extends SendableCommandGroup {
       ).withName("ClimbToThirdBar"),
       new WaitUntilCommand(RobotContainer.climberButton.negate()::get).withName("WAIT-ReleaseButton"),
 
-      /* Release Third Bar */  //TODO: Add dampening bars
+      /* Release Third Bar */  
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToReleaseFromThirdBar"),
       new ClimberExtendOutSlow(Constants.CLIMBER_TOP_POSITION).withName("ReleaseFromThirdBar"),
-      // new ClimberDampeningOut(),
+      new ClimberDampeningIn().withName("DampeningBarIn"),
       new WaitUntilCommand(RobotContainer.climberButton.negate()::get).withName("WAIT-ReleaseButton"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToTiltToFourth"),
       new ClimberTiltOut().withName("TiltToFourthBar"),
@@ -77,7 +78,6 @@ public class ClimberClimb extends SendableCommandGroup {
 
       /* Climb To Fourth Bar */
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToLiftOffThirdbar"),
-      // new ClimberDampeningIn(),
       new ClimberExtendoToPosition(Constants.CLIMBER_LIFT_POSITION).withName("LiftOffThirdBar"),
       new WaitUntilCommand(RobotContainer.climberButton.negate()::get).withName("WAIT-ReleaseButton"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToClimbToFourthBar"),

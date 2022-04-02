@@ -257,8 +257,7 @@ public final class Constants {
     public static final int HARVESTER_TILT_OUT = 9;//Intake
     public static final int CLIMBER_TILT_IN = 13;//Climber
     public static final int CLIMBER_TILT_OUT = 12;//Climber
-    public static final int CLIMBER_DAMPENING_RIGHT = 14;//Climber
-    public static final int CLIMBER_DAMPENING_LEFT = 15;//Climber
+    public static final int CLIMBER_DAMPENING_BAR = 15;//Climber
     public static final int LL_LIGHT = 0;//Limelight
 
     /* Digital Input */

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import javax.sound.midi.Sequence;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -33,6 +35,7 @@ import frc.robot.commands.autonomous.AutoLeftBackOutOfWay;
 import frc.robot.commands.autonomous.AutoLeftFourBall;
 import frc.robot.commands.autonomous.AutoLeftTwoBall;
 import frc.robot.commands.autonomous.AutoLeftTwoBallFromHub;
+import frc.robot.commands.autonomous.AutoLeftTwoBallThenOppToss;
 import frc.robot.commands.autonomous.AutoMidFourBall;
 import frc.robot.commands.autonomous.AutoMidTwoBall;
 import frc.robot.commands.autonomous.AutoPartnerPickupLeftBall;
@@ -249,6 +252,11 @@ public class RobotContainer {
     driverDDown.whenReleased(new StopShooterHandlerHood());
     driverDRight.whenPressed(new BallHandlerIntakeOut());
     driverDLeft.whenPressed(new BallHandlerIntakeIn());
+    // driverStart.whileHeld(new SequentialCommandGroup(
+    //   new DriveTurnToAngle(Math.toRadians(-135)).withTimeout(2.5),
+    //   new WaitCommand(.5),
+    //   new DriveFollowTrajectory("DriveLeftToOppBallShoot")
+    // ));
 
     /* =================== CODRIVER BUTTONS =================== */
     coDriverB.whenPressed(new BallHandlerSetState(State.kSpitMid0));//spit ball0
@@ -307,6 +315,7 @@ public class RobotContainer {
     autoChooser.addOption("Right Three Ball", new AutoRightThreeBall());
     autoChooser.addOption("Mid Four Ball", new AutoMidFourBall());
     autoChooser.addOption("Hungry Hungry Hippo", new AutoPartnerPickupLeftBall());
+    autoChooser.addOption("Drive Left Steal Opp Ball Shoot", new AutoLeftTwoBallThenOppToss());
     // autoChooser.addOption("5 ball", new AutoRightFiveBall());
 
 

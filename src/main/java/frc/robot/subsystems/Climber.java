@@ -22,6 +22,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,7 +31,7 @@ import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
   DoubleSolenoid tiltRobot; // attatched to the fixed arm
-  DoubleSolenoid dampeningBars;
+  Solenoid dampeningBars;
   TalonFX extendoMotorLeft; // attatched to the left extending arm
   TalonFX extendoMotorRight; // attatched to the right extending arm, not mechanically linked to left
   TalonFXSensorCollection leftBottomSwitch;
@@ -41,8 +42,8 @@ public class Climber extends SubsystemBase {
     tiltRobot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
       Constants.CLIMBER_TILT_IN, Constants.CLIMBER_TILT_OUT);
 
-    dampeningBars = new DoubleSolenoid(PneumaticsModuleType.REVPH,
-      Constants.CLIMBER_DAMPENING_RIGHT, Constants.CLIMBER_DAMPENING_LEFT);
+    dampeningBars = new Solenoid(PneumaticsModuleType.REVPH,
+      Constants.CLIMBER_DAMPENING_BAR);
 
     // Configures the Left Extendo Motor
     extendoMotorLeft = new TalonFX(Constants.CLIMBER_LEFT_ARM);
@@ -114,11 +115,11 @@ public class Climber extends SubsystemBase {
   /* ==================== Functions for the dampening bars ==================== */
 
   public void dampeningBarsOut(){
-    dampeningBars.set(Value.kReverse);
+    dampeningBars.set(true);
   }
 
   public void dampeningBarsIn(){
-    dampeningBars.set(Value.kForward);
+    dampeningBars.set(false);
   }
 
   /* ==================== Functions for the fixed arms ==================== */

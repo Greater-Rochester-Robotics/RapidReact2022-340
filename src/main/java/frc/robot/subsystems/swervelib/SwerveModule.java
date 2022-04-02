@@ -70,7 +70,7 @@ public class SwerveModule {
         driveMotor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
         setDriveMotorPIDF(Constants.SWERVE_DRIVE_P_VALUE, Constants.SWERVE_DRIVE_I_VALUE,
                           Constants.SWERVE_DRIVE_D_VALUE, Constants.SWERVE_DRIVE_FF_VALUE);
-        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);//TODO: rethink if we need this speed, I don't think we do
+        driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 253);//TODO: rethink if we need this speed, I don't think we do
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);//This is key to odometry must be around same as code loop
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 251);
         driveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 241);

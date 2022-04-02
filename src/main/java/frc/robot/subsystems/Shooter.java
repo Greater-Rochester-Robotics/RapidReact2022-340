@@ -34,13 +34,13 @@ public class Shooter extends SubsystemBase {
     motor.setInverted(false);//on robot no inversion needed
     motor.enableVoltageCompensation(true);
     motor.configVoltageCompSaturation(Constants.MAXIMUM_VOLTAGE);
-    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);
-    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
-    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 255);
-    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 255);
-    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc, 255);
-    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 255);
-    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 255);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 255);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);//this is the shooter speed we need
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 251);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 241);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc, 239);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, 233);
+    motor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 229);
     motor.setStatusFramePeriod(StatusFrameEnhanced.Status_15_FirmwareApiStatus, 255);
 
     motor.config_kP(0, Constants.SHOOTER_MAIN_MOTOR_P);

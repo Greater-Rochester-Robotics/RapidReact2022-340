@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.ballhandler.BallHandlerRejectOppColor;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -57,7 +56,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    new BallHandlerRejectOppColor();
+    RobotContainer.ballHandler.rejectOppColor(true);
     //set a timer so we can reset things a few seconds into disabled
     disableTimer.start();
     disableTimer.reset();

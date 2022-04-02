@@ -377,7 +377,7 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public boolean isTiltedBack(){
-    return (imu.getYawAxis().equals(ADIS.IMUAxis.kZ)) && (getGyroInDegZ() > 37 && getGyroInDegZ() < 39);
+    return (imu.getYawAxis().equals(ADIS.IMUAxis.kZ)) && (Math.abs(getRotationalVelocityZ()) < 5) && (getGyroInDegZ() > 36 && getGyroInDegZ() < 40);
   }
 
   /**
