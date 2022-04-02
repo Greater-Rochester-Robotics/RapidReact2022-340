@@ -33,7 +33,10 @@ public class ClimberClimb extends SendableCommandGroup {
       new WaitUntilCommand(RobotContainer.climberButton.negate()::get).withName("WAIT-ReleaseButton"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToReleaseTiltRobot"),
       new ClimberTiltOut().withName("TiltToThirdBar"),
-      new WaitCommand(1.0).withName("PauseToTilt"),//TODO: Race? with a detection of a tilt of 38ish degrees
+      // race(
+        new WaitCommand(1.0).withName("PauseToTilt"),//TODO: Race? with a detection of a tilt of 38ish degrees
+        // new WaitUntilCommand(RobotContainer.swerveDrive::isTiltedBack)
+      // ),
       new WaitUntilCommand(RobotContainer.climberButton.negate()::get).withName("WAIT-ReleaseButton"),
 
       /* Climb To Third Bar */
@@ -44,7 +47,10 @@ public class ClimberClimb extends SendableCommandGroup {
       new WaitUntilCommand(RobotContainer.climberButton.negate()::get).withName("WAIT-ReleaseButton"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-UntilTiltInThirdBar"),
       new ClimberTiltIn().withName("TiltToNormal"),
-      new WaitCommand(1.0).withName("PauseToTilt"),//TODO: Race? with a detection of a tilt of 38ish degrees
+      // race(
+        new WaitCommand(1.0).withName("PauseToTilt"),//TODO: Race? with a detection of a tilt of 38ish degrees
+        // new WaitUntilCommand(RobotContainer.swerveDrive::isTiltedBack)
+      // ),
       new WaitUntilCommand(RobotContainer.climberButton.negate()::get).withName("WAIT-ReleaseButton"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToLiftOffSecondBar"),
       new ClimberExtendoToPosition(Constants.CLIMBER_LIFT_POSITION,true).withName("LiftOffSecondBar"),
@@ -59,14 +65,19 @@ public class ClimberClimb extends SendableCommandGroup {
       /* Release Third Bar */  //TODO: Add dampening bars
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToReleaseFromThirdBar"),
       new ClimberExtendOutSlow(Constants.CLIMBER_TOP_POSITION).withName("ReleaseFromThirdBar"),
+      // new ClimberDampeningOut(),
       new WaitUntilCommand(RobotContainer.climberButton.negate()::get).withName("WAIT-ReleaseButton"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToTiltToFourth"),
       new ClimberTiltOut().withName("TiltToFourthBar"),
-      new WaitCommand(1.0).withName("PauseToTilt"),//TODO: Race? with a detection of a tilt of 38ish degrees
+      // race(
+        new WaitCommand(1.0).withName("PauseToTilt"),//TODO: Race? with a detection of a tilt of 38ish degrees
+        // new WaitUntilCommand(RobotContainer.swerveDrive::isTiltedBack)
+      // ),
       new WaitUntilCommand(RobotContainer.climberButton.negate()::get).withName("WAIT-ReleaseButton"),
 
       /* Climb To Fourth Bar */
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToLiftOffThirdbar"),
+      // new ClimberDampeningIn(),
       new ClimberExtendoToPosition(Constants.CLIMBER_LIFT_POSITION).withName("LiftOffThirdBar"),
       new WaitUntilCommand(RobotContainer.climberButton.negate()::get).withName("WAIT-ReleaseButton"),
       new WaitUntilCommand(RobotContainer.climberButton::get).withName("WAIT-ToClimbToFourthBar"),

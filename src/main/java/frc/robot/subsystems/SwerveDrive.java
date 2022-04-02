@@ -376,6 +376,10 @@ public class SwerveDrive extends SubsystemBase {
     return imu.getYawAxis().equals(ADIS.IMUAxis.kZ)? imu.getAngle() : 0.0;
   }
 
+  public boolean isTiltedBack(){
+    return (imu.getYawAxis().equals(ADIS.IMUAxis.kZ)) && (getGyroInDegZ() > 37 && getGyroInDegZ() < 39);
+  }
+
   /**
    * Returns the speed of rotation of the robot, 
    * counterclockwise is positive.

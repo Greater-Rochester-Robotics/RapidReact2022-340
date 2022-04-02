@@ -7,9 +7,12 @@ package frc.robot.commands.autonomous;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ShootHighGoal;
 import frc.robot.commands.ShootHighGoalWithoutLL;
+import frc.robot.commands.StopShooterHandlerHood;
+import frc.robot.commands.ballhandler.BallHandlerRejectOppColor;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
 import frc.robot.commands.ballhandler.BallHandlerShootProgT;
 import frc.robot.commands.drive.DriveOnTarget;
@@ -23,16 +26,10 @@ import frc.robot.commands.shooter.ShooterPrepShot;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.subsystems.BallHandler.State;
 
-/**
- * TODO: Needs to fixed
- */
-@Deprecated
 public class AutoLeftTwoBallThenOppToss extends SequentialCommandGroup {
   /** Creates a new AutoLeftTwoBallThenOppToss. not tested*/
   @Deprecated
   public AutoLeftTwoBallThenOppToss() {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new HoodHome(),
       new BallHandlerSetState(State.kFillTo0),
@@ -56,15 +53,22 @@ public class AutoLeftTwoBallThenOppToss extends SequentialCommandGroup {
       ),
       new DriveTurnToAngle(Math.toRadians(-31.43)).withTimeout(1.5),//make sure we return to start rotation
       new BallHandlerShootProgT(0.0),
-      //TODO: set intake to not reject Opp color(need to make a new command)
+      new BallHandlerRejectOppColor(false),//set intake to not reject Opp color
       new BallHandlerSetState(State.kFillTo1),
-      new DriveFollowTrajectory("DriveLeftBallToOpponentBall"),//TODO: parallel this with hood and shooter to lowfender settings
-      new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),//TODO: use this a race with previous parallel, also test against Ball0 sensor
-      //TODO: re-enable the color sensing.
+      race(
+        parallel(
+          new DriveFollowTrajectory("DriveLeftBallToOpponentBall"),//drive to opponent's ball
+          new ShooterSetSpeed(Constants.SHOOTER_LOW_GOAL_FENDER_SPEED, true).withTimeout(2),//set the shooter to fender speed
+          new HoodToPosition(22.0)//set the hood to maximum position
+        ),
+        new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
+        new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0)//when ball is in robot stop prep and shoot
+      ),
+      new BallHandlerRejectOppColor(),//set intake to reject Opp color
       new DriveTurnToAngle(15.0 * Math.PI / 180),//TODO: adjust this angle, we want to shoot into the hanger
-      new BallHandlerSetState(State.kOff)
-      //TODO: shoot the ball
-      //TODO: stop the shooter
+      new BallHandlerSetState(State.kOff),
+      new BallHandlerShootProgT(0.0),//shoot the ball
+      new StopShooterHandlerHood()//stop shooter (and ballhandler and hood if they aren't already)
     );
   }
 }

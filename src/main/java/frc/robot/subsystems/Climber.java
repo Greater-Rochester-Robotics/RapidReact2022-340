@@ -30,7 +30,7 @@ import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
   DoubleSolenoid tiltRobot; // attatched to the fixed arm
-  DoubleSolenoid dampingBar;
+  DoubleSolenoid dampeningBars;
   TalonFX extendoMotorLeft; // attatched to the left extending arm
   TalonFX extendoMotorRight; // attatched to the right extending arm, not mechanically linked to left
   TalonFXSensorCollection leftBottomSwitch;
@@ -41,8 +41,8 @@ public class Climber extends SubsystemBase {
     tiltRobot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 
       Constants.CLIMBER_TILT_IN, Constants.CLIMBER_TILT_OUT);
 
-    dampingBar = new DoubleSolenoid(PneumaticsModuleType.REVPH,
-      Constants.CLIMBER_DAMPING_RIGHT, Constants.CLIMBER_DAMPING_LEFT);
+    dampeningBars = new DoubleSolenoid(PneumaticsModuleType.REVPH,
+      Constants.CLIMBER_DAMPENING_RIGHT, Constants.CLIMBER_DAMPENING_LEFT);
 
     // Configures the Left Extendo Motor
     extendoMotorLeft = new TalonFX(Constants.CLIMBER_LEFT_ARM);
@@ -111,14 +111,14 @@ public class Climber extends SubsystemBase {
     }
   }
 
-  /* ==================== Functions for the damping bars ==================== */
+  /* ==================== Functions for the dampening bars ==================== */
 
-  public void dampingBarOut(){
-    dampingBar.set(Value.kReverse);
+  public void dampeningBarsOut(){
+    dampeningBars.set(Value.kReverse);
   }
 
-  public void dampingBarIn(){
-    dampingBar.set(Value.kForward);
+  public void dampeningBarsIn(){
+    dampeningBars.set(Value.kForward);
   }
 
   /* ==================== Functions for the fixed arms ==================== */
