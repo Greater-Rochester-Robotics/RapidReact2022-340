@@ -314,6 +314,7 @@ public class RobotContainer {
     autoChooser.addOption("Right Two Ball", new AutoRightTwoBall());
     autoChooser.addOption("Right Three Ball", new AutoRightThreeBall());
     autoChooser.addOption("Mid Four Ball", new AutoMidFourBall());
+    autoChooser.addOption("Left Four Ball", new AutoLeftFourBall());
     autoChooser.addOption("Hungry Hungry Hippo", new AutoPartnerPickupLeftBall());
     autoChooser.addOption("Drive Left Steal Opp Ball Shoot", new AutoLeftTwoBallThenOppToss());
     // autoChooser.addOption("5 ball", new AutoRightFiveBall());

@@ -42,6 +42,7 @@ public class DriveRobotCentric extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    RobotContainer.setDriverRumble(0.25, 0.25);
     //pull primary stick values, and put to awaySpeed and lateralSpeed doubles
     double forwardSpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftY);
     double strafeSpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftX);

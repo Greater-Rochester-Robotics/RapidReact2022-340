@@ -7,7 +7,6 @@ package frc.robot.commands.drive.util;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.RobotContainer;
-import frc.robot.Constants;
 
 public class DriveTurnToAngle extends CommandBase {
   private double angle = 0;
@@ -55,6 +54,6 @@ public class DriveTurnToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return onTargetCount >= 10; //TODO:fix the end condition
+    return onTargetCount >= 10; 
   }
 }
