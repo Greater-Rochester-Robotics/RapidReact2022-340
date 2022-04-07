@@ -380,6 +380,14 @@ public class SwerveDrive extends SubsystemBase {
     return (imu.getYawAxis().equals(ADIS.IMUAxis.kZ)) && (Math.abs(getRotationalVelocityZ()) < 5) && (getGyroInDegZ() > 36 && getGyroInDegZ() < 40);
   }
 
+  public boolean isTiltedUp(){
+    return (imu.getYawAxis().equals(ADIS.IMUAxis.kZ)) && (Math.abs(getRotationalVelocityZ()) < 5) && (getGyroInDegZ() > 30 && getGyroInDegZ() < 36);
+  }
+
+  public boolean isLiftToThirdReady(){
+    return (imu.getYawAxis().equals(ADIS.IMUAxis.kZ)) && (Math.abs(getRotationalVelocityZ()) < 2) && (getGyroInDegZ() < -15 );
+  }
+
   /**
    * Returns the speed of rotation of the robot, 
    * counterclockwise is positive.

@@ -147,8 +147,10 @@ public class RobotContainer {
   static final Button coDriverRTButton25 = new JoyTriggerButton(coDriver, .25, Axis.kRightTrigger);
 
   //Climber next step button is aliased here.
-  public static final Button climberButton = coDriverA;
+  public static final Button climberManButton = coDriverA;
+  public static final Button climberAutoButton = coDriverB;
   public static SendableCommandGroup climbCommand;
+  
   public class ClimberCommandRunning extends Button{
     public boolean get(){
       return climbCommand.isScheduled();
@@ -259,8 +261,8 @@ public class RobotContainer {
     // ));
 
     /* =================== CODRIVER BUTTONS =================== */
-    coDriverB.whenPressed(new BallHandlerSetState(State.kSpitMid0));//spit ball0
-    coDriverB.whenReleased(new BallHandlerSetState(State.kOff));
+    coDriverB.and(climberCommandRunning.negate()).whenActive(new BallHandlerSetState(State.kSpitMid0))//spit ball0
+    .whenInactive(new BallHandlerSetState(State.kOff));
     coDriverX.whenPressed(new PrepLowFender());//prep low goal, aka hood to position and shooter to speed
     coDriverY.whenPressed(new ShooterPrepShot());//prep high goal, aka shooter to a starter speed
 

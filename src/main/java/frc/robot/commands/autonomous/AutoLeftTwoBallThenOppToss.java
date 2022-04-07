@@ -58,8 +58,7 @@ public class AutoLeftTwoBallThenOppToss extends SequentialCommandGroup {
         new ShooterSetSpeed(Constants.SHOOTER_LOW_GOAL_FENDER_SPEED, true).withTimeout(2),//set the shooter to fender speed
         new HoodToPosition(22.0)//set the hood to maximum position
       ),
-      // new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
-      new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),//when ball is in robot stop prep and shoot
+      new WaitUntilCommand(() -> RobotContainer.ballHandler.isBall0() || RobotContainer.ballHandler.isBall1()).withTimeout(2.0),//when ball is in robot stop prep and shoot
       new BallHandlerRejectOppColor(),//set intake to reject Opp color
       new DriveTurnToAngle(-Math.PI),//
       new BallHandlerSetState(State.kOff),
