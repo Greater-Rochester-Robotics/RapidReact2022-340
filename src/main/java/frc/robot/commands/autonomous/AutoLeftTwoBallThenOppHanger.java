@@ -21,9 +21,9 @@ import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.subsystems.BallHandler.State;
 
-public class AutoLeftTwoBallThenOppToss extends SequentialCommandGroup {
+public class AutoLeftTwoBallThenOppHanger extends SequentialCommandGroup {
   /** Creates a new AutoLeftTwoBallThenOppToss. tested*/
-  public AutoLeftTwoBallThenOppToss() {
+  public AutoLeftTwoBallThenOppHanger() {
     addCommands(
       new HoodHome(),
       new BallHandlerSetState(State.kFillTo0),

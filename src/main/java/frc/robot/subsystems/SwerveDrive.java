@@ -377,15 +377,15 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public boolean isTiltedBack(){
-    return (imu.getYawAxis().equals(ADIS.IMUAxis.kZ)) && (Math.abs(getRotationalVelocityZ()) < 5) && (getGyroInDegZ() > 36 && getGyroInDegZ() < 40);
+    return (imu.getYawAxis().equals(ADIS.IMUAxis.kZ)) && (Math.abs(getRotationalVelocityZ()) < 5) && (getGyroInDegZ() < -36 && getGyroInDegZ() > -40);
   }
 
   public boolean isTiltedUp(){
-    return (imu.getYawAxis().equals(ADIS.IMUAxis.kZ)) && (Math.abs(getRotationalVelocityZ()) < 5) && (getGyroInDegZ() > 30 && getGyroInDegZ() < 36);
+    return (imu.getYawAxis().equals(ADIS.IMUAxis.kZ)) && (Math.abs(getRotationalVelocityZ()) < 5) && (getGyroInDegZ() < -20 && getGyroInDegZ() > -25);
   }
 
   public boolean isLiftToThirdReady(){
-    return (imu.getYawAxis().equals(ADIS.IMUAxis.kZ)) && (Math.abs(getRotationalVelocityZ()) < 2) && (getGyroInDegZ() < -15 );
+    return (imu.getYawAxis().equals(ADIS.IMUAxis.kZ)) && (Math.abs(getRotationalVelocityZ()) < 2) && (getGyroInDegZ() > 15 );
   }
 
   /**

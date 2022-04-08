@@ -49,7 +49,11 @@ public class AutoMidFourBall extends SequentialCommandGroup {
         new DriveFollowTrajectory("DriveToMidBall", 4.5, 1.5),
         new HoodToPosition(Constants.HOOD_HIGH_POSITION_TABLE.lookup(118))//while driving to the ball, set the hood
       ),
-      new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
+      parallel(
+        new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
+        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(2.0),
+        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true).withTimeout(2.0)
+      ),
       new BallHandlerShootProgT(0.0).withTimeout(2.0),
       new BallHandlerSetState(State.kFillTo1),
       new DriveFollowTrajectory("DriveMidBallToHuman", 4.5, 1.5),
