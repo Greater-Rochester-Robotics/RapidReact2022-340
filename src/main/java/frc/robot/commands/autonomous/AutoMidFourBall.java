@@ -23,9 +23,6 @@ import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.commands.shooter.ShooterStop;
 import frc.robot.subsystems.BallHandler.State;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 /**
  * Starts at right zone, back is on line, front left corner touching left line.
  * Moves to pick up the middle ball and shoots both.
@@ -60,10 +57,14 @@ public class AutoMidFourBall extends SequentialCommandGroup {
       new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),//wait to get the first ball
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),//now wait for the second ball
       // new BallHandlerSetState(State.kOff),
-      new ShooterSetSpeed(Constants.SHOOTER_HIGH_SPEEDS_TABLE.lookup(144)),//need 9400 so use 9700 bc bad pid, no need to wait to get to speed
+      new ShooterSetSpeed(Constants.SHOOTER_HIGH_SPEEDS_TABLE.lookup(130)),//need 9400 so use 9700 bc bad pid, no need to wait to get to speed, set lower than predicted distance, limelight fixes it later
       parallel(
         new DriveFollowTrajectory("DriveFromHumanStraight", 4.5, 1.5),
-        new HoodToPosition(Constants.HOOD_HIGH_POSITION_TABLE.lookup(144))//while driving to the shooting point, set the hood
+        new HoodToPosition(Constants.HOOD_HIGH_POSITION_TABLE.lookup(130))//while driving to the shooting point, set the hood(), set lower than predicted distance, limelight fixes it later
+      ),
+      parallel(
+        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true),
+        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true)
       ),
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood()

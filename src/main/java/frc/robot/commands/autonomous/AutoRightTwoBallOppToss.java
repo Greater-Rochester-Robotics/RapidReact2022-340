@@ -74,6 +74,8 @@ public class AutoRightTwoBallOppToss extends SequentialCommandGroup {
       new BallHandlerRejectOppColor(),//set intake to reject Opp color
       new BallHandlerSetState(State.kOff),
       new BallHandlerShootProgT(0.0),//shoot the ball
+      new DriveTurnToAngle(Math.toRadians(90)),
+      new DriveStraightBack(0.1),
       new StopShooterHandlerHood()//stop shooter (and ballhandler and hood if they aren't already)
     );
   }
