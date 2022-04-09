@@ -35,7 +35,9 @@ import frc.robot.commands.autonomous.AutoLeftBackOutOfWay;
 import frc.robot.commands.autonomous.AutoLeftFourBall;
 import frc.robot.commands.autonomous.AutoLeftTwoBall;
 import frc.robot.commands.autonomous.AutoLeftTwoBallFromHub;
+import frc.robot.commands.autonomous.AutoLeftTwoBallThenOppAllianceWall;
 import frc.robot.commands.autonomous.AutoLeftTwoBallThenOppHanger;
+import frc.robot.commands.autonomous.AutoLeftTwoBallThenOppSpitHub;
 import frc.robot.commands.autonomous.AutoMidFourBall;
 import frc.robot.commands.autonomous.AutoMidTwoBall;
 import frc.robot.commands.autonomous.AutoPartnerPickupLeftBall;
@@ -319,8 +321,10 @@ public class RobotContainer {
     autoChooser.addOption("Mid Four Ball", new AutoMidFourBall());
     autoChooser.addOption("Left Four Ball", new AutoLeftFourBall());
     autoChooser.addOption("Hungry Hungry Hippo", new AutoPartnerPickupLeftBall());
-    autoChooser.addOption("Left Two Ball, Opp Hanger ", new AutoLeftTwoBallThenOppHanger());
-    autoChooser.addOption("RightBallOppToss", new AutoRightTwoBallOppToss());
+    autoChooser.addOption("Left Two Ball, Opp Hanger", new AutoLeftTwoBallThenOppHanger());
+    autoChooser.addOption("Left Two Ball, Opp Hub Spit", new AutoLeftTwoBallThenOppSpitHub());
+    autoChooser.addOption("Left Two Ball, Opp Wall", new AutoLeftTwoBallThenOppAllianceWall());
+    autoChooser.addOption("Right Two Ball, Opp Hub", new AutoRightTwoBallOppToss());
     // autoChooser.addOption("5 ball", new AutoRightFiveBall());
 
 

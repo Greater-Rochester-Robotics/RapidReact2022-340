@@ -21,9 +21,9 @@ import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.subsystems.BallHandler.State;
 
-public class AutoLeftTwoBallThenOppAllianceWall extends SequentialCommandGroup {
+public class AutoLeftTwoBallThenOppSpitHub extends SequentialCommandGroup {
   /** Creates a new AutoLeftTwoBallThenOppToss. tested*/
-  public AutoLeftTwoBallThenOppAllianceWall(){
+  public AutoLeftTwoBallThenOppSpitHub(){
     addCommands(
       new HoodHome(),
       new BallHandlerSetState(State.kFillTo0),
@@ -55,15 +55,15 @@ public class AutoLeftTwoBallThenOppAllianceWall extends SequentialCommandGroup {
           new WaitCommand(.5),
           new DriveFollowTrajectory("DriveLeftToOppBallShoot")//drive to opponent's ball
         ),
-        new ShooterSetSpeed(7000, true).withTimeout(2),//set the shooter to fender speed
+        new ShooterSetSpeed(Constants.SHOOTER_LOW_GOAL_FENDER_SPEED, true).withTimeout(2),//set the shooter to fender speed
         new HoodToPosition(22.0)//set the hood to maximum position
       ),
       new WaitUntilCommand(() -> RobotContainer.ballHandler.isBall0() || RobotContainer.ballHandler.isBall1()).withTimeout(2.0),//when ball is in robot stop prep and shoot
       new BallHandlerRejectOppColor(),//set intake to reject Opp color
-      new DriveTurnToAngle(Math.toRadians(-140)),//
-      new BallHandlerSetState(State.kOff),
-      new BallHandlerShootProgT(0.0),//shoot the ball
-      new StopShooterHandlerHood()//stop shooter (and ballhandler and hood if they aren't already)
+      new DriveTurnToAngle(Math.toRadians(-228)),//
+      new BallHandlerSetState(State.kSpitLow1)
+      // new BallHandlerSetState(State.kOff),
+      // new StopShooterHandlerHood()//stop shooter (and ballhandler and hood if they aren't already)
     );
   }
 }

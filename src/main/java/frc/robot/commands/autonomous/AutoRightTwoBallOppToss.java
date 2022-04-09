@@ -29,7 +29,6 @@ import frc.robot.subsystems.BallHandler.State;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoRightTwoBallOppToss extends SequentialCommandGroup {
   /** Creates a new AutoRightTwoBall. this won't work because mechanical intake limitations.*/
-  @Deprecated
   public AutoRightTwoBallOppToss() {
     addCommands(
       new HoodHome(),
