@@ -48,7 +48,7 @@ public class AutoMidTwoBall extends SequentialCommandGroup {
         new HoodToPosition(9.9)//while driving to the ball, set the hood
       ),
       race(
-        new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(4.0),
+        new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(4.0),//Wait for ball0 switch, race with a wiggle
         sequence(
           new DriveTurnToAngle(Math.toRadians(31.9)).withTimeout(1.0),
           new WaitCommand(.5),
@@ -57,6 +57,10 @@ public class AutoMidTwoBall extends SequentialCommandGroup {
         )
       ),
       new DriveTurnToAngle(Math.toRadians(36.9)).withTimeout(1.5),
+      parallel(
+        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(1.0),
+        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true).withTimeout(1.0)
+      ),
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood()
     );

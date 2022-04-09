@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-
+import frc.robot.commands.LimeLightCalibrate;
 import frc.robot.commands.LimeLightPowerCycle;
 import frc.robot.commands.PrepLowFender;
 import frc.robot.commands.ShootHighFenderWithDriveBack;
@@ -42,7 +42,7 @@ import frc.robot.commands.autonomous.AutoPartnerPickupLeftBall;
 import frc.robot.commands.autonomous.AutoRightFiveBall;
 import frc.robot.commands.autonomous.AutoRightThreeBall;
 import frc.robot.commands.autonomous.AutoRightTwoBall;
-
+import frc.robot.commands.autonomous.AutoRightTwoBallOppToss;
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
@@ -208,6 +208,7 @@ public class RobotContainer {
                             new ClimberExtendoHome(),
                             climbCommand.resetCommandCommand()));//for setup
     SmartDashboard.putData(new LimeLightPowerCycle());//allows the drivers to restart the Limelight at will(good for hangups)
+    SmartDashboard.putData(new LimeLightCalibrate());//allows for the limelight to run while in testing mode
     // SmartDashboard.putData(new DriveFindMaxAccel());//This is for tuning acceleration constants
     // SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));//this is for Velocity PID parameters
     SmartDashboard.putData(new ShooterSetSpeed(this::speedIShoot));//Testing Shooter
@@ -319,6 +320,7 @@ public class RobotContainer {
     autoChooser.addOption("Left Four Ball", new AutoLeftFourBall());
     autoChooser.addOption("Hungry Hungry Hippo", new AutoPartnerPickupLeftBall());
     autoChooser.addOption("Left Two Ball, Opp Hanger ", new AutoLeftTwoBallThenOppHanger());
+    autoChooser.addOption("RightBallOppToss", new AutoRightTwoBallOppToss());
     // autoChooser.addOption("5 ball", new AutoRightFiveBall());
 
 

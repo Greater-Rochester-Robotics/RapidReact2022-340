@@ -42,7 +42,11 @@ public class AutoLeftTwoBall extends SequentialCommandGroup {
         new HoodToPosition(9.9)//while driving to the ball, set the hood
       ),
       race(
-        new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(4.0),//Wait for ball0 switch, race with a wiggle
+        deadline(
+          new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(4.0),//Wait for ball0 switch, race with a wiggle
+          new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true),
+          new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true)
+        ),
         sequence(
           new DriveTurnToAngle(Math.toRadians(-26.43)).withTimeout(1.0),//wiggle 5 degrees clockwise
           new WaitCommand(.5),//wait for a moment 
