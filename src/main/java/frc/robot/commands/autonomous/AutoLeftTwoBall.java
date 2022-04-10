@@ -23,9 +23,6 @@ import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.BallHandler.State;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoLeftTwoBall extends SequentialCommandGroup {
   /** Creates a new AutoLeftTwoBall. */
   public AutoLeftTwoBall() {

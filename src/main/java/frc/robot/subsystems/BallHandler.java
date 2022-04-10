@@ -165,7 +165,7 @@ public class BallHandler extends SubsystemBase {
         }
       case kSpitLow0:
         //spitting balls, with harvester down and running out
-        speeds = new double[] { HARV_OUT, BALL0_OUT, 0, 0 };
+        speeds = new double[] { HARV_OUT * 0.5, BALL0_OUT * 0.5, 0, 0 };
         break;
       case kSpitMid1:
         //spitting balls, with harvester up and off

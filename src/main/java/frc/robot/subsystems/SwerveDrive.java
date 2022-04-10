@@ -104,7 +104,7 @@ public class SwerveDrive extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Gyro", this.getGyroInDeg());
-    SmartDashboard.putNumber("GyroZ", this.getGyroInDegZ());
+    // SmartDashboard.putNumber("GyroZ", this.getGyroInDegZ());
     //run odometry update on the odometry object
     if(isOdometry) {
       //instatiate and construct a 4 large SwerveModuleState array
@@ -115,8 +115,8 @@ public class SwerveDrive extends SubsystemBase {
       }
       driveOdometry.update(getGyroRotation2d(), moduleStates);
       // SmartDashboard.putNumber("GyroRate", this.getRotationalVelocity());
-      SmartDashboard.putNumber("Odometry X", getCurPose2d().getX());
-      SmartDashboard.putNumber("Odometry Y", getCurPose2d().getY());
+      // SmartDashboard.putNumber("Odometry X", getCurPose2d().getX());
+      // SmartDashboard.putNumber("Odometry Y", getCurPose2d().getY());
     }
   }
 

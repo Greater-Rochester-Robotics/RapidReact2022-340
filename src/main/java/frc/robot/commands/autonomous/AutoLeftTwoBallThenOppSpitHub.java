@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.StopShooterHandlerHood;
+import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerRejectOppColor;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
 import frc.robot.commands.ballhandler.BallHandlerShootProgT;
@@ -26,7 +27,7 @@ public class AutoLeftTwoBallThenOppSpitHub extends SequentialCommandGroup {
   public AutoLeftTwoBallThenOppSpitHub(){
     addCommands(
       new HoodHome(),
-      new BallHandlerSetState(State.kFillTo0),
+      new BallHandlerSetState(State.kFillTo1),
       parallel(
         new DriveSetGyro(-45.0),
         new WaitCommand(.75)//We need to wait for two reasons, the gyro takes time too set the value, and the harvester needs to come down
@@ -46,22 +47,24 @@ public class AutoLeftTwoBallThenOppSpitHub extends SequentialCommandGroup {
         )
       ),
       new DriveTurnToAngle(Math.toRadians(-31.43)).withTimeout(1.5),//make sure we return to start rotation
+      parallel(
+        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(1.5),
+        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true).withTimeout(1.5)
+      ),
       new BallHandlerShootProgT(0.0),
       new BallHandlerRejectOppColor(false),//set intake to not reject Opp color
-      new BallHandlerSetState(State.kFillTo1),
-      parallel(
-        sequence(
-          new DriveTurnToAngle(Math.toRadians(-135)).withTimeout(2.5),
-          new WaitCommand(.5),
-          new DriveFollowTrajectory("DriveLeftToOppBallShoot")//drive to opponent's ball
-        ),
-        new ShooterSetSpeed(Constants.SHOOTER_LOW_GOAL_FENDER_SPEED, true).withTimeout(2),//set the shooter to fender speed
-        new HoodToPosition(22.0)//set the hood to maximum position
+      new StopShooterHandlerHood(),
+      new BallHandlerSetState(State.kFillTo0),
+      sequence(
+        new DriveTurnToAngle(Math.toRadians(-135)).withTimeout(2.5),
+        new WaitCommand(.5),
+        new DriveFollowTrajectory("DriveLeftToOppBallShoot")//drive to opponent's ball
       ),
-      new WaitUntilCommand(() -> RobotContainer.ballHandler.isBall0() || RobotContainer.ballHandler.isBall1()).withTimeout(2.0),//when ball is in robot stop prep and shoot
+      new WaitUntilCommand(() -> RobotContainer.ballHandler.isBall0()).withTimeout(2.0),//when ball is in robot stop prep and shoot
       new BallHandlerRejectOppColor(),//set intake to reject Opp color
-      new DriveTurnToAngle(Math.toRadians(-228)),//
-      new BallHandlerSetState(State.kSpitLow1)
+      new BallHandlerIntakeOut(),
+      new DriveTurnToAngle(Math.toRadians(-228)),
+      new BallHandlerSetState(State.kSpitLow0)
       // new BallHandlerSetState(State.kOff),
       // new StopShooterHandlerHood()//stop shooter (and ballhandler and hood if they aren't already)
     );

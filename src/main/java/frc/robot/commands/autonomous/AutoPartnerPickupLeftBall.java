@@ -22,9 +22,6 @@ import frc.robot.commands.shooter.ShooterSetSpeed;
 import frc.robot.commands.shooter.ShooterStop;
 import frc.robot.subsystems.BallHandler.State;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoPartnerPickupLeftBall extends SequentialCommandGroup {
   /** Creates a new AutoPartnerPickupLeftBall. */
   public AutoPartnerPickupLeftBall() {
@@ -32,15 +29,18 @@ public class AutoPartnerPickupLeftBall extends SequentialCommandGroup {
       new HoodHome(),
       new DriveSetGyro(45.0),
       parallel(
-        new HoodToPosition(6.2),//TODO:get value
-        new ShooterSetSpeed(7900.0),//TODO:get value
+        new HoodToPosition(6.2),
         new WaitCommand(2.0)
       ),
       new BallHandlerSetState(State.kFillTo0),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(5.0),
       new BallHandlerSetState(State.kOff),
-      new WaitCommand(1.0),
-      new DriveTurnToAngle(Math.toRadians(-47.42)).withTimeout(2.0),//this angle should be correct
+      new WaitCommand(1.0), //wait for harvester to come up
+      parallel(
+        new ShooterSetSpeed(7900.0),
+        new DriveTurnToAngle(Math.toRadians(-47.42)).withTimeout(2.0)//this angle should be correct
+      ),
+      //Note: too close to use limelight distancing
       new BallHandlerShootProgT(0.0),
       parallel(
         new BallHandlerSetState(State.kFillTo1),
@@ -51,7 +51,7 @@ public class AutoPartnerPickupLeftBall extends SequentialCommandGroup {
       new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood(),
-      new DriveStraightBack(0.0)
+      new DriveStraightBack(0.20)
     );
   }
 }

@@ -5,6 +5,7 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.StopShooterHandlerHood;
@@ -22,9 +23,6 @@ import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.BallHandler.State;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 /**
  * Starts at right zone, with left bumper touching center corner.
  * Moves back to pick up right ball and shoots both.
@@ -48,13 +46,17 @@ public class AutoRightThreeBall extends SequentialCommandGroup {
         new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true)
       ),
       new BallHandlerShootProgT(0.0).withTimeout(1.0),
+      new StopShooterHandlerHood(),
       new BallHandlerSetState(State.kFillTo1),
-      new ShooterSetSpeed(9500),//9300 is real, rescale to 9600
       new DriveFollowTrajectory("DriveToRightBall"),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall1).withTimeout(2.0),
       parallel(
         new DriveFollowTrajectory("DriveFromRightBallToMidBall"),
-        new HoodToPosition(12.5)
+        new HoodToPosition(12.5),
+        sequence(
+          new WaitCommand(1.0),
+          new ShooterSetSpeed(9500)//9300 is real, rescale to 9600
+        )
       ),
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new DriveTurnToAngle(Math.toRadians(45.28)),

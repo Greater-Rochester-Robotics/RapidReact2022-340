@@ -215,9 +215,9 @@ public class RobotContainer {
     SmartDashboard.putData(new LimeLightCalibrate());//allows for the limelight to run while in testing mode
     // SmartDashboard.putData(new DriveFindMaxAccel());//This is for tuning acceleration constants
     // SmartDashboard.putData(new DriveTuneDriveMotorFeedForward(1.0));//this is for Velocity PID parameters
-    SmartDashboard.putData(new ShooterSetSpeed(this::speedIShoot));//Testing Shooter
-    SmartDashboard.putData(new HoodToPosition(this::angleIShoot));//Testing Shooter
-    SmartDashboard.putData(new ShooterStop());//Testing Shooter
+    // SmartDashboard.putData(new ShooterSetSpeed(this::speedIShoot));//Testing Shooter
+    // SmartDashboard.putData(new HoodToPosition(this::angleIShoot));//Testing Shooter
+    // SmartDashboard.putData(new ShooterStop());//Testing Shooter
     // SmartDashboard.putData(new DriveTurnToAngle(Constants.PI_OVER_TWO));//for testing turn to angle function
     // SmartDashboard.putData(new AutoDriveStraightBackAndShootHigh(1.5));//AutoTesting
     // SmartDashboard.putData(new AutoMidTwoBall());//AutoTesting

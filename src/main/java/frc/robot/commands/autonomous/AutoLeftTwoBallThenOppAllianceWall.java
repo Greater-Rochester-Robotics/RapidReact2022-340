@@ -46,6 +46,10 @@ public class AutoLeftTwoBallThenOppAllianceWall extends SequentialCommandGroup {
         )
       ),
       new DriveTurnToAngle(Math.toRadians(-31.43)).withTimeout(1.5),//make sure we return to start rotation
+      parallel(
+        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(1.5),
+        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true).withTimeout(1.5)
+      ),
       new BallHandlerShootProgT(0.0),
       new BallHandlerRejectOppColor(false),//set intake to not reject Opp color
       new BallHandlerSetState(State.kFillTo1),
