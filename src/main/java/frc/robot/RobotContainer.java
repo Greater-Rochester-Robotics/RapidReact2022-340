@@ -50,6 +50,7 @@ import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
 
 import frc.robot.commands.climber.ClimberClimb;
+import frc.robot.commands.climber.ClimberDampeningIn;
 import frc.robot.commands.climber.ClimberExtendBothIn;
 import frc.robot.commands.climber.ClimberExtendLeftIn;
 import frc.robot.commands.climber.ClimberExtendOut;
@@ -207,6 +208,7 @@ public class RobotContainer {
     SmartDashboard.putData(new HoodHome(true));//For setup, leave for drives to use
     SmartDashboard.putData("Climber Home", new SequentialCommandGroup(
                             new ClimberTiltIn(),
+                            new ClimberDampeningIn(),
                             new ClimberExtendoHome(),
                             climbCommand.resetCommandCommand()));//for setup
     SmartDashboard.putData(new LimeLightPowerCycle());//allows the drivers to restart the Limelight at will(good for hangups)
@@ -280,6 +282,7 @@ public class RobotContainer {
     coDriverLS.and(coDriverRS).whenActive(new ClimberTiltIn());
     coDriverDDown.whenPressed(new SequentialCommandGroup(
       new ClimberTiltIn(),
+      new ClimberDampeningIn(),
       new ClimberExtendoHome(),
       climbCommand.resetCommandCommand())
       );
