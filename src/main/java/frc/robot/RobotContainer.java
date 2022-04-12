@@ -281,6 +281,8 @@ public class RobotContainer {
 
     coDriverLS.and(coDriverRS).whenActive(new ClimberTiltIn());
     coDriverDDown.whenPressed(new SequentialCommandGroup(
+      new HoodHome(true),
+      new BallHandlerIntakeIn(),
       new ClimberTiltIn(),
       new ClimberDampeningIn(),
       new ClimberExtendoHome(),

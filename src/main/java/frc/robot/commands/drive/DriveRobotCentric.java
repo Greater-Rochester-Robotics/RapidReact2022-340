@@ -57,8 +57,8 @@ public class DriveRobotCentric extends CommandBase {
     double rotSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightTrigger) - Robot.robotContainer.getDriverAxis(Axis.kLeftTrigger);
 
     RobotContainer.swerveDrive.driveRobotCentric(
-      forwardSpeed *-Constants.DRIVER_SPEED_SCALE_LINEAR ,
-      strafeSpeed *-Constants.DRIVER_SPEED_SCALE_LINEAR ,
+      forwardSpeed *Constants.DRIVER_SPEED_SCALE_LINEAR ,
+      strafeSpeed *Constants.DRIVER_SPEED_SCALE_LINEAR ,
       rotSpeed*-Constants.DRIVER_SPEED_SCALE_ROTATIONAL,
       false,
       false

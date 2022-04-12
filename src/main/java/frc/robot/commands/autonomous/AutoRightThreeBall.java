@@ -42,8 +42,8 @@ public class AutoRightThreeBall extends SequentialCommandGroup {
         new ShooterSetSpeed(7900, true)//7700
       ),
       parallel(
-        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true),
-        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true)
+        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(2.0),
+        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true).withTimeout(2.0)
       ),
       new BallHandlerShootProgT(0.0).withTimeout(1.0),
       new StopShooterHandlerHood(),
@@ -61,8 +61,8 @@ public class AutoRightThreeBall extends SequentialCommandGroup {
       new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(2.0),
       new DriveTurnToAngle(Math.toRadians(45.28)),
       parallel(
-        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true),
-        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true)
+        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(2.0),
+        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true).withTimeout(2.0)
       ),
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood()

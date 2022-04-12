@@ -64,9 +64,9 @@ public class DriveFieldRelativeAdvanced extends CommandBase {
     double rotSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightTrigger) - Robot.robotContainer.getDriverAxis(Axis.kLeftTrigger);
 
     //use DPad to turn to specific angles.
-    if(Robot.robotContainer.getDriverDPad() == 0){
-      currentAngle = Math.round(RobotContainer.swerveDrive.getGyroInRad()/Constants.TWO_PI) * Constants.TWO_PI;
-    }
+    // if(Robot.robotContainer.getDriverDPad() == 0){
+    //   currentAngle = Math.round(RobotContainer.swerveDrive.getGyroInRad()/Constants.TWO_PI) * Constants.TWO_PI;
+    // }
     // else if(Robot.robotContainer.getDriverDPad() == 90){
     //   currentAngle = Math.round(RobotContainer.swerveDrive.getGyroInRad()/Constants.TWO_PI) * Constants.TWO_PI - 1.178;
     // }

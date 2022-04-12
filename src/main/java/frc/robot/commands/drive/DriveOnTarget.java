@@ -56,12 +56,13 @@ public class DriveOnTarget extends CommandBase {
     // Set the rotate to angle to the target if limelight sees it
     if(hasTarget) {
       setPointAngle = RobotContainer.swerveDrive.getGyroInRad() - Math.toRadians(RobotContainer.limeLight.angleToTarget(offsetDistance));
-    }else if(RobotContainer.swerveDrive.hasPoseBeenSet() && !hasHadTarget && startTimer.hasElapsed(.2)){
-      // Point robot in the general direction of the target if the limelight doesn't see the target
-      // Finds where we are relative to the center of the field, set as setPoint
-      setPointAngle = RobotContainer.swerveDrive.getAngleOfTarget();
-      hasHadTarget = true;
     }
+    // else if(RobotContainer.swerveDrive.hasPoseBeenSet() && !hasHadTarget && startTimer.hasElapsed(.2)){
+    //   // Point robot in the general direction of the target if the limelight doesn't see the target
+    //   // Finds where we are relative to the center of the field, set as setPoint
+    //   setPointAngle = RobotContainer.swerveDrive.getAngleOfTarget();
+    //   hasHadTarget = true;
+    // }
 
     // Sets away and lateral speeds using driver axis
     double  awaySpeed = Robot.robotContainer.getDriverAxis(Axis.kLeftY);
@@ -73,9 +74,13 @@ public class DriveOnTarget extends CommandBase {
       awaySpeed = Robot.robotContainer.getDriverAxis(Axis.kRightY)*.5;
       lateralSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightX)*.5;
     }
-
+    double rotSpeed = Robot.robotContainer.getDriverAxis(Axis.kRightTrigger) - Robot.robotContainer.getDriverAxis(Axis.kLeftTrigger);
     double output = RobotContainer.swerveDrive.getRobotRotationPIDOut(setPointAngle);
 
+    if (Math.abs(rotSpeed) > .1){
+      output = rotSpeed;
+    }
+    
     if(!(Math.abs(output) < (Constants.MINIMUM_ROTATIONAL_OUTPUT * 2.0) )){
       onTargetTimer.reset();
     }

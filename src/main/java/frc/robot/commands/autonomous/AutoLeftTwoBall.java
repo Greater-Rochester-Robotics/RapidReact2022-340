@@ -49,8 +49,8 @@ public class AutoLeftTwoBall extends SequentialCommandGroup {
       ),
       new DriveTurnToAngle(Math.toRadians(-31.43)).withTimeout(1.5),//make sure we return to start rotation
       parallel(
-        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true),
-        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true)
+        new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(2.0),
+        new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true).withTimeout(2.0)
       ),
       new BallHandlerShootProgT(0.0),
       new StopShooterHandlerHood(),
