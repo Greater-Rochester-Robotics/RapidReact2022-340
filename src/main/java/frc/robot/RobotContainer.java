@@ -38,6 +38,7 @@ import frc.robot.commands.autonomous.AutoLeftTwoBallFromHub;
 import frc.robot.commands.autonomous.AutoLeftTwoBallThenOppAllianceWall;
 import frc.robot.commands.autonomous.AutoLeftTwoBallThenOppHanger;
 import frc.robot.commands.autonomous.AutoLeftTwoBallThenOppSpitHub;
+import frc.robot.commands.autonomous.AutoLeftTwoBallThenTwoOppSpitHub;
 import frc.robot.commands.autonomous.AutoMidFourBall;
 import frc.robot.commands.autonomous.AutoMidTwoBall;
 import frc.robot.commands.autonomous.AutoPartnerPickupLeftBall;
@@ -252,7 +253,7 @@ public class RobotContainer {
     driverY.whenReleased(new StopShooterHandlerHood());
     driverLB.and(climberCommandRunning.negate()).whenActive(new DriveResetGyroToZero());
     driverRB.and(climberCommandRunning.negate()).whileActiveContinuous(new DriveOnTarget(4));
-    driverBack.and(climberCommandRunning.negate()).toggleWhenActive(new DriveRobotCentric()); 
+    driverBack.or(driverStart).and(climberCommandRunning.negate()).toggleWhenActive(new DriveRobotCentric()); 
     // driverStart.whenPressed(new AutoMidFourBall());
     driverDUp.whenPressed(new ShootHighFender(0.1));
     driverDDown.whenPressed(new ShootHighFenderWithDriveBack(0.1));
@@ -328,6 +329,7 @@ public class RobotContainer {
     autoChooser.addOption("Hungry Hungry Hippo", new AutoPartnerPickupLeftBall());
     autoChooser.addOption("Left Two Ball, Opp Hanger", new AutoLeftTwoBallThenOppHanger());
     autoChooser.addOption("Left Two Ball, Opp Hub Spit", new AutoLeftTwoBallThenOppSpitHub());
+    autoChooser.addOption("Left Two Ball, Two Opp Hub Spit", new AutoLeftTwoBallThenTwoOppSpitHub());
     autoChooser.addOption("Left Two Ball, Opp Wall", new AutoLeftTwoBallThenOppAllianceWall());
     autoChooser.addOption("Right Two Ball, Opp Hub", new AutoRightTwoBallOppToss());
     // autoChooser.addOption("5 ball", new AutoRightFiveBall());

@@ -179,7 +179,7 @@ public class BallHandler extends SubsystemBase {
         }
       case kSpitLow1:
         //spitting balls, with harvester down and running out
-        speeds = new double[] { HARV_OUT, BALL0_OUT, BALL1_OUT, BALL2_OUT };
+        speeds = new double[] { HARV_OUT*.5, BALL0_OUT*.5, BALL1_OUT*.5, BALL2_OUT*.5 };
         break;
       case kFillTo1:
         //filling the robot until the Ball1 sensor is pressed
