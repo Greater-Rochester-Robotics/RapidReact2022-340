@@ -71,6 +71,7 @@ public class Shooter extends SubsystemBase {
    */
   public void setSpeed(double speed){
     motor.set(TalonFXControlMode.Velocity, speed * Constants.SHOOTER_MOTOR_PULSES_PER_REV);//, DemandType.ArbitraryFeedForward, (speed / 15000));
+    // SmartDashboard.putNumber("Target Shooter Speed", speed);
   }
 
   /**

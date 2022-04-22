@@ -138,15 +138,15 @@ public final class Constants {
         //use put(distance, speed)
         SHOOTER_HIGH_SPEEDS_TABLE.put(260, 12000);
         SHOOTER_HIGH_SPEEDS_TABLE.put(220, 10600);
-        SHOOTER_HIGH_SPEEDS_TABLE.put(180, 10000);
-        SHOOTER_HIGH_SPEEDS_TABLE.put(153.25, 9400);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(180, 10200);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(153.25, 9600);
         SHOOTER_HIGH_SPEEDS_TABLE.put(130, 9200);
         SHOOTER_HIGH_SPEEDS_TABLE.put(115, 9000);
-        SHOOTER_HIGH_SPEEDS_TABLE.put(92, 8200);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(92, 8500);
         SHOOTER_HIGH_SPEEDS_TABLE.put(75.25, 8150);
         SHOOTER_HIGH_SPEEDS_TABLE.put(65.75, 8000);
-        SHOOTER_HIGH_SPEEDS_TABLE.put(43.75, 7600);
-        SHOOTER_HIGH_SPEEDS_TABLE.put(24.0, 7500);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(43.75, 7800);
+        SHOOTER_HIGH_SPEEDS_TABLE.put(24.0, 7700);
     }
     public static final LookUpTable SHOOTER_LOW_SPEEDS_TABLE = new LookUpTable();
     static {

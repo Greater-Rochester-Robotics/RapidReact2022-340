@@ -14,6 +14,7 @@ import frc.robot.commands.ballhandler.BallHandlerRejectOppColor;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
 import frc.robot.commands.ballhandler.BallHandlerShootProgT;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
+import frc.robot.commands.drive.auto.DriveTurnToTarget;
 import frc.robot.commands.drive.util.DriveSetGyro;
 import frc.robot.commands.drive.util.DriveTurnToAngle;
 import frc.robot.commands.hood.HoodHome;
@@ -45,7 +46,7 @@ public class AutoLeftTwoBallThenOppAllianceWall extends SequentialCommandGroup {
           new WaitCommand(.5)//wait for a moment
         )
       ),
-      new DriveTurnToAngle(Math.toRadians(-31.43)).withTimeout(1.5),//make sure we return to start rotation
+      new DriveTurnToTarget(),
       parallel(
         new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(1.5),
         new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true).withTimeout(1.5)

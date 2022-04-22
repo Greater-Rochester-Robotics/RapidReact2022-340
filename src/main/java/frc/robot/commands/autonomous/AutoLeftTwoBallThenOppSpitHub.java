@@ -15,6 +15,7 @@ import frc.robot.commands.ballhandler.BallHandlerRejectOppColor;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
 import frc.robot.commands.ballhandler.BallHandlerShootProgT;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
+import frc.robot.commands.drive.auto.DriveTurnToTarget;
 import frc.robot.commands.drive.util.DriveSetGyro;
 import frc.robot.commands.drive.util.DriveTurnToAngle;
 import frc.robot.commands.hood.HoodHome;
@@ -46,7 +47,7 @@ public class AutoLeftTwoBallThenOppSpitHub extends SequentialCommandGroup {
           new WaitCommand(.5)//wait for a moment
         )
       ),
-      new DriveTurnToAngle(Math.toRadians(-31.43)).withTimeout(1.5),//make sure we return to start rotation
+      new DriveTurnToTarget(),
       parallel(
         new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(1.5),
         new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true).withTimeout(1.5)
@@ -63,7 +64,7 @@ public class AutoLeftTwoBallThenOppSpitHub extends SequentialCommandGroup {
       new WaitUntilCommand(() -> RobotContainer.ballHandler.isBall0()).withTimeout(2.0),//when ball is in robot stop prep and shoot
       new BallHandlerRejectOppColor(),//set intake to reject Opp color
       new BallHandlerIntakeOut(),
-      new DriveTurnToAngle(Math.toRadians(-228)),
+      new DriveTurnToAngle(Math.toRadians(-235)),
       new BallHandlerSetState(State.kSpitLow0)
       // new BallHandlerSetState(State.kOff),
       // new StopShooterHandlerHood()//stop shooter (and ballhandler and hood if they aren't already)
