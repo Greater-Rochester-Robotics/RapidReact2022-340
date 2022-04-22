@@ -252,7 +252,7 @@ public class RobotContainer {
     driverY.whenReleased(new StopShooterHandlerHood());
     driverLB.and(climberCommandRunning.negate()).whenActive(new DriveResetGyroToZero());
     driverRB.and(climberCommandRunning.negate()).whileActiveContinuous(new DriveOnTarget(0));
-    driverBack.and(climberCommandRunning.negate()).toggleWhenActive(new DriveRobotCentric()); 
+    driverBack.or(driverStart).and(climberCommandRunning.negate()).toggleWhenActive(new DriveRobotCentric()); 
     // driverStart.whenPressed(new AutoMidFourBall());
     driverDUp.whenPressed(new ShootHighFender(0.1));
     driverDDown.whenPressed(new ShootHighFenderWithDriveBack(0.1));
