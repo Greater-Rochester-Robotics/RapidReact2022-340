@@ -212,7 +212,7 @@ public final class Constants {
     public static final double CLIMBER_TOP_POSITION = 23;
     public static final double CLIMBER_LIFT_POSITION = 12;
     public static final double CLIMBER_RELEASE_POSITION = 4;
-    public static final double CLIMBER_BOTTOM_POSITION = -.7;
+    public static final double CLIMBER_BOTTOM_POSITION = -.9;
 
     public static final int SELECTED_FEEDBACK_COEFFICIENT = 1;
 

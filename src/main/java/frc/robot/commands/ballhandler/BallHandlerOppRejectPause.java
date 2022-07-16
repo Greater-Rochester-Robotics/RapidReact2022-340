@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class BallHandlerOppRejectPause extends CommandBase {
+  boolean isFinished = false;
   /** Creates a new BallHandlerOppRejectPause. */
   public BallHandlerOppRejectPause() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -16,6 +17,7 @@ public class BallHandlerOppRejectPause extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
     RobotContainer.ballHandler.rejectOppColor(false);
   }
 
@@ -35,6 +37,6 @@ public class BallHandlerOppRejectPause extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isFinished;
   }
 }
