@@ -47,6 +47,7 @@ import frc.robot.commands.autonomous.AutoRightTwoBall;
 import frc.robot.commands.autonomous.AutoRightTwoBallOppToss;
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
+import frc.robot.commands.ballhandler.BallHandlerOppRejectPause;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
 
 import frc.robot.commands.climber.ClimberClimb;
@@ -266,6 +267,7 @@ public class RobotContainer {
     // ));
 
     /* =================== CODRIVER BUTTONS =================== */
+    coDriverB.and(climberCommandRunning.negate()).toggleWhenActive(new BallHandlerOppRejectPause()); //Pause SBM
     coDriverB.and(climberCommandRunning.negate()).whenActive(new BallHandlerSetState(State.kSpitMid0))//spit ball0
     .whenInactive(new BallHandlerSetState(State.kOff));
     coDriverX.whenPressed(new PrepLowFender());//prep low goal, aka hood to position and shooter to speed
@@ -352,7 +354,7 @@ public class RobotContainer {
   }
 
   /**
-   * Accessor method to set codriver rumble function
+   * Accessor method to set driver rumble function
    * 
    * @param leftRumble
    * @param rightRumble
@@ -401,7 +403,7 @@ public class RobotContainer {
    * @param leftRumble
    * @param rightRumble
    */
-  public void setCoDriverRumble(double leftRumble, double rightRumble) {
+  public static void setCoDriverRumble(double leftRumble, double rightRumble) {
     coDriver.setRumble(RumbleType.kLeftRumble, leftRumble);
     coDriver.setRumble(RumbleType.kRightRumble, rightRumble);
   }
