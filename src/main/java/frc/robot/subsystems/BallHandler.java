@@ -138,7 +138,7 @@ public class BallHandler extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
+    SmartDashboard.putBoolean("SBM", rejectOppColor);
     //BallHandler State Machine
     switch(state){
       case kShoot1:
