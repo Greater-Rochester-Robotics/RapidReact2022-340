@@ -320,6 +320,7 @@ public class RobotContainer {
     
     autoChooser.setDefaultOption("Wait 1 sec(do nothing)", new WaitCommand(1));
     autoChooser.addOption("Drives backwards 1.5 robot, shoots", new AutoDriveBackAndShoot(1.5));
+    autoChooser.addOption("Waits 10 seconds, Drives backwards 1.5 robot, shoots", new SequentialCommandGroup(new ShooterSetSpeed(9200),new WaitCommand(10), new AutoDriveBackAndShoot(1.5)));
     autoChooser.addOption("Drives backwards 2.5 robot, shoots", new AutoDriveBackAndShoot(2.5));
     autoChooser.addOption("Left Two Ball", new AutoLeftTwoBall());
     autoChooser.addOption("Mid Two Ball", new AutoMidTwoBall());
