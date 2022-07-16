@@ -267,7 +267,7 @@ public class RobotContainer {
     // ));
 
     /* =================== CODRIVER BUTTONS =================== */
-    coDriverB.and(climberCommandRunning.negate()).toggleWhenActive(new BallHandlerOppRejectPause()); //Pause SBM
+    coDriverA.and(climberCommandRunning.negate()).toggleWhenActive(new BallHandlerOppRejectPause()); //Pause SBM
     coDriverB.and(climberCommandRunning.negate()).whenActive(new BallHandlerSetState(State.kSpitMid0))//spit ball0
     .whenInactive(new BallHandlerSetState(State.kOff));
     coDriverX.whenPressed(new PrepLowFender());//prep low goal, aka hood to position and shooter to speed
