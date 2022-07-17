@@ -45,6 +45,7 @@ import frc.robot.commands.autonomous.AutoRightFiveBall;
 import frc.robot.commands.autonomous.AutoRightThreeBall;
 import frc.robot.commands.autonomous.AutoRightTwoBall;
 import frc.robot.commands.autonomous.AutoRightTwoBallOppToss;
+import frc.robot.commands.autonomous.AutoShootThenStealMidBall;
 import frc.robot.commands.ballhandler.BallHandlerIntakeIn;
 import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerOppRejectPause;
@@ -333,6 +334,7 @@ public class RobotContainer {
     autoChooser.addOption("Left Two Ball, Opp Hub Spit", new AutoLeftTwoBallThenOppSpitHub());
     autoChooser.addOption("Left Two Ball, Opp Wall", new AutoLeftTwoBallThenOppAllianceWall());
     autoChooser.addOption("Right Two Ball, Opp Hub", new AutoRightTwoBallOppToss());
+    autoChooser.addOption("Shoot, Mid Opp Ball Hanger", new AutoShootThenStealMidBall());
     // autoChooser.addOption("5 ball", new AutoRightFiveBall());
 
 
