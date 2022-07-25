@@ -6,7 +6,10 @@ package frc.robot.commands.drive.util;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
+
+import java.util.InputMismatchException;
 
 public class DriveTurnToAngle extends CommandBase {
   private double angle = 0;
@@ -22,6 +25,9 @@ public class DriveTurnToAngle extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.swerveDrive);
 
+    if(angle > Constants.TWO_PI){
+      throw new InputMismatchException("Angle Too Large");
+    }
     this.angle = angle;
   }
 
