@@ -17,7 +17,7 @@ import frc.robot.commands.ballhandler.BallHandlerShootProgT;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.auto.DriveTurnToTarget;
 import frc.robot.commands.drive.util.DriveSetGyro;
-import frc.robot.commands.drive.util.DriveTurnToAngle;
+import frc.robot.commands.drive.util.DriveTurnToAngleInRad;
 import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterSetSpeed;
@@ -41,9 +41,9 @@ public class AutoLeftTwoBallThenOppSpitHub extends SequentialCommandGroup {
       race(
         new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(4.0),//Wait for ball0 switch, race with a wiggle
         sequence(
-          new DriveTurnToAngle(Math.toRadians(-26.43)).withTimeout(1.0),//wiggle 5 degrees clockwise
+          new DriveTurnToAngleInRad(Math.toRadians(-26.43)).withTimeout(1.0),//wiggle 5 degrees clockwise
           new WaitCommand(.5),//wait for a moment 
-          new DriveTurnToAngle(Math.toRadians(-36.43)).withTimeout(2.0),//wiggle 5 degrees counter-clockwise(total of 10 deg)
+          new DriveTurnToAngleInRad(Math.toRadians(-36.43)).withTimeout(2.0),//wiggle 5 degrees counter-clockwise(total of 10 deg)
           new WaitCommand(.5)//wait for a moment
         )
       ),
@@ -57,14 +57,14 @@ public class AutoLeftTwoBallThenOppSpitHub extends SequentialCommandGroup {
       new StopShooterHandlerHood(),
       new BallHandlerSetState(State.kFillTo0),
       sequence(
-        new DriveTurnToAngle(Math.toRadians(-135)).withTimeout(2.5),
+        new DriveTurnToAngleInRad(Math.toRadians(-135)).withTimeout(2.5),
         new WaitCommand(.5),
         new DriveFollowTrajectory("DriveLeftToOppBallShoot")//drive to opponent's ball
       ),
       new WaitUntilCommand(() -> RobotContainer.ballHandler.isBall0()).withTimeout(2.0),//when ball is in robot stop prep and shoot
       new BallHandlerRejectOppColor(),//set intake to reject Opp color
       new BallHandlerIntakeOut(),
-      new DriveTurnToAngle(Math.toRadians(-235)),
+      new DriveTurnToAngleInRad(Math.toRadians(-235)),
       new BallHandlerSetState(State.kSpitLow0)
       // new BallHandlerSetState(State.kOff),
       // new StopShooterHandlerHood()//stop shooter (and ballhandler and hood if they aren't already)

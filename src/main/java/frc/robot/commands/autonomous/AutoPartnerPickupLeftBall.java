@@ -15,7 +15,7 @@ import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.auto.DriveStraightBack;
 import frc.robot.commands.drive.auto.DriveTurnToTarget;
 import frc.robot.commands.drive.util.DriveSetGyro;
-import frc.robot.commands.drive.util.DriveTurnToAngle;
+import frc.robot.commands.drive.util.DriveTurnToAngleInRad;
 import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterSetSpeed;
@@ -38,7 +38,7 @@ public class AutoPartnerPickupLeftBall extends SequentialCommandGroup {
       new WaitCommand(1.0), //wait for harvester to come up
       parallel(
         new ShooterSetSpeed(7900.0),
-        new DriveTurnToAngle(Math.toRadians(-47.42)).withTimeout(2.0)//this angle should be correct
+        new DriveTurnToAngleInRad(Math.toRadians(-47.42)).withTimeout(2.0)//this angle should be correct
       ),
       //Note: too close to use limelight distancing
       new BallHandlerShootProgT(0.0),

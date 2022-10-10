@@ -19,7 +19,7 @@ import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.auto.DriveTurnToTarget;
 import frc.robot.commands.drive.util.DriveResetGyroToZero;
 import frc.robot.commands.drive.util.DriveSetGyro;
-import frc.robot.commands.drive.util.DriveTurnToAngle;
+import frc.robot.commands.drive.util.DriveTurnToAngleInRad;
 import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterPrepShot;
@@ -53,21 +53,21 @@ public class AutoShootThenStealMidBall extends SequentialCommandGroup {
       new BallHandlerSetState(State.kFillTo0),
       parallel(
         new WaitCommand(3.0),//Wait For 5 ball robot to get its third ball
-        new DriveTurnToAngle(Math.toRadians(29.0)).withTimeout(3.0)
+        new DriveTurnToAngleInRad(Math.toRadians(29.0)).withTimeout(3.0)
       ),
       new DriveFollowTrajectory("DriveToMidOppBall"),
       race(
         new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(4.0),//Wait for ball0 switch, race with a wiggle
         sequence(
-          new DriveTurnToAngle(Math.toRadians(24.0)).withTimeout(1.0),
+          new DriveTurnToAngleInRad(Math.toRadians(24.0)).withTimeout(1.0),
           new WaitCommand(.5),
-          new DriveTurnToAngle(Math.toRadians(34.0)).withTimeout(2.0),
+          new DriveTurnToAngleInRad(Math.toRadians(34.0)).withTimeout(2.0),
           new WaitCommand(.5)
         )
       ),
       new BallHandlerIntakeOut(),
       new BallHandlerRejectOppColor(),
-      new DriveTurnToAngle(Math.toRadians(-17.0)).withTimeout(1.5),
+      new DriveTurnToAngleInRad(Math.toRadians(-17.0)).withTimeout(1.5),
       new BallHandlerSetState(State.kSpitLow0),
       new WaitCommand(3.0),
       new StopShooterHandlerHood()

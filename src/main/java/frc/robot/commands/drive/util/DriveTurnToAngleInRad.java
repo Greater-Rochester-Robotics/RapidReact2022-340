@@ -4,16 +4,16 @@
 
 package frc.robot.commands.drive.util;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
-import java.util.InputMismatchException;
-
-public class DriveTurnToAngle extends CommandBase {
+public class DriveTurnToAngleInRad extends CommandBase {
   private double angle = 0;
   private int onTargetCount;
+  private boolean angleTooBig = false;
 
   /** Creates a new DriveTurnToAngle. This command 
    * is used in tuning PID for rotation and in 
@@ -21,13 +21,15 @@ public class DriveTurnToAngle extends CommandBase {
    * 
    * @param angle angle in radians 
    */
-  public DriveTurnToAngle(double angle) {
+  public DriveTurnToAngleInRad(double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.swerveDrive);
 
-    if(angle > Constants.TWO_PI){
-      throw new InputMismatchException("Angle Too Large");
+    if(Math.abs(angle) > Constants.TWO_PI){
+      angle = 0.0;
+      angleTooBig = true;
     }
+    
     this.angle = angle;
   }
 
@@ -54,6 +56,9 @@ public class DriveTurnToAngle extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if(angleTooBig){
+      DriverStation.reportError("THE ANGLE USED IN THIS TurnToAngleInRad IS TOO BIG, LIKELY BECAUSE IT IS IN DEGREES AND NOT RADIANS", true);
+    }
     RobotContainer.swerveDrive.stopAllModules();
   }
 

@@ -15,7 +15,7 @@ import frc.robot.commands.ballhandler.BallHandlerSetState;
 import frc.robot.commands.ballhandler.BallHandlerShootProgT;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.util.DriveSetGyro;
-import frc.robot.commands.drive.util.DriveTurnToAngle;
+import frc.robot.commands.drive.util.DriveTurnToAngleInRad;
 import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterSetSpeed;
@@ -39,13 +39,13 @@ public class AutoLeftTwoBallThenOppHanger extends SequentialCommandGroup {
       race(
         new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(4.0),//Wait for ball0 switch, race with a wiggle
         sequence(
-          new DriveTurnToAngle(Math.toRadians(-26.43)).withTimeout(1.0),//wiggle 5 degrees clockwise
+          new DriveTurnToAngleInRad(Math.toRadians(-26.43)).withTimeout(1.0),//wiggle 5 degrees clockwise
           new WaitCommand(.5),//wait for a moment 
-          new DriveTurnToAngle(Math.toRadians(-36.43)).withTimeout(2.0),//wiggle 5 degrees counter-clockwise(total of 10 deg)
+          new DriveTurnToAngleInRad(Math.toRadians(-36.43)).withTimeout(2.0),//wiggle 5 degrees counter-clockwise(total of 10 deg)
           new WaitCommand(.5)//wait for a moment
         )
       ),
-      new DriveTurnToAngle(Math.toRadians(-31.43)).withTimeout(1.5),//make sure we return to start rotation
+      new DriveTurnToAngleInRad(Math.toRadians(-31.43)).withTimeout(1.5),//make sure we return to start rotation
       parallel(
         new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(1.5),
         new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true).withTimeout(1.5)
@@ -55,7 +55,7 @@ public class AutoLeftTwoBallThenOppHanger extends SequentialCommandGroup {
       new BallHandlerSetState(State.kFillTo1),
       parallel(
         sequence(
-          new DriveTurnToAngle(Math.toRadians(-135)).withTimeout(2.5),
+          new DriveTurnToAngleInRad(Math.toRadians(-135)).withTimeout(2.5),
           new WaitCommand(.5),
           new DriveFollowTrajectory("DriveLeftToOppBallShoot")//drive to opponent's ball
         ),
@@ -64,7 +64,7 @@ public class AutoLeftTwoBallThenOppHanger extends SequentialCommandGroup {
       ),
       new WaitUntilCommand(() -> RobotContainer.ballHandler.isBall0() || RobotContainer.ballHandler.isBall1()).withTimeout(2.0),//when ball is in robot stop prep and shoot
       new BallHandlerRejectOppColor(),//set intake to reject Opp color
-      new DriveTurnToAngle(-Math.PI),//
+      new DriveTurnToAngleInRad(-Math.PI),//
       new BallHandlerSetState(State.kOff),
       new BallHandlerShootProgT(0.0),//shoot the ball
       new StopShooterHandlerHood()//stop shooter (and ballhandler and hood if they aren't already)

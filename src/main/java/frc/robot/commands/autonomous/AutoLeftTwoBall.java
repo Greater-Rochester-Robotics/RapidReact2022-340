@@ -15,7 +15,7 @@ import frc.robot.commands.ballhandler.BallHandlerShootProgT;
 import frc.robot.commands.drive.auto.DriveFollowTrajectory;
 import frc.robot.commands.drive.auto.DriveStraightBack;
 import frc.robot.commands.drive.util.DriveSetGyro;
-import frc.robot.commands.drive.util.DriveTurnToAngle;
+import frc.robot.commands.drive.util.DriveTurnToAngleInRad;
 import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
 import frc.robot.commands.shooter.ShooterSetSpeed;
@@ -41,13 +41,13 @@ public class AutoLeftTwoBall extends SequentialCommandGroup {
       race(
           new WaitUntilCommand(RobotContainer.ballHandler::isBall0).withTimeout(4.0),//Wait for ball0 switch, race with a wiggle
         sequence(
-          new DriveTurnToAngle(Math.toRadians(-26.43)).withTimeout(1.0),//wiggle 5 degrees clockwise
+          new DriveTurnToAngleInRad(Math.toRadians(-26.43)).withTimeout(1.0),//wiggle 5 degrees clockwise
           new WaitCommand(.5),//wait for a moment 
-          new DriveTurnToAngle(Math.toRadians(-36.43)).withTimeout(2.0),//wiggle 5 degrees counter-clockwise(total of 10 deg)
+          new DriveTurnToAngleInRad(Math.toRadians(-36.43)).withTimeout(2.0),//wiggle 5 degrees counter-clockwise(total of 10 deg)
           new WaitCommand(.5)//wait for a moment
         )
       ),
-      new DriveTurnToAngle(Math.toRadians(-31.43)).withTimeout(1.5),//make sure we return to start rotation
+      new DriveTurnToAngleInRad(Math.toRadians(-31.43)).withTimeout(1.5),//make sure we return to start rotation
       parallel(
         new ShooterSetSpeed(RobotContainer.limeLight::getShooterHighSpeed,true).withTimeout(2.0),
         new HoodToPosition(RobotContainer.limeLight::getHoodHighAngle,true).withTimeout(2.0)

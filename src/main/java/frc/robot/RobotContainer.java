@@ -77,7 +77,7 @@ import frc.robot.commands.drive.util.DriveResetAllModulePositionsToZero;
 import frc.robot.commands.drive.util.DriveResetGyroToZero;
 import frc.robot.commands.drive.util.DriveSetGyro;
 import frc.robot.commands.drive.util.DriveTuneDriveMotorFeedForward;
-import frc.robot.commands.drive.util.DriveTurnToAngle;
+import frc.robot.commands.drive.util.DriveTurnToAngleInRad;
 
 import frc.robot.commands.hood.HoodHome;
 import frc.robot.commands.hood.HoodToPosition;
@@ -271,8 +271,8 @@ public class RobotContainer {
     coDriverA.and(climberCommandRunning.negate()).toggleWhenActive(new BallHandlerOppRejectPause()); //Pause SBM
     coDriverB.and(climberCommandRunning.negate()).whenActive(new BallHandlerSetState(State.kSpitMid0))//spit ball0
     .whenInactive(new BallHandlerSetState(State.kOff));
-    coDriverX.whenPressed(new PrepLowFender());//prep low goal, aka hood to position and shooter to speed
-    coDriverY.whenPressed(new ShooterPrepShot());//prep high goal, aka shooter to a starter speed
+    coDriverX.and(driverX.negate()).whenActive(new PrepLowFender());//prep low goal, aka hood to position and shooter to speed
+    coDriverY.and(driverY.negate()).whenActive(new ShooterPrepShot());//prep high goal, aka shooter to a starter speed
 
     coDriverRB.and(coDriverDUp).whenActive(climbCommand.iterateFowardCommand());
     coDriverLB.and(coDriverDUp).whenActive(climbCommand.iterateBackwardCommand());
