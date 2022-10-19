@@ -271,8 +271,8 @@ public class RobotContainer {
     coDriverA.and(climberCommandRunning.negate()).toggleWhenActive(new BallHandlerOppRejectPause()); //Pause SBM
     coDriverB.and(climberCommandRunning.negate()).whenActive(new BallHandlerSetState(State.kSpitMid0))//spit ball0
     .whenInactive(new BallHandlerSetState(State.kOff));
-    coDriverX.and(driverX.negate()).whenActive(new PrepLowFender());//prep low goal, aka hood to position and shooter to speed
-    coDriverY.and(driverY.negate()).whenActive(new ShooterPrepShot());//prep high goal, aka shooter to a starter speed
+    coDriverX.and(driverX.negate().and(driverY.negate())).whenActive(new PrepLowFender());//prep low goal, aka hood to position and shooter to speed
+    coDriverY.and(driverX.negate().and(driverY.negate())).whenActive(new ShooterPrepShot());//prep high goal, aka shooter to a starter speed
 
     coDriverRB.and(coDriverDUp).whenActive(climbCommand.iterateFowardCommand());
     coDriverLB.and(coDriverDUp).whenActive(climbCommand.iterateBackwardCommand());

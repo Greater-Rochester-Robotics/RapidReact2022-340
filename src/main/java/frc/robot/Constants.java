@@ -85,7 +85,7 @@ public final class Constants {
     // public static final double DRIVE_ROTATION_MIN_VELOCITY = 25;
 
     /* Driver Scaling Constants */
-    public static final double DRIVER_SPEED_SCALE_LINEAR = 0.65*.7;
+    public static final double DRIVER_SPEED_SCALE_LINEAR = 0.65;
     public static final double DRIVER_SPEED_SCALE_ROTATIONAL = .75;
 
     /* Limelight Values*/
@@ -172,8 +172,8 @@ public final class Constants {
         //use put(distance, angle)
         HOOD_HIGH_POSITION_TABLE.put(260, 19);
         HOOD_HIGH_POSITION_TABLE.put(220, 18);
-        HOOD_HIGH_POSITION_TABLE.put(180, 16.5);
-        HOOD_HIGH_POSITION_TABLE.put(153.25, 15);
+        HOOD_HIGH_POSITION_TABLE.put(180, 17.5);
+        HOOD_HIGH_POSITION_TABLE.put(153.25, 16);
         HOOD_HIGH_POSITION_TABLE.put(130, 14);
         HOOD_HIGH_POSITION_TABLE.put(115,14);
         HOOD_HIGH_POSITION_TABLE.put(92,12.5);
