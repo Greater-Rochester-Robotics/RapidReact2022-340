@@ -51,16 +51,16 @@ import frc.robot.commands.ballhandler.BallHandlerIntakeOut;
 import frc.robot.commands.ballhandler.BallHandlerOppRejectPause;
 import frc.robot.commands.ballhandler.BallHandlerSetState;
 
-import frc.robot.commands.climber.ClimberClimb;
-import frc.robot.commands.climber.ClimberDampeningIn;
-import frc.robot.commands.climber.ClimberExtendBothIn;
-import frc.robot.commands.climber.ClimberExtendLeftIn;
-import frc.robot.commands.climber.ClimberExtendOut;
-import frc.robot.commands.climber.ClimberExtendRightIn;
-import frc.robot.commands.climber.ClimberExtendoHome;
-import frc.robot.commands.climber.ClimberExtendoToPosition;
-import frc.robot.commands.climber.ClimberTiltIn;
-import frc.robot.commands.climber.ClimberTiltOut;
+// import frc.robot.commands.climber.ClimberClimb;
+// import frc.robot.commands.climber.ClimberDampeningIn;
+// import frc.robot.commands.climber.ClimberExtendBothIn;
+// import frc.robot.commands.climber.ClimberExtendLeftIn;
+// import frc.robot.commands.climber.ClimberExtendOut;
+// import frc.robot.commands.climber.ClimberExtendRightIn;
+// import frc.robot.commands.climber.ClimberExtendoHome;
+// import frc.robot.commands.climber.ClimberExtendoToPosition;
+// import frc.robot.commands.climber.ClimberTiltIn;
+// import frc.robot.commands.climber.ClimberTiltOut;
 
 import frc.robot.commands.drive.DriveFieldRelative;
 import frc.robot.commands.drive.DriveFieldRelativeAdvanced;
@@ -154,14 +154,14 @@ public class RobotContainer {
   //Climber next step button is aliased here.
   public static final Button climberManButton = coDriverA;
   public static final Button climberAutoButton = coDriverB;
-  public static SendableCommandGroup climbCommand;
+  // public static SendableCommandGroup climbCommand;
   
-  public class ClimberCommandRunning extends Button{
-    public boolean get(){
-      return climbCommand.isScheduled();
-    }
-  };
-  public static ClimberCommandRunning climberCommandRunning;
+  // public class ClimberCommandRunning extends Button{
+  //   public boolean get(){
+  //     return climbCommand.isScheduled();
+  //   }
+  // };
+  // public static ClimberCommandRunning climberCommandRunning;
 
   //The robot's subsystems are instantiated here
   public static Compressor compressor;
@@ -183,14 +183,14 @@ public class RobotContainer {
     compressor = new Compressor();//Let's keep compressor first
     swerveDrive = new SwerveDrive();
     swerveDrive.setDefaultCommand(new DriveFieldRelativeAdvanced());
-    climber = new Climber();
+    // climber = new Climber();
     ballHandler = new BallHandler();
     limeLight = new LimeLight();
     shooter = new Shooter();
     hood = new Hood();
 
-    climbCommand = new ClimberClimb();
-    climberCommandRunning = new ClimberCommandRunning();
+    // climbCommand = new ClimberClimb();
+    // climberCommandRunning = new ClimberCommandRunning();
 
     //Add all autos to the auto selector
     configureAutoModes();
@@ -208,11 +208,11 @@ public class RobotContainer {
     SmartDashboard.putData(new DriveAllModulesPositionOnly());
     SmartDashboard.putData(new DriveStopAllModules());//For setup of swerve
     SmartDashboard.putData(new HoodHome(true));//For setup, leave for drives to use
-    SmartDashboard.putData("Climber Home", new SequentialCommandGroup(
-                            new ClimberTiltIn(),
-                            new ClimberDampeningIn(),
-                            new ClimberExtendoHome(),
-                            climbCommand.resetCommandCommand()));//for setup
+    // SmartDashboard.putData("Climber Home", new SequentialCommandGroup(
+    //                         new ClimberTiltIn(),
+    //                         new ClimberDampeningIn(),
+    //                         new ClimberExtendoHome(),
+    //                         climbCommand.resetCommandCommand()));//for setup
     SmartDashboard.putData(new LimeLightPowerCycle());//allows the drivers to restart the Limelight at will(good for hangups)
     SmartDashboard.putData(new LimeLightCalibrate());//allows for the limelight to run while in testing mode
     // SmartDashboard.putData(new DriveFindMaxAccel());//This is for tuning acceleration constants
@@ -226,7 +226,7 @@ public class RobotContainer {
     // SmartDashboard.putData(new AutoRightThreeBall());//AutoTesting
     // SmartDashboard.putData(new AutoPartnerPickupLeftBall());
     
-    SmartDashboard.putData(climbCommand);//this is for the LED to see that this command is running
+    // SmartDashboard.putData(climbCommand);//this is for the LED to see that this command is running
 
 
     SmartDashboard.putNumber("SpeedIShoot",0.0);
@@ -252,9 +252,9 @@ public class RobotContainer {
     driverX.whenReleased(new StopShooterHandlerHood());
     driverY.whenPressed(new ShootHighGoal(0.0));
     driverY.whenReleased(new StopShooterHandlerHood());
-    driverLB.and(climberCommandRunning.negate()).whenActive(new DriveResetGyroToZero());
-    driverRB.and(climberCommandRunning.negate()).whileActiveContinuous(new DriveOnTarget(0));
-    driverBack.or(driverStart).and(climberCommandRunning.negate()).toggleWhenActive(new DriveRobotCentric()); 
+    driverLB.whenActive(new DriveResetGyroToZero());
+    driverRB.whileActiveContinuous(new DriveOnTarget(0));
+    driverBack.or(driverStart).toggleWhenActive(new DriveRobotCentric()); 
     // driverStart.whenPressed(new AutoMidFourBall());
     driverDUp.whenPressed(new ShootHighFender(0.1));
     driverDDown.whenPressed(new ShootHighFenderWithDriveBack(0.1));
@@ -268,33 +268,33 @@ public class RobotContainer {
     // ));
 
     /* =================== CODRIVER BUTTONS =================== */
-    coDriverA.and(climberCommandRunning.negate()).toggleWhenActive(new BallHandlerOppRejectPause()); //Pause SBM
-    coDriverB.and(climberCommandRunning.negate()).whenActive(new BallHandlerSetState(State.kSpitMid0))//spit ball0
-    .whenInactive(new BallHandlerSetState(State.kOff));
+    //coDriverA.and(climberCommandRunning.negate()).toggleWhenActive(new BallHandlerOppRejectPause()); //Pause SBM
+    //coDriverB.and(climberCommandRunning.negate()).whenActive(new BallHandlerSetState(State.kSpitMid0))//spit ball0
+    //.whenInactive(new BallHandlerSetState(State.kOff));
     coDriverX.and(driverX.negate().and(driverY.negate())).whenActive(new PrepLowFender());//prep low goal, aka hood to position and shooter to speed
     coDriverY.and(driverX.negate().and(driverY.negate())).whenActive(new ShooterPrepShot());//prep high goal, aka shooter to a starter speed
 
-    coDriverRB.and(coDriverDUp).whenActive(climbCommand.iterateFowardCommand());
-    coDriverLB.and(coDriverDUp).whenActive(climbCommand.iterateBackwardCommand());
+    //coDriverRB.and(coDriverDUp).whenActive(climbCommand.iterateFowardCommand());
+    //coDriverLB.and(coDriverDUp).whenActive(climbCommand.iterateBackwardCommand());
 
-    coDriverBack.and(coDriverStart).whenActive(new ParallelCommandGroup(
-      climbCommand,
-      new DriveRobotCentricNoGyro())
-      );
+    //coDriverBack.and(coDriverStart).whenActive(new ParallelCommandGroup(
+    //  climbCommand,
+    //  new DriveRobotCentricNoGyro())
+    //  );
 
-    coDriverLS.and(coDriverRS).whenActive(new ClimberTiltIn());
-    coDriverDDown.whenPressed(new SequentialCommandGroup(
-      new HoodHome(true),
-      new BallHandlerIntakeIn(),
-      new ClimberTiltIn(),
-      new ClimberDampeningIn(),
-      new ClimberExtendoHome(),
-      climbCommand.resetCommandCommand())
-      );
+    // coDriverLS.and(coDriverRS).whenActive(new ClimberTiltIn());
+    // coDriverDDown.whenPressed(new SequentialCommandGroup(
+    //   new HoodHome(true),
+    //   new BallHandlerIntakeIn()//,
+      // new ClimberTiltIn(),
+      // new ClimberDampeningIn(),
+      // new ClimberExtendoHome(),
+      // climbCommand.resetCommandCommand())
+    //   );
 
-    coDriverLTButton25.and(coDriverRTButton25).whileActiveContinuous(new ClimberExtendBothIn());
-    coDriverRTButton70.and(coDriverLTButton25.negate()).whileActiveContinuous(new ClimberExtendRightIn());
-    coDriverLTButton70.and(coDriverRTButton25.negate()).whileActiveContinuous(new ClimberExtendLeftIn());
+    // coDriverLTButton25.and(coDriverRTButton25).whileActiveContinuous(new ClimberExtendBothIn());
+    // coDriverRTButton70.and(coDriverLTButton25.negate()).whileActiveContinuous(new ClimberExtendRightIn());
+    // coDriverLTButton70.and(coDriverRTButton25.negate()).whileActiveContinuous(new ClimberExtendLeftIn());
 
     
   }

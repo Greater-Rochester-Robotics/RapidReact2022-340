@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
     //wait for the robot to be disabled for 5 seconds before we change anything, avoids momentary comm errors
     if(disableTimer.hasElapsed(5) && !disableTimer.hasElapsed(5.1)){
       //when we disable the robot, reset the climb sequence. this make testing much easier
-      RobotContainer.climbCommand.resetCommandCommand().schedule();
+      // RobotContainer.climbCommand.resetCommandCommand().schedule();
       //reset the hasHarvesterBeenOut so that the harvester doesn't lock the floppy roller motor up
       RobotContainer.ballHandler.resetHasHarvesterBeenOut();
     }
